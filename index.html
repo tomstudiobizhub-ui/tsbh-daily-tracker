@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#6c5ce7">
+  <title>TOMSTUDIO BIZ HUB - Task Manager</title>
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="logo-192.png">
+
+  <!-- Styles -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      min-height: 100vh;
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    /* Login Screen */
+    .screen {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #loginScreen {
+      text-align: center;
+      padding: 50px 30px;
+    }
+
+    #loginScreen img {
+      width: 230px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      border: 5px solid #6c5ce7;
+    }
+
+    #loginScreen h1 {
+      color: #6c5ce7;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    #loginScreen h3 {
+      color: #2d3436;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    #loginScreen p {
+      color: #636e72;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    #loginScreen input {
+      width: 100%;
+      max-width: 300px;
+      padding: 15px;
+      margin: 15px auto;
+      border: 2px solid #ddd;
+      border-radius: 50px;
+      font-size: 16px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    #loginScreen input:focus {
+      border-color: #6c5ce7;
+      outline: none;
+      box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
+    }
+
+    #loginScreen button {
+      background: linear-gradient(45deg, #6c5ce7, #a55eea);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+    }
+
+    #loginScreen button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+    }
+
+    /* Main App */
+    #mainApp {
+      display: none;
+      padding: 30px;
+    }
+
+    #mainApp img.mal {
+      width: 185px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #6c5ce7;
+      margin-bottom: 20px;
+    }
+
+    #mainApp h1 {
+      text-align: center;
+      color: #6c5ce7;
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+    }
+
+    #mainApp h1 span {
+      color: #2d3436;
+      font-weight: 700;
+    }
+
+    #mainApp p {
+      text-align: center;
+      color: #636e72;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+
+    /* Sign In Section */
+    .sign-in-info {
+      background: linear-gradient(45deg, #00b894, #00cec9);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .sign-in-info h3 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .sign-in-info p {
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+
+    .time-location-btn {
+      background: #2d3436;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .time-location-btn:hover {
+      background: #1e272e;
+      transform: translateY(-2px);
+    }
+
+    /* Form */
+    .form {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .form h3 {
+      color: #6c5ce7;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .form input, 
+    .form textarea, 
+    .form select {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .form input:focus,
+    .form textarea:focus,
+    .form select:focus {
+      border-color: #6c5ce7;
+      outline: none;
+      box-shadow: 0 0 10px rgba(108, 92, 231, 0.2);
+    }
+
+    .form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form button {
+      background: linear-gradient(45deg, #6c5ce7, #a55eea);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+    }
+
+    .form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+    }
+
+    /* Tasks List */
+    h2 {
+      color: #6c5ce7;
+      margin: 30px 0 15px;
+      font-size: 1.8rem;
+    }
+
+    #taskList {
+      list-style: none;
+    }
+
+    #taskList li {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border-left: 5px solid #6c5ce7;
+      transition: all 0.3s;
+    }
+
+    #taskList li:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .task-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #2d3436;
+    }
+
+    .task-score {
+      background: #6c5ce7;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .task-desc {
+      color: #636e72;
+      margin: 8px 0;
+      font-size: 0.95rem;
+    }
+
+    .task-comment {
+      background: #fdcb6e;
+      color: #2d3436;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 8px 0;
+      font-size: 0.9rem;
+      border-left: 3px solid #e17055;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 0.85rem;
+      color: #636e72;
+      margin-top: 10px;
+    }
+
+    .delete-btn {
+      background: #e17055;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    /* Summary */
+    .summary, .stats {
+      background: linear-gradient(45deg, #74b9ff, #0984e3);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 30px 0;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .summary h3, .stats h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .summary p, .stats p {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    /* Export & Buttons */
+    .export {
+      display: flex;
+      gap: 15px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .export button {
+      background: linear-gradient(45deg, #fd79a8, #e84393);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(236, 90, 159, 0.4);
+    }
+
+    .export button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(236, 90, 159, 0.6);
+    }
+
+    .clear-btn, .logout-btn {
+      background: #2d3436;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 5px;
+      transition: all 0.3s;
+    }
+
+    .clear-btn:hover, .logout-btn:hover {
+      background: #1e272e;
+      transform: translateY(-2px);
+    }
+
+    /* Client Section */
+    .client-section {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 30px 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .client-section h3 {
+      color: #6c5ce7;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: white;
+      font-size: 0.9rem;
+      margin-top: 30px;
+    }
+
+    footer a {
+      color: #fdcb6e;
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        margin: 10px;
+        padding: 15px;
+      }
+      
+      #loginScreen {
+        padding: 30px 20px;
+      }
+      
+      #loginScreen h1 {
+        font-size: 2rem;
+      }
+      
+      #mainApp {
+        padding: 20px;
+      }
+      
+      .export {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .export button {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .summary, .stats {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen">
+      <img src="logo-192.png" alt="TOMSTUDIO Logo">
+      <h1>TOMSTUDIO BIZ HUB</h1>
+      <h3>DAILY TASK TRACKER</h3>
+      <p>Please log in with your Staff ID</p>
+      <input type="text" id="staffId" placeholder="Enter Staff ID" maxlength="10" />
+      <button onclick="login()">🔓 Log In</button>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="screen">
+      <div style="text-align: center;">
+        <img src="logo-192.png" alt="TOMSTUDIO Logo" class="mal">
+      </div>
+      
+      <h1>🎯 Welcome, <span id="staffDisplay"></span>!</h1>
+      <p>Track your tasks and performance.</p>
+
+      <!-- Sign In Section -->
+      <div class="sign-in-info">
+        <h3>⏰ Daily Sign In</h3>
+        <p id="signInTime">Not signed in</p>
+        <p id="locationInfo">Location: Not tracked</p>
+        <button class="time-location-btn" onclick="recordSignIn()">
+          🕒 Record Sign-In Time & Location
+        </button>
+      </div>
+
+      <!-- Add Task Form -->
+      <div class="form">
+        <h3>➕ Add New Task</h3>
+        <input type="text" id="taskName" placeholder="Task name" required />
+        <textarea id="taskDesc" placeholder="Description (optional)"></textarea>
+        <select id="taskScore" required>
+          <option value="">Rate Task (1-10)</option>
+          <option value="1">1 - Poor</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5 - Average</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10 - Excellent</option>
+        </select>
+        <textarea id="taskComment" placeholder="Explain why this task wasn't achieved (optional)"></textarea>
+        <button onclick="addTask()">➕ Add Task</button>
+      </div>
+
+      <!-- Client/Visitor Section -->
+      <div class="client-section">
+        <h3>📝 Client/Visitor Details</h3>
+        <div class="form-row" style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 200px;">
+            <input type="text" id="clientName" placeholder="Client Name" style="width: 100%;">
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <input type="text" id="clientPhone" placeholder="Phone Number" style="width: 100%;">
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <input type="email" id="clientEmail" placeholder="Email (optional)" style="width: 100%;">
+          </div>
+        </div>
+        <textarea id="clientComment" placeholder="Client comments, inquiries, or feedback..." 
+                  style="width: 100%; margin: 15px 0; padding: 15px; min-height: 100px;"></textarea>
+        <button onclick="saveClientDetails()" style="width: 100%; background: #00b894;">✅ Save Client Details</button>
+      </div>
+
+      <!-- Daily Tasks List -->
+      <h2>📅 Today's Tasks</h2>
+      <ul id="taskList"></ul>
+
+      <!-- Daily Summary -->
+      <div class="summary">
+        <h3>📊 Today's Score: <span id="dailyScore">0</span>/100</h3>
+        <p>Average: <span id="dailyAvg">0</span></p>
+      </div>
+
+      <!-- Weekly & Monthly Stats -->
+      <div class="stats">
+        <h3>📈 Weekly Average: <span id="weeklyAvg">0</span></h3>
+        <h3>📆 Monthly Average: <span id="monthlyAvg">0</span></h3>
+      </div>
+
+      <!-- Export Buttons -->
+      <div class="export">
+        <button onclick="exportToCSV()">📥 Export to CSV</button>
+        <button onclick="generatePDF()">📄 Generate Comprehensive PDF Report</button>
+      </div>
+
+      <div style="text-align: center;">
+        <button class="clear-btn" onclick="clearToday()">🗑️ Clear Today's Tasks</button>
+        <button class="logout-btn" onclick="logout()">↩️ Logout</button>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417">+2348030827417</a></p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    // Global Variables
+    let currentStaffId = null;
+    let clientDetails = {};
+    let signInData = {};
+
+    // DOM Elements
+    const loginScreen = document.getElementById("loginScreen");
+    const mainApp = document.getElementById("mainApp");
+    const staffIdInput = document.getElementById("staffId");
+    const staffDisplay = document.getElementById("staffDisplay");
+    const signInTimeElement = document.getElementById("signInTime");
+    const locationInfoElement = document.getElementById("locationInfo");
+
+    // Login
+    function login() {
+      const id = staffIdInput.value.trim();
+      if (!id) {
+        alert("Please enter your Staff ID");
+        return;
+      }
+      currentStaffId = id;
+      staffDisplay.textContent = id;
+      loginScreen.style.display = "none";
+      mainApp.style.display = "block";
+      loadAllData();
+    }
+
+    // Logout
+    function logout() {
+      if (confirm("Log out?")) {
+        currentStaffId = null;
+        loginScreen.style.display = "block";
+        mainApp.style.display = "none";
+        staffIdInput.value = "";
+      }
+    }
+
+    // Record Sign-In Time and Location
+    function recordSignIn() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString();
+      const dateStr = now.toLocaleDateString();
+      
+      signInData = {
+        time: timeStr,
+        date: dateStr,
+        timestamp: now.toISOString()
+      };
+
+      if (navigator.geolocation) {
+        locationInfoElement.textContent = "📍 Getting location...";
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            signInData.location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              accuracy: position.coords.accuracy
+            };
+            locationInfoElement.innerHTML = `📍 Location: ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)} (Accuracy: ${position.coords.accuracy}m)`;
+            saveSignInData(signInData);
+          },
+          (error) => {
+            console.log("Location error:", error);
+            locationInfoElement.textContent = "📍 Location: Could not retrieve";
+            saveSignInData(signInData);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        );
+      } else {
+        locationInfoElement.textContent = "📍 Location: Not supported";
+        saveSignInData(signInData);
+      }
+
+      signInTimeElement.textContent = `Signed in at ${timeStr} on ${dateStr}`;
+    }
+
+    // Save sign-in data
+    function saveSignInData(data) {
+      localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
+    }
+
+    // Display sign-in data
+    function displaySignInData() {
+      const saved = localStorage.getItem(`signin_${currentStaffId}`);
+      if (saved) {
+        const data = JSON.parse(saved);
+        signInData = data;
+        signInTimeElement.textContent = `Signed in at ${data.time} on ${data.date}`;
+        if (data.location) {
+          locationInfoElement.innerHTML = `📍 Location: ${data.location.lat.toFixed(6)}, ${data.location.lng.toFixed(6)} (Accuracy: ${data.location.accuracy}m)`;
+        }
+      }
+    }
+
+    // Get Keys
+    function getTodayKey() {
+      return `tasks_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
+    }
+
+    function getWeekKey() {
+      const now = new Date();
+      const onejan = new Date(now.getFullYear(), 0, 1);
+      const week = Math.ceil((((now - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+      return `week_${currentStaffId}_${now.getFullYear()}_W${week}`;
+    }
+
+    function getMonthKey() {
+      const now = new Date();
+      return `month_${currentStaffId}_${now.getFullYear()}_${now.getMonth() + 1}`;
+    }
+
+    function getClientKey() {
+      return `clients_${currentStaffId}`;
+    }
+
+    // Load tasks
+    function loadTasks() {
+      const saved = localStorage.getItem(getTodayKey());
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    // Save tasks
+    function saveTasks(tasks) {
+      localStorage.setItem(getTodayKey(), JSON.stringify(tasks));
+      updateDailyStats(tasks);
+      updateWeeklyMonthlyStats();
+    }
+
+    // Add Task
+    function addTask() {
+      const name = document.getElementById("taskName").value.trim();
+      const desc = document.getElementById("taskDesc").value.trim();
+      const score = parseInt(document.getElementById("taskScore").value);
+      const comment = document.getElementById("taskComment").value.trim();
+
+      if (!name || isNaN(score)) {
+        alert("Please enter task name and score.");
+        return;
+      }
+
+      const tasks = loadTasks();
+      const now = new Date();
+      
+      tasks.push({
+        id: Date.now(),
+        name,
+        desc,
+        score,
+        comment: comment || null,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      });
+
+      saveTasks(tasks);
+      renderTasks();
+      clearForm();
+    }
+
+    // Render Tasks
+    function renderTasks() {
+      const tasks = loadTasks();
+      const taskList = document.getElementById("taskList");
+      taskList.innerHTML = "";
+
+      tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="task-header">
+            <span class="task-name">${task.name}</span>
+            <span class="task-score">${task.score}/10</span>
+          </div>
+          ${task.desc ? `<p class="task-desc">${task.desc}</p>` : ""}
+          ${task.comment ? `<div class="task-comment">💬 ${task.comment}</div>` : ""}
+          <div class="task-meta">
+            <span>📅 ${task.date}</span>
+            <span>⏰ ${task.time}</span>
+          </div>
+        `;
+        
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑️ Delete";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.onclick = () => deleteTask(task.id);
+        
+        li.appendChild(deleteBtn);
+        taskList.appendChild(li);
+      });
+    }
+
+    // Delete Task
+    function deleteTask(id) {
+      let tasks = loadTasks();
+      tasks = tasks.filter(t => t.id !== id);
+      saveTasks(tasks);
+      renderTasks();
+    }
+
+    // Update Daily Stats
+    function updateDailyStats(tasks) {
+      const total = tasks.reduce((sum, t) => sum + t.score, 0);
+      const avg = tasks.length > 0 ? (total / tasks.length).toFixed(2) : "0";
+
+      document.getElementById("dailyScore").textContent = total;
+      document.getElementById("dailyAvg").textContent = avg;
+    }
+
+    // Update Weekly & Monthly Averages
+    function updateWeeklyMonthlyStats() {
+      const allKeys = Object.keys(localStorage);
+      let weeklyScores = [];
+      let monthlyScores = [];
+
+      const todayPrefix = getTodayKey().split("_").slice(0, 3).join("_");
+
+      allKeys.forEach(key => {
+        if (key.startsWith(todayPrefix)) {
+          const tasks = JSON.parse(localStorage.getItem(key));
+          const avgScore = tasks.length > 0 ? tasks.reduce((a, b) => a + b.score, 0) / tasks.length : 0;
+
+          if (key.startsWith(getWeekKey())) {
+            weeklyScores.push(avgScore);
+          }
+          if (key.startsWith(getMonthKey())) {
+            monthlyScores.push(avgScore);
+          }
+        }
+      });
+
+      const weeklyAvg = weeklyScores.length > 0
+        ? (weeklyScores.reduce((a, b) => a + b, 0) / weeklyScores.length).toFixed(2)
+        : "0";
+
+      const monthlyAvg = monthlyScores.length > 0
+        ? (monthlyScores.reduce((a, b) => a + b, 0) / monthlyScores.length).toFixed(2)
+        : "0";
+
+      document.getElementById("weeklyAvg").textContent = weeklyAvg;
+      document.getElementById("monthlyAvg").textContent = monthlyAvg;
+    }
+
+    // Save Client Details
+    function saveClientDetails() {
+      const name = document.getElementById("clientName").value.trim();
+      const phone = document.getElementById("clientPhone").value.trim();
+      const email = document.getElementById("clientEmail").value.trim();
+      const comment = document.getElementById("clientComment").value.trim();
+
+      if (!name) {
+        alert("Please enter client name");
+        return;
+      }
+
+      clientDetails = { name, phone, email, comment, timestamp: new Date().toISOString() };
+      localStorage.setItem(getClientKey(), JSON.stringify(clientDetails));
+      alert("✅ Client details saved!");
+    }
+
+    // Load Client Details
+    function loadClientDetails() {
+      const saved = localStorage.getItem(getClientKey());
+      if (saved) {
+        clientDetails = JSON.parse(saved);
+        document.getElementById("clientName").value = clientDetails.name || '';
+        document.getElementById("clientPhone").value = clientDetails.phone || '';
+        document.getElementById("clientEmail").value = clientDetails.email || '';
+        document.getElementById("clientComment").value = clientDetails.comment || '';
+      }
+    }
+
+    // Export to CSV
+    function exportToCSV() {
+      const tasks = loadTasks();
+      if (tasks.length === 0) {
+        alert("No tasks to export.");
+        return;
+      }
+
+      let csv = "Staff,Date,Sign-In,Location,Task,Description,Score,Comment\n";
+      const date = new Date().toISOString().split("T")[0];
+      const signIn = signInData.time || 'Not recorded';
+      const location = signInData.location ? 
+        `${signInData.location.lat},${signInData.location.lng}` : 'Not recorded';
+
+      tasks.forEach(t => {
+        csv += `${currentStaffId},${date},"${signIn}","${location}","${t.name}","${t.desc}","${t.score}","${t.comment || ''}"\n`;
+      });
+
+      downloadFile(csv, `tasks_${currentStaffId}_${date}.csv`, "text/csv");
+    }
+
+    // Generate Comprehensive PDF Report
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const tasks = loadTasks();
+      const today = new Date().toLocaleDateString();
+      const dailyScore = document.getElementById("dailyScore").textContent;
+      const dailyAvg = document.getElementById("dailyAvg").textContent;
+      const weeklyAvg = document.getElementById("weeklyAvg").textContent;
+      const monthlyAvg = document.getElementById("monthlyAvg").textContent;
+
+      // Header
+      doc.setFontSize(20);
+      doc.setTextColor(108, 92, 231);
+      doc.text("TOMSTUDIO BIZ HUB", 105, 20, null, null, "center");
+      doc.setFontSize(16);
+      doc.setTextColor(45, 52, 54);
+      doc.text("Daily Performance Report", 105, 30, null, null, "center");
+
+      // Staff Info
+      doc.setFontSize(12);
+      doc.setTextColor(99, 110, 114);
+      doc.text(`Staff ID: ${currentStaffId}`, 20, 50);
+      doc.text(`Date: ${today}`, 20, 56);
+      doc.text(`Sign-In: ${signInData.time || 'Not recorded'}`, 20, 62);
+      if (signInData.location) {
+        doc.text(`Location: ${signInData.location.lat.toFixed(6)}, ${signInData.location.lng.toFixed(6)}`, 20, 68);
+      }
+
+      // Client Info
+      if (clientDetails.name) {
+        doc.setFontSize(14);
+        doc.setTextColor(108, 92, 231);
+        doc.text("Client/Visitor Information", 20, 85);
+        doc.setFontSize(12);
+        doc.setTextColor(99, 110, 114);
+        doc.text(`Name: ${clientDetails.name}`, 20, 95);
+        if (clientDetails.phone) doc.text(`Phone: ${clientDetails.phone}`, 20, 101);
+        if (clientDetails.email) doc.text(`Email: ${clientDetails.email}`, 20, 107);
+        if (clientDetails.comment) {
+          doc.text("Comments:", 20, 113);
+          const lines = doc.splitTextToSize(clientDetails.comment, 170);
+          doc.text(lines, 20, 119);
+        }
+      }
+
+      // Performance Stats
+      doc.setFontSize(14);
+      doc.setTextColor(108, 92, 231);
+      doc.text("Performance Summary", 20, clientDetails.name ? 140 : 90);
+      doc.setFontSize(12);
+      doc.setTextColor(99, 110, 114);
+      doc.text(`Today's Score: ${dailyScore}/100 | Average: ${dailyAvg}`, 20, clientDetails.name ? 150 : 100);
+      doc.text(`Weekly Average: ${weeklyAvg} | Monthly Average: ${monthlyAvg}`, 20, clientDetails.name ? 156 : 106);
+
+      // Tasks Table
+      if (tasks.length > 0) {
+        const tableData = tasks.map(t => [t.name, t.desc || "-", t.score, t.comment || "-"]);
+        doc.autoTable({
+          startY: clientDetails.name ? 170 : 120,
+          head: [['Task', 'Description', 'Score', 'Comment']],
+          body: tableData,
+          theme: 'striped',
+          headStyles: { fillColor: [108, 92, 231] }
+        });
+      }
+
+      // Footer
+      doc.setFontSize(10);
+      doc.setTextColor(99, 110, 114);
+      doc.text("App Design and Developed by Tomstudio Tech Academy", 20, doc.internal.pageSize.height - 30);
+      doc.text("+2348030827417", 20, doc.internal.pageSize.height - 20);
+
+      doc.save(`report_${currentStaffId}_${today.replace(/\//g, "-")}.pdf`);
+    }
+
+    // Utility: Download File
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Clear Form
+    function clearForm() {
+      document.getElementById("taskName").value = "";
+      document.getElementById("taskDesc").value = "";
+      document.getElementById("taskScore").value = "";
+      document.getElementById("taskComment").value = "";
+    }
+
+    // Clear today's tasks
+    function clearToday() {
+      if (confirm("Are you sure you want to clear all tasks for today?")) {
+        localStorage.removeItem(getTodayKey());
+        renderTasks();
+        updateDailyStats([]);
+        updateWeeklyMonthlyStats();
+      }
+    }
+
+    // Load all data
+    function loadAllData() {
+      renderTasks();
+      updateWeeklyMonthlyStats();
+      displaySignInData();
+      loadClientDetails();
+    }
+
+    // Initialize
+    window.onload = function() {
+      // Check for saved sign-in data
+      const savedSignIn = localStorage.getItem('tomstudio_signIn');
+      if (savedSignIn) {
+        signInData = JSON.parse(savedSignIn);
+      }
+    };
+  </script>
+</body>
+</html>
