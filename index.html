@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#6c5ce7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>TOMSTUDIO BIZ HUB - Task Manager</title>
   
-  <!-- PWA -->
+  <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="apple-touch-icon" href="logo-192.png">
 
-  <!-- Styles -->
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     body {
@@ -25,19 +25,20 @@
       color: #333;
       min-height: 100vh;
       background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
+      margin: 10px auto;
+      padding: 15px;
     }
 
     /* Login Screen */
     .screen {
       background: white;
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
       overflow: hidden;
       animation: fadeIn 0.6s ease;
     }
@@ -49,27 +50,26 @@
 
     #loginScreen {
       text-align: center;
-      padding: 50px 30px;
+      padding: 40px 20px;
     }
 
     #loginScreen img {
-      width: 230px;
-      height: 120px;
-      margin: 0 auto 20px;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 15px;
       border-radius: 50%;
-      border: 5px solid #6c5ce7;
+      border: 4px solid #6c5ce7;
     }
 
     #loginScreen h1 {
       color: #6c5ce7;
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      font-size: 2.2rem;
+      margin-bottom: 8px;
     }
 
     #loginScreen h3 {
       color: #2d3436;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-weight: 600;
     }
 
@@ -82,13 +82,13 @@
     #loginScreen input {
       width: 100%;
       max-width: 300px;
-      padding: 15px;
-      margin: 15px auto;
+      padding: 14px;
+      margin: 12px auto;
       border: 2px solid #ddd;
       border-radius: 50px;
       font-size: 16px;
       text-align: center;
-      transition: all 0.3s;
+      display: block;
     }
 
     #loginScreen input:focus {
@@ -101,38 +101,38 @@
       background: linear-gradient(45deg, #6c5ce7, #a55eea);
       color: white;
       border: none;
-      padding: 15px 40px;
+      padding: 14px 35px;
       border-radius: 50px;
-      font-size: 18px;
+      font-size: 17px;
       cursor: pointer;
-      transition: all 0.3s;
       box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      margin-top: 10px;
     }
 
     #loginScreen button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+      transform: translateY(-1px);
     }
 
     /* Main App */
     #mainApp {
       display: none;
-      padding: 30px;
+      padding: 20px;
     }
 
     #mainApp img.mal {
-      width: 185px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       border: 3px solid #6c5ce7;
-      margin-bottom: 20px;
+      margin: 0 auto 15px;
+      display: block;
     }
 
     #mainApp h1 {
       text-align: center;
       color: #6c5ce7;
-      margin-bottom: 10px;
-      font-size: 2.2rem;
+      margin-bottom: 8px;
+      font-size: 1.8rem;
     }
 
     #mainApp h1 span {
@@ -143,87 +143,75 @@
     #mainApp p {
       text-align: center;
       color: #636e72;
-      margin-bottom: 30px;
-      font-size: 1.1rem;
+      margin-bottom: 25px;
+      font-size: 1rem;
     }
 
     /* Sign In Section */
     .sign-in-info {
       background: linear-gradient(45deg, #00b894, #00cec9);
       color: white;
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
-      margin-bottom: 30px;
-      text-align: center;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
 
     .sign-in-info h3 {
-      margin-bottom: 15px;
-      font-size: 1.5rem;
+      margin-bottom: 12px;
+      font-size: 1.4rem;
     }
 
     .sign-in-info p {
-      margin: 10px 0;
-      font-size: 1.1rem;
+      margin: 8px 0;
+      font-size: 1rem;
     }
 
     .time-location-btn {
       background: #2d3436;
       color: white;
       border: none;
-      padding: 15px 30px;
+      padding: 13px 25px;
       border-radius: 50px;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.3s;
+      width: 100%;
+      margin-top: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    .time-location-btn:hover {
-      background: #1e272e;
-      transform: translateY(-2px);
     }
 
     /* Form */
     .form {
       background: #f8f9fa;
-      padding: 30px;
+      padding: 25px;
       border-radius: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
     .form h3 {
       color: #6c5ce7;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
 
-    .form input, 
-    .form textarea, 
-    .form select {
+    .form input, .form textarea, .form select {
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       margin: 10px 0;
       border: 2px solid #ddd;
       border-radius: 10px;
-      font-size: 16px;
-      transition: all 0.3s;
+      font-size: 15px;
     }
 
-    .form input:focus,
-    .form textarea:focus,
-    .form select:focus {
+    .form input:focus, .form textarea:focus, .form select:focus {
       border-color: #6c5ce7;
       outline: none;
-      box-shadow: 0 0 10px rgba(108, 92, 231, 0.2);
     }
 
     .form textarea {
-      min-height: 100px;
+      min-height: 90px;
       resize: vertical;
     }
 
@@ -231,26 +219,64 @@
       background: linear-gradient(45deg, #6c5ce7, #a55eea);
       color: white;
       border: none;
-      padding: 15px;
+      padding: 14px;
       border-radius: 10px;
-      font-size: 18px;
+      font-size: 17px;
       cursor: pointer;
       width: 100%;
       font-weight: 600;
-      transition: all 0.3s;
       box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
     }
 
-    .form button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+    /* Client Section */
+    .client-section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 25px 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .client-section h3 {
+      color: #6c5ce7;
+      margin-bottom: 18px;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+
+    .client-entry {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 4px solid #00b894;
+    }
+
+    .client-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .client-actions button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .delete-client {
+      background: #e17055;
+      color: white;
     }
 
     /* Tasks List */
     h2 {
       color: #6c5ce7;
-      margin: 30px 0 15px;
-      font-size: 1.8rem;
+      margin: 25px 0 12px;
+      font-size: 1.6rem;
     }
 
     #taskList {
@@ -259,29 +285,23 @@
 
     #taskList li {
       background: white;
-      padding: 20px;
+      padding: 18px;
       border-radius: 15px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       border-left: 5px solid #6c5ce7;
-      transition: all 0.3s;
-    }
-
-    #taskList li:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
     .task-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .task-name {
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #2d3436;
     }
 
@@ -294,128 +314,99 @@
       font-weight: 600;
     }
 
-    .task-desc {
+    .task-desc, .task-comment {
       color: #636e72;
-      margin: 8px 0;
-      font-size: 0.95rem;
+      margin: 6px 0;
+      font-size: 0.9rem;
     }
 
     .task-comment {
       background: #fdcb6e;
-      color: #2d3436;
-      padding: 10px;
-      border-radius: 8px;
-      margin: 8px 0;
-      font-size: 0.9rem;
+      padding: 8px;
+      border-radius: 6px;
       border-left: 3px solid #e17055;
     }
 
     .task-meta {
       display: flex;
-      gap: 15px;
-      font-size: 0.85rem;
+      gap: 12px;
+      font-size: 0.8rem;
       color: #636e72;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .delete-btn {
       background: #e17055;
       color: white;
       border: none;
-      padding: 8px 15px;
-      border-radius: 20px;
+      padding: 6px 12px;
+      border-radius: 18px;
       cursor: pointer;
-      font-size: 0.9rem;
-      margin-top: 10px;
+      font-size: 0.85rem;
+      margin-top: 8px;
     }
 
     /* Summary */
     .summary, .stats {
       background: linear-gradient(45deg, #74b9ff, #0984e3);
       color: white;
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
-      margin: 30px 0;
+      margin: 25px 0;
       text-align: center;
       box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
     .summary h3, .stats h3 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
     }
 
     .summary p, .stats p {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
     }
 
-    /* Export & Buttons */
+    /* Export */
     .export {
       display: flex;
-      gap: 15px;
-      margin: 30px 0;
+      gap: 12px;
+      margin: 25px 0;
       flex-wrap: wrap;
-      justify-content: center;
     }
 
     .export button {
+      flex: 1;
+      min-width: 140px;
       background: linear-gradient(45deg, #fd79a8, #e84393);
       color: white;
       border: none;
-      padding: 15px 30px;
+      padding: 14px;
       border-radius: 50px;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
-      transition: all 0.3s;
       box-shadow: 0 5px 15px rgba(236, 90, 159, 0.4);
     }
 
-    .export button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(236, 90, 159, 0.6);
-    }
-
+    /* Buttons */
     .clear-btn, .logout-btn {
       background: #2d3436;
       color: white;
       border: none;
-      padding: 12px 25px;
+      padding: 11px 22px;
       border-radius: 50px;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
-      margin: 10px 5px;
-      transition: all 0.3s;
-    }
-
-    .clear-btn:hover, .logout-btn:hover {
-      background: #1e272e;
-      transform: translateY(-2px);
-    }
-
-    /* Client Section */
-    .client-section {
-      background: #f8f9fa;
-      padding: 30px;
-      border-radius: 15px;
-      margin: 30px 0;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    .client-section h3 {
-      color: #6c5ce7;
-      margin-bottom: 20px;
-      text-align: center;
-      font-size: 1.5rem;
+      margin: 8px 4px;
     }
 
     /* Footer */
     footer {
       text-align: center;
-      padding: 30px;
+      padding: 20px;
       color: white;
-      font-size: 0.9rem;
-      margin-top: 30px;
+      font-size: 0.85rem;
+      margin-top: 20px;
     }
 
     footer a {
@@ -427,33 +418,27 @@
     @media (max-width: 768px) {
       .container {
         margin: 10px;
-        padding: 15px;
+        padding: 12px;
       }
       
       #loginScreen {
-        padding: 30px 20px;
+        padding: 30px 15px;
       }
       
       #loginScreen h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
       
       #mainApp {
-        padding: 20px;
+        padding: 15px;
       }
       
       .export {
         flex-direction: column;
-        align-items: center;
       }
       
       .export button {
         width: 100%;
-        max-width: 300px;
-      }
-      
-      .summary, .stats {
-        padding: 20px;
       }
     }
   </style>
@@ -482,11 +467,11 @@
 
       <!-- Sign In Section -->
       <div class="sign-in-info">
-        <h3>⏰ Daily Sign In</h3>
+        <h3>📍 Daily Sign In & Location</h3>
         <p id="signInTime">Not signed in</p>
         <p id="locationInfo">Location: Not tracked</p>
         <button class="time-location-btn" onclick="recordSignIn()">
-          🕒 Record Sign-In Time & Location
+          🕒 Record Sign-In & GPS Coordinates
         </button>
       </div>
 
@@ -515,20 +500,21 @@
       <!-- Client/Visitor Section -->
       <div class="client-section">
         <h3>📝 Client/Visitor Details</h3>
-        <div class="form-row" style="display: flex; gap: 15px; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 200px;">
-            <input type="text" id="clientName" placeholder="Client Name" style="width: 100%;">
-          </div>
-          <div style="flex: 1; min-width: 200px;">
-            <input type="text" id="clientPhone" placeholder="Phone Number" style="width: 100%;">
-          </div>
-          <div style="flex: 1; min-width: 200px;">
-            <input type="email" id="clientEmail" placeholder="Email (optional)" style="width: 100%;">
-          </div>
+        
+        <!-- Add New Client Form -->
+        <div style="background: #f1f2f6; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+          <input type="text" id="clientName" placeholder="Client Name" style="margin-bottom: 10px;" />
+          <input type="text" id="clientPhone" placeholder="Phone Number" style="margin-bottom: 10px;" />
+          <input type="email" id="clientEmail" placeholder="Email (optional)" style="margin-bottom: 10px;" />
+          <textarea id="clientComment" placeholder="Client comments, inquiries, or feedback..." 
+                    style="width: 100%; margin: 10px 0; padding: 12px; min-height: 80px; border-radius: 8px;"></textarea>
+          <button onclick="addClient()" style="width: 100%; background: #00b894; padding: 12px;">✅ Add Client</button>
         </div>
-        <textarea id="clientComment" placeholder="Client comments, inquiries, or feedback..." 
-                  style="width: 100%; margin: 15px 0; padding: 15px; min-height: 100px;"></textarea>
-        <button onclick="saveClientDetails()" style="width: 100%; background: #00b894;">✅ Save Client Details</button>
+
+        <!-- Client List -->
+        <div id="clientList" style="margin-top: 15px;">
+          <!-- Client entries will be added here -->
+        </div>
       </div>
 
       <!-- Daily Tasks List -->
@@ -550,7 +536,7 @@
       <!-- Export Buttons -->
       <div class="export">
         <button onclick="exportToCSV()">📥 Export to CSV</button>
-        <button onclick="generatePDF()">📄 Generate Comprehensive PDF Report</button>
+        <button onclick="generatePDF()">📄 Generate PDF Report</button>
       </div>
 
       <div style="text-align: center;">
@@ -570,7 +556,7 @@
   <script>
     // Global Variables
     let currentStaffId = null;
-    let clientDetails = {};
+    let clients = [];
     let signInData = {};
 
     // DOM Elements
@@ -580,6 +566,7 @@
     const staffDisplay = document.getElementById("staffDisplay");
     const signInTimeElement = document.getElementById("signInTime");
     const locationInfoElement = document.getElementById("locationInfo");
+    const clientList = document.getElementById("clientList");
 
     // Login
     function login() {
@@ -618,7 +605,7 @@
       };
 
       if (navigator.geolocation) {
-        locationInfoElement.textContent = "📍 Getting location...";
+        locationInfoElement.textContent = "📍 Getting GPS coordinates...";
         
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -627,18 +614,24 @@
               lng: position.coords.longitude,
               accuracy: position.coords.accuracy
             };
-            locationInfoElement.innerHTML = `📍 Location: ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)} (Accuracy: ${position.coords.accuracy}m)`;
+            
+            locationInfoElement.innerHTML = `
+              📍 <strong>Lat:</strong> ${position.coords.latitude.toFixed(6)}<br>
+              📍 <strong>Lng:</strong> ${position.coords.longitude.toFixed(6)}<br>
+              📏 <strong>Accuracy:</strong> ${position.coords.accuracy}m
+            `;
+            
             saveSignInData(signInData);
           },
           (error) => {
             console.log("Location error:", error);
-            locationInfoElement.textContent = "📍 Location: Could not retrieve";
+            locationInfoElement.textContent = "📍 Location: Permission denied or unavailable";
             saveSignInData(signInData);
           },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
         );
       } else {
-        locationInfoElement.textContent = "📍 Location: Not supported";
+        locationInfoElement.textContent = "📍 Location: Not supported by browser";
         saveSignInData(signInData);
       }
 
@@ -658,7 +651,11 @@
         signInData = data;
         signInTimeElement.textContent = `Signed in at ${data.time} on ${data.date}`;
         if (data.location) {
-          locationInfoElement.innerHTML = `📍 Location: ${data.location.lat.toFixed(6)}, ${data.location.lng.toFixed(6)} (Accuracy: ${data.location.accuracy}m)`;
+          locationInfoElement.innerHTML = `
+            📍 <strong>Lat:</strong> ${data.location.lat.toFixed(6)}<br>
+            📍 <strong>Lng:</strong> ${data.location.lng.toFixed(6)}<br>
+            📏 <strong>Accuracy:</strong> ${data.location.accuracy}m
+          `;
         }
       }
     }
@@ -668,20 +665,8 @@
       return `tasks_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
     }
 
-    function getWeekKey() {
-      const now = new Date();
-      const onejan = new Date(now.getFullYear(), 0, 1);
-      const week = Math.ceil((((now - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-      return `week_${currentStaffId}_${now.getFullYear()}_W${week}`;
-    }
-
-    function getMonthKey() {
-      const now = new Date();
-      return `month_${currentStaffId}_${now.getFullYear()}_${now.getMonth() + 1}`;
-    }
-
     function getClientKey() {
-      return `clients_${currentStaffId}`;
+      return `clients_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
     }
 
     // Load tasks
@@ -789,10 +774,10 @@
           const tasks = JSON.parse(localStorage.getItem(key));
           const avgScore = tasks.length > 0 ? tasks.reduce((a, b) => a + b.score, 0) / tasks.length : 0;
 
-          if (key.startsWith(getWeekKey())) {
+          if (key.startsWith(`week_${currentStaffId}`)) {
             weeklyScores.push(avgScore);
           }
-          if (key.startsWith(getMonthKey())) {
+          if (key.startsWith(`month_${currentStaffId}`)) {
             monthlyScores.push(avgScore);
           }
         }
@@ -810,8 +795,8 @@
       document.getElementById("monthlyAvg").textContent = monthlyAvg;
     }
 
-    // Save Client Details
-    function saveClientDetails() {
+    // Add Client
+    function addClient() {
       const name = document.getElementById("clientName").value.trim();
       const phone = document.getElementById("clientPhone").value.trim();
       const email = document.getElementById("clientEmail").value.trim();
@@ -822,48 +807,126 @@
         return;
       }
 
-      clientDetails = { name, phone, email, comment, timestamp: new Date().toISOString() };
-      localStorage.setItem(getClientKey(), JSON.stringify(clientDetails));
-      alert("✅ Client details saved!");
+      const now = new Date();
+      const client = {
+        id: Date.now(),
+        name,
+        phone,
+        email,
+        comment,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+
+      clients.push(client);
+      saveClients();
+      renderClients();
+      clearClientForm();
     }
 
-    // Load Client Details
-    function loadClientDetails() {
+    // Save Clients
+    function saveClients() {
+      localStorage.setItem(getClientKey(), JSON.stringify(clients));
+    }
+
+    // Render Clients
+    function renderClients() {
+      clientList.innerHTML = "";
+      
+      if (clients.length === 0) {
+        clientList.innerHTML = "<p>No clients recorded today.</p>";
+        return;
+      }
+
+      clients.forEach(client => {
+        const div = document.createElement("div");
+        div.className = "client-entry";
+        div.innerHTML = `
+          <strong>${client.name}</strong>
+          ${client.phone ? `<div>📞 ${client.phone}</div>` : ""}
+          ${client.email ? `<div>✉️ ${client.email}</div>` : ""}
+          ${client.comment ? `<div class="task-comment">💬 ${client.comment}</div>` : ""}
+          <div class="task-meta">
+            <span>📅 ${client.date}</span>
+            <span>⏰ ${client.time}</span>
+          </div>
+        `;
+        
+        const actions = document.createElement("div");
+        actions.className = "client-actions";
+        
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑️ Delete";
+        deleteBtn.className = "delete-client";
+        deleteBtn.onclick = () => deleteClient(client.id);
+        
+        actions.appendChild(deleteBtn);
+        div.appendChild(actions);
+        clientList.appendChild(div);
+      });
+    }
+
+    // Delete Client
+    function deleteClient(id) {
+      clients = clients.filter(c => c.id !== id);
+      saveClients();
+      renderClients();
+    }
+
+    // Clear Client Form
+    function clearClientForm() {
+      document.getElementById("clientName").value = "";
+      document.getElementById("clientPhone").value = "";
+      document.getElementById("clientEmail").value = "";
+      document.getElementById("clientComment").value = "";
+    }
+
+    // Load Clients
+    function loadClients() {
       const saved = localStorage.getItem(getClientKey());
       if (saved) {
-        clientDetails = JSON.parse(saved);
-        document.getElementById("clientName").value = clientDetails.name || '';
-        document.getElementById("clientPhone").value = clientDetails.phone || '';
-        document.getElementById("clientEmail").value = clientDetails.email || '';
-        document.getElementById("clientComment").value = clientDetails.comment || '';
+        clients = JSON.parse(saved);
+        renderClients();
       }
     }
 
     // Export to CSV
     function exportToCSV() {
       const tasks = loadTasks();
-      if (tasks.length === 0) {
-        alert("No tasks to export.");
+      if (tasks.length === 0 && clients.length === 0) {
+        alert("No data to export.");
         return;
       }
 
-      let csv = "Staff,Date,Sign-In,Location,Task,Description,Score,Comment\n";
+      let csv = "Staff,Date,Sign-In,Lat,Lng,Accuracy,Task,Desc,Score,Comment,Client,ClientPhone,ClientEmail,ClientComment\n";
       const date = new Date().toISOString().split("T")[0];
       const signIn = signInData.time || 'Not recorded';
-      const location = signInData.location ? 
-        `${signInData.location.lat},${signInData.location.lng}` : 'Not recorded';
+      const lat = signInData.location ? signInData.location.lat.toFixed(6) : '';
+      const lng = signInData.location ? signInData.location.lng.toFixed(6) : '';
+      const accuracy = signInData.location ? signInData.location.accuracy : '';
 
+      // Add tasks
       tasks.forEach(t => {
-        csv += `${currentStaffId},${date},"${signIn}","${location}","${t.name}","${t.desc}","${t.score}","${t.comment || ''}"\n`;
+        csv += `${currentStaffId},${date},"${signIn}","${lat}","${lng}","${accuracy}","${t.name}","${t.desc}","${t.score}","${t.comment || ''}","","","",""\n`;
       });
 
-      downloadFile(csv, `tasks_${currentStaffId}_${date}.csv`, "text/csv");
+      // Add clients
+      clients.forEach(c => {
+        csv += `${currentStaffId},${date},"${signIn}","${lat}","${lng}","${accuracy}","","","","","${c.name}","${c.phone || ''}","${c.email || ''}","${c.comment || ''}"\n`;
+      });
+
+      downloadFile(csv, `report_${currentStaffId}_${date}.csv`, "text/csv");
     }
 
-    // Generate Comprehensive PDF Report
+    // Generate Comprehensive PDF Report - VERIFIED VERSION
     function generatePDF() {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
 
       const tasks = loadTasks();
       const today = new Date().toLocaleDateString();
@@ -872,69 +935,198 @@
       const weeklyAvg = document.getElementById("weeklyAvg").textContent;
       const monthlyAvg = document.getElementById("monthlyAvg").textContent;
 
+      // Set colors
+      const primaryColor = [108, 92, 231]; // #6c5ce7
+      const textColor = [66, 66, 66];
+
       // Header
+      doc.setFillColor(...primaryColor);
+      doc.rect(0, 0, 210, 40, 'F'); // Background
+      doc.setTextColor(255, 255, 255);
       doc.setFontSize(20);
-      doc.setTextColor(108, 92, 231);
       doc.text("TOMSTUDIO BIZ HUB", 105, 20, null, null, "center");
-      doc.setFontSize(16);
-      doc.setTextColor(45, 52, 54);
+      doc.setFontSize(14);
       doc.text("Daily Performance Report", 105, 30, null, null, "center");
 
-      // Staff Info
+      // Reset color
+      doc.setTextColor(...textColor);
+
+      // Staff Info - Section 1
+      let yPos = 50;
       doc.setFontSize(12);
-      doc.setTextColor(99, 110, 114);
-      doc.text(`Staff ID: ${currentStaffId}`, 20, 50);
-      doc.text(`Date: ${today}`, 20, 56);
-      doc.text(`Sign-In: ${signInData.time || 'Not recorded'}`, 20, 62);
+      doc.setFont("helvetica", "bold");
+      doc.text("STAFF INFORMATION", 15, yPos);
+      yPos += 8;
+      doc.setFont("helvetica", "normal");
+      doc.text(`Staff ID: ${currentStaffId}`, 15, yPos);
+      yPos += 6;
+      doc.text(`Date: ${today}`, 15, yPos);
+      yPos += 6;
+      doc.text(`Sign-In: ${signInData.time || 'Not recorded'}`, 15, yPos);
+      yPos += 10;
+
+      // Location Info
       if (signInData.location) {
-        doc.text(`Location: ${signInData.location.lat.toFixed(6)}, ${signInData.location.lng.toFixed(6)}`, 20, 68);
+        doc.setFont("helvetica", "bold");
+        doc.text("GPS LOCATION", 15, yPos);
+        yPos += 8;
+        doc.setFont("helvetica", "normal");
+        doc.text(`Latitude: ${signInData.location.lat.toFixed(6)}`, 15, yPos);
+        yPos += 6;
+        doc.text(`Longitude: ${signInData.location.lng.toFixed(6)}`, 15, yPos);
+        yPos += 6;
+        doc.text(`Accuracy: ${signInData.location.accuracy}m`, 15, yPos);
+        yPos += 10;
       }
 
       // Client Info
-      if (clientDetails.name) {
-        doc.setFontSize(14);
-        doc.setTextColor(108, 92, 231);
-        doc.text("Client/Visitor Information", 20, 85);
-        doc.setFontSize(12);
-        doc.setTextColor(99, 110, 114);
-        doc.text(`Name: ${clientDetails.name}`, 20, 95);
-        if (clientDetails.phone) doc.text(`Phone: ${clientDetails.phone}`, 20, 101);
-        if (clientDetails.email) doc.text(`Email: ${clientDetails.email}`, 20, 107);
-        if (clientDetails.comment) {
-          doc.text("Comments:", 20, 113);
-          const lines = doc.splitTextToSize(clientDetails.comment, 170);
-          doc.text(lines, 20, 119);
-        }
+      if (clients.length > 0) {
+        doc.setFont("helvetica", "bold");
+        doc.text("CLIENT/VISITOR DETAILS", 15, yPos);
+        yPos += 8;
+        
+        clients.forEach(client => {
+          if (yPos > 250) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          doc.setFont("helvetica", "bold");
+          doc.text(`Name: ${client.name}`, 15, yPos);
+          yPos += 6;
+          doc.setFont("helvetica", "normal");
+          
+          if (client.phone) {
+            doc.text(`Phone: ${client.phone}`, 15, yPos);
+            yPos += 5;
+          }
+          if (client.email) {
+            doc.text(`Email: ${client.email}`, 15, yPos);
+            yPos += 5;
+          }
+          if (client.comment) {
+            doc.text("Comments:", 15, yPos);
+            yPos += 5;
+            const commentLines = doc.splitTextToSize(client.comment, 170);
+            commentLines.forEach(line => {
+              if (yPos > 270) {
+                doc.addPage();
+                yPos = 20;
+              }
+              doc.text(line, 15, yPos);
+              yPos += 5;
+            });
+            yPos += 2;
+          }
+          
+          doc.text(`Date: ${client.date} | Time: ${client.time}`, 15, yPos);
+          yPos += 8;
+        });
+        
+        yPos += 5;
       }
 
-      // Performance Stats
-      doc.setFontSize(14);
-      doc.setTextColor(108, 92, 231);
-      doc.text("Performance Summary", 20, clientDetails.name ? 140 : 90);
-      doc.setFontSize(12);
-      doc.setTextColor(99, 110, 114);
-      doc.text(`Today's Score: ${dailyScore}/100 | Average: ${dailyAvg}`, 20, clientDetails.name ? 150 : 100);
-      doc.text(`Weekly Average: ${weeklyAvg} | Monthly Average: ${monthlyAvg}`, 20, clientDetails.name ? 156 : 106);
+      // Performance Summary
+      doc.setFont("helvetica", "bold");
+      doc.text("PERFORMANCE SUMMARY", 15, yPos);
+      yPos += 8;
+      doc.setFont("helvetica", "normal");
+      doc.text(`Today's Score: ${dailyScore}/100`, 15, yPos);
+      yPos += 6;
+      doc.text(`Average: ${dailyAvg}`, 15, yPos);
+      yPos += 6;
+      doc.text(`Weekly Average: ${weeklyAvg}`, 15, yPos);
+      yPos += 6;
+      doc.text(`Monthly Average: ${monthlyAvg}`, 15, yPos);
+      yPos += 10;
 
       // Tasks Table
       if (tasks.length > 0) {
-        const tableData = tasks.map(t => [t.name, t.desc || "-", t.score, t.comment || "-"]);
-        doc.autoTable({
-          startY: clientDetails.name ? 170 : 120,
-          head: [['Task', 'Description', 'Score', 'Comment']],
-          body: tableData,
-          theme: 'striped',
-          headStyles: { fillColor: [108, 92, 231] }
-        });
+        doc.setFont("helvetica", "bold");
+        doc.text("TODAY'S TASKS", 15, yPos);
+        yPos += 8;
+        
+        const tableData = tasks.map(t => [
+          t.name,
+          t.desc || "-",
+          t.score.toString(),
+          t.comment || "-"
+        ]);
+        
+        try {
+          doc.autoTable({
+            startY: yPos,
+            head: [['Task', 'Description', 'Score', 'Comment']],
+            body: tableData,
+            theme: 'grid',
+            headStyles: { 
+              fillColor: primaryColor,
+              textColor: [255, 255, 255],
+              fontSize: 10
+            },
+            bodyStyles: { 
+              fontSize: 9
+            },
+            styles: {
+              font: 'helvetica',
+              fontSize: 10
+            },
+            columnStyles: {
+              0: { cellWidth: 50 },
+              1: { cellWidth: 60 },
+              2: { cellWidth: 20 },
+              3: { cellWidth: 60 }
+            }
+          });
+        } catch (e) {
+          console.error("AutoTable error:", e);
+          yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : yPos;
+          doc.text("Task data could not be displayed in table format.", 15, yPos);
+        }
       }
 
       // Footer
-      doc.setFontSize(10);
-      doc.setTextColor(99, 110, 114);
-      doc.text("App Design and Developed by Tomstudio Tech Academy", 20, doc.internal.pageSize.height - 30);
-      doc.text("+2348030827417", 20, doc.internal.pageSize.height - 20);
+      const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 20 : yPos + 20;
+      doc.setDrawColor(...primaryColor);
+      doc.line(15, finalY, 195, finalY);
+      doc.setFontSize(9);
+      doc.setTextColor(...textColor);
+      doc.text("App Design and Developed by Tomstudio Tech Academy", 15, finalY + 10);
+      doc.text("+2348030827417", 15, finalY + 15);
 
-      doc.save(`report_${currentStaffId}_${today.replace(/\//g, "-")}.pdf`);
+      // Finalize and save with multiple fallbacks
+      try {
+        // Method 1: Direct save
+        doc.save(`TOMSTUDIO_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
+      } catch (e) {
+        console.error("Save failed:", e);
+        
+        // Method 2: Blob + download
+        try {
+          const pdfBlob = doc.output('blob');
+          const url = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `TOMSTUDIO_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`;
+          
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 100);
+        } catch (e2) {
+          console.error("Fallback save failed:", e2);
+          
+          // Method 3: Open in new tab
+          try {
+            const url = doc.output('datauristring');
+            const newTab = window.open();
+            newTab.document.write(`<iframe width="100%" height="100%" src="${url}"></iframe>`);
+          } catch (e3) {
+            alert("Could not generate PDF. Please try again.");
+            console.error("All methods failed:", e3);
+          }
+        }
+      }
     }
 
     // Utility: Download File
@@ -960,9 +1152,12 @@
 
     // Clear today's tasks
     function clearToday() {
-      if (confirm("Are you sure you want to clear all tasks for today?")) {
+      if (confirm("Are you sure you want to clear all data for today?")) {
         localStorage.removeItem(getTodayKey());
+        localStorage.removeItem(getClientKey());
         renderTasks();
+        clients = [];
+        renderClients();
         updateDailyStats([]);
         updateWeeklyMonthlyStats();
       }
@@ -973,17 +1168,25 @@
       renderTasks();
       updateWeeklyMonthlyStats();
       displaySignInData();
-      loadClientDetails();
+      loadClients();
     }
 
     // Initialize
     window.onload = function() {
-      // Check for saved sign-in data
       const savedSignIn = localStorage.getItem('tomstudio_signIn');
       if (savedSignIn) {
         signInData = JSON.parse(savedSignIn);
       }
     };
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW registration failed', err));
+      });
+    }
   </script>
 </body>
 </html>
