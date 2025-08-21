@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#6c5ce7">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>TOMSTUDIO BIZ HUB - Task Manager</title>
+  <title>TOMSTUDIO DAILY PERFORMANCE TRACKER</title>
   
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
@@ -91,12 +91,6 @@
       display: block;
     }
 
-    #loginScreen input:focus {
-      border-color: #6c5ce7;
-      outline: none;
-      box-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
-    }
-
     #loginScreen button {
       background: linear-gradient(45deg, #6c5ce7, #a55eea);
       color: white;
@@ -109,8 +103,33 @@
       margin-top: 10px;
     }
 
-    #loginScreen button:hover {
-      transform: translateY(-1px);
+    /* Navigation */
+    nav {
+      background: white;
+      border-radius: 15px;
+      padding: 5px;
+      margin: 15px 0;
+      display: flex;
+      overflow-x: auto;
+      gap: 2px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      display: block;
+      padding: 12px 20px;
+      color: #636e72;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 10px;
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+
+    nav a.active {
+      background: #6c5ce7;
+      color: white;
+      box-shadow: 0 3px 10px rgba(108, 92, 231, 0.4);
     }
 
     /* Main App */
@@ -180,6 +199,15 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
+    /* Tab Content */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
     /* Form */
     .form {
       background: #f8f9fa;
@@ -228,143 +256,85 @@
       box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
     }
 
-    /* Client Section */
-    .client-section {
-      background: #f8f9fa;
-      padding: 25px;
-      border-radius: 15px;
-      margin: 25px 0;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    .client-section h3 {
-      color: #6c5ce7;
-      margin-bottom: 18px;
+    /* Image Upload */
+    .image-upload {
+      border: 2px dashed #ddd;
+      padding: 20px;
       text-align: center;
-      font-size: 1.4rem;
-    }
-
-    .client-entry {
-      background: white;
-      padding: 15px;
+      margin: 15px 0;
       border-radius: 10px;
-      margin-bottom: 15px;
-      border-left: 4px solid #00b894;
     }
 
-    .client-actions {
+    .image-preview {
       display: flex;
       gap: 10px;
-      margin-top: 10px;
+      overflow-x: auto;
+      padding: 10px 0;
+      margin: 10px 0;
     }
 
-    .client-actions button {
-      flex: 1;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
+    .image-item {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .delete-client {
-      background: #e17055;
-      color: white;
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    /* Tasks List */
-    h2 {
-      color: #6c5ce7;
-      margin: 25px 0 12px;
-      font-size: 1.6rem;
-    }
-
-    #taskList {
-      list-style: none;
-    }
-
-    #taskList li {
-      background: white;
-      padding: 18px;
-      border-radius: 15px;
-      margin-bottom: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      border-left: 5px solid #6c5ce7;
-    }
-
-    .task-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-
-    .task-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #2d3436;
-    }
-
-    .task-score {
-      background: #6c5ce7;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .task-desc, .task-comment {
-      color: #636e72;
-      margin: 6px 0;
-      font-size: 0.9rem;
-    }
-
-    .task-comment {
-      background: #fdcb6e;
-      padding: 8px;
-      border-radius: 6px;
-      border-left: 3px solid #e17055;
-    }
-
-    .task-meta {
-      display: flex;
-      gap: 12px;
-      font-size: 0.8rem;
-      color: #636e72;
-      margin-top: 8px;
-    }
-
-    .delete-btn {
-      background: #e17055;
+    .image-item .delete-img {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(225, 112, 85, 0.9);
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 18px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      font-size: 12px;
       cursor: pointer;
-      font-size: 0.85rem;
-      margin-top: 8px;
     }
 
-    /* Summary */
-    .summary, .stats {
-      background: linear-gradient(45deg, #74b9ff, #0984e3);
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .gallery-item {
+      position: relative;
+      height: 150px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-item .delete-img {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(225, 112, 85, 0.9);
       color: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin: 25px 0;
-      text-align: center;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-
-    .summary h3, .stats h3 {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-    }
-
-    .summary p, .stats p {
-      font-size: 1.1rem;
-      font-weight: 600;
+      border: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
     }
 
     /* Export */
@@ -400,18 +370,43 @@
       margin: 8px 4px;
     }
 
+    /* Summary Cards */
+    .summary-box {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    .summary-card {
+      flex: 1;
+      min-width: 200px;
+      background: #f1f2f6;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .summary-card h4 {
+      font-size: 0.9rem;
+      color: #636e72;
+      margin-bottom: 5px;
+    }
+
+    .summary-card p {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #2d3436;
+    }
+
     /* Footer */
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 30px;
       color: white;
-      font-size: 0.85rem;
-      margin-top: 20px;
-    }
-
-    footer a {
-      color: #fdcb6e;
-      text-decoration: none;
+      font-size: 0.9rem;
+      margin-top: 30px;
+      font-weight: 600;
     }
 
     /* Responsive */
@@ -440,6 +435,10 @@
       .export button {
         width: 100%;
       }
+      
+      .summary-box {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -449,8 +448,8 @@
     <!-- Login Screen -->
     <div id="loginScreen" class="screen">
       <img src="logo-192.png" alt="TOMSTUDIO Logo">
-      <h1>TOMSTUDIO BIZ HUB</h1>
-      <h3>DAILY TASK TRACKER</h3>
+      <h1>TOMSTUDIO DAILY PERFORMANCE TRACKER</h1>
+      <h3>COMPLETE FIELD OPERATIONS</h3>
       <p>Please log in with your Staff ID</p>
       <input type="text" id="staffId" placeholder="Enter Staff ID" maxlength="10" />
       <button onclick="login()">🔓 Log In</button>
@@ -463,90 +462,195 @@
       </div>
       
       <h1>🎯 Welcome, <span id="staffDisplay"></span>!</h1>
-      <p>Track your tasks and performance.</p>
+      <p>Track your daily performance and activities.</p>
 
       <!-- Sign In Section -->
       <div class="sign-in-info">
-        <h3>📍 Daily Sign In & Location</h3>
+        <h3>📍 Daily Sign In & GPS Location</h3>
         <p id="signInTime">Not signed in</p>
         <p id="locationInfo">Location: Not tracked</p>
         <button class="time-location-btn" onclick="recordSignIn()">
-          🕒 Record Sign-In & GPS Coordinates
+          🕒 Record Sign-In & Get GPS Coordinates
         </button>
       </div>
 
-      <!-- Add Task Form -->
-      <div class="form">
-        <h3>➕ Add New Task</h3>
-        <input type="text" id="taskName" placeholder="Task name" required />
-        <textarea id="taskDesc" placeholder="Description (optional)"></textarea>
-        <select id="taskScore" required>
-          <option value="">Rate Task (1-10)</option>
-          <option value="1">1 - Poor</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5 - Average</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10 - Excellent</option>
-        </select>
-        <textarea id="taskComment" placeholder="Explain why this task wasn't achieved (optional)"></textarea>
-        <button onclick="addTask()">➕ Add Task</button>
-      </div>
+      <!-- Navigation Tabs -->
+      <nav>
+        <a href="#" class="tab-link active" data-tab="clients">Clients/Visitors</a>
+        <a href="#" class="tab-link" data-tab="staff">Onsite Staff</a>
+        <a href="#" class="tab-link" data-tab="learning">Student Learning</a>
+        <a href="#" class="tab-link" data-tab="sales">Daily Sales</a>
+        <a href="#" class="tab-link" data-tab="registration">New Students</a>
+        <a href="#" class="tab-link" data-tab="finance">Income & Expenses</a>
+        <a href="#" class="tab-link" data-tab="gallery">Class Gallery</a>
+        <a href="#" class="tab-link" data-tab="reports">Reports</a>
+      </nav>
 
-      <!-- Client/Visitor Section -->
-      <div class="client-section">
-        <h3>📝 Client/Visitor Details</h3>
+      <!-- Clients/Visitors Tab -->
+      <section id="clients" class="tab-content active">
+        <div class="form">
+          <h3>📝 Client/Visitor Details</h3>
+          <input type="text" id="clientName" placeholder="Client Name" />
+          <input type="text" id="clientPhone" placeholder="Phone Number" />
+          <input type="email" id="clientEmail" placeholder="Email (optional)" />
+          <textarea id="clientComment" placeholder="Purpose of visit, feedback, or comments..."></textarea>
+          <button onclick="addClient()">✅ Add Client</button>
+          <button onclick="clearClients()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
+        </div>
+
+        <div id="clientList"></div>
+      </section>
+
+      <!-- Onsite Staff Tab -->
+      <section id="staff" class="tab-content">
+        <div class="form">
+          <h3>👷 Onsite Staff Daily Tasks</h3>
+          <input type="text" id="staffName" placeholder="Staff Name" />
+          <select id="staffRole">
+            <option value="">Select Role</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Cleaner">Cleaner</option>
+            <option value="Security">Security</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <textarea id="staffActivity" placeholder="Daily activities and tasks completed..."></textarea>
+          <div class="image-upload">
+            <p>📸 Upload Activity Photos</p>
+            <input type="file" id="staffPhotos" accept="image/*" multiple>
+          </div>
+          <button onclick="addStaffActivity()">✅ Record Activity</button>
+          <button onclick="clearStaff()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
+        </div>
+
+        <div id="staffList"></div>
+      </section>
+
+      <!-- Student Learning Tab -->
+      <section id="learning" class="tab-content">
+        <div class="form">
+          <h3>📚 Student Learning Log</h3>
+          <input type="text" id="className" placeholder="Class Name (e.g., Primary 3)" />
+          <textarea id="topicsCovered" placeholder="Topics covered today..."></textarea>
+          <textarea id="studentProgress" placeholder="Student progress and challenges..."></textarea>
+          <div class="image-upload">
+            <p>📸 Upload Class Activity Photos</p>
+            <input type="file" id="learningPhotos" accept="image/*" multiple>
+          </div>
+          <button onclick="addLearningLog()">✅ Record Learning</button>
+          <button onclick="clearLearning()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
+        </div>
+
+        <div id="learningList"></div>
+      </section>
+
+      <!-- Daily Sales Tab -->
+      <section id="sales" class="tab-content">
+        <div class="form">
+          <h3>💰 Daily Sales</h3>
+          <input type="text" id="saleItem" placeholder="Item Sold" />
+          <input type="number" id="saleAmount" placeholder="Amount (₦)" />
+          <textarea id="saleNotes" placeholder="Additional notes..."></textarea>
+          <button onclick="addSale()">✅ Record Sale</button>
+          <button onclick="clearSales()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
+        </div>
+
+        <div id="salesList"></div>
+        <div style="background:white; padding:15px; border-radius:10px; margin:15px 0;">
+          <h4>💰 Today's Total Sales: <span id="dailySalesTotal">₦0</span></h4>
+        </div>
+      </section>
+
+      <!-- New Student Registration -->
+      <section id="registration" class="tab-content">
+        <div class="form">
+          <h3>🎓 New Student Registration</h3>
+          <input type="text" id="studentName" placeholder="Student Name" />
+          <input type="text" id="studentAge" placeholder="Age" />
+          <input type="text" id="studentClass" placeholder="Class" />
+          <input type="text" id="parentName" placeholder="Parent/Guardian Name" />
+          <input type="text" id="parentPhone" placeholder="Parent Phone" />
+          <textarea id="studentNotes" placeholder="Additional information..."></textarea>
+          <button onclick="registerStudent()">✅ Register Student</button>
+          <button onclick="clearRegistrations()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
+        </div>
+
+        <div id="registrationList"></div>
+      </section>
+
+      <!-- Income & Expenses -->
+      <section id="finance" class="tab-content">
+        <div class="form">
+          <h3>📊 Income & Expenses</h3>
+          <select id="financeType">
+            <option value="">Select Type</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <input type="text" id="financeItem" placeholder="Item/Description" />
+          <input type="number" id="financeAmount" placeholder="Amount (₦)" />
+          <textarea id="financeNotes" placeholder="Additional notes..."></textarea>
+          <button onclick="addFinance()">✅ Record Transaction</button>
+          <button onclick="clearFinance()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
+        </div>
+
+        <div id="financeList"></div>
+        <div style="background:white; padding:15px; border-radius:10px; margin:15px 0;">
+          <h4>📊 Today's Summary:</h4>
+          <p>Income: <span id="totalIncome">₦0</span> | Expenses: <span id="totalExpenses">₦0</span> | Net: <span id="netBalance">₦0</span></p>
+        </div>
+      </section>
+
+      <!-- Class Gallery Tab -->
+      <section id="gallery" class="tab-content">
+        <h2>🖼️ Class Gallery</h2>
+        <button onclick="clearGallery()" class="clear-btn" style="margin:10px 0;">🗑️ Clear All Images</button>
+        <div class="gallery" id="galleryImages"></div>
+      </section>
+
+      <!-- Reports Tab -->
+      <section id="reports" class="tab-content">
+        <h2>📄 Comprehensive Reports</h2>
+        <div class="export">
+          <button onclick="generatePDF()">📄 Generate PDF Report</button>
+          <button onclick="exportToCSV()">📥 Export to CSV</button>
+        </div>
         
-        <!-- Add New Client Form -->
-        <div style="background: #f1f2f6; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-          <input type="text" id="clientName" placeholder="Client Name" style="margin-bottom: 10px;" />
-          <input type="text" id="clientPhone" placeholder="Phone Number" style="margin-bottom: 10px;" />
-          <input type="email" id="clientEmail" placeholder="Email (optional)" style="margin-bottom: 10px;" />
-          <textarea id="clientComment" placeholder="Client comments, inquiries, or feedback..." 
-                    style="width: 100%; margin: 10px 0; padding: 12px; min-height: 80px; border-radius: 8px;"></textarea>
-          <button onclick="addClient()" style="width: 100%; background: #00b894; padding: 12px;">✅ Add Client</button>
+        <div class="summary-box" style="margin: 20px 0;">
+          <div class="summary-card">
+            <h4>Clients</h4>
+            <p id="clientCount">0</p>
+          </div>
+          <div class="summary-card">
+            <h4>Staff</h4>
+            <p id="staffCount">0</p>
+          </div>
+          <div class="summary-card">
+            <h4>Learning</h4>
+            <p id="learningCount">0</p>
+          </div>
+          <div class="summary-card">
+            <h4>Sales</h4>
+            <p id="salesCount">0</p>
+          </div>
+          <div class="summary-card">
+            <h4>Students</h4>
+            <p id="studentCount">0</p>
+          </div>
+          <div class="summary-card">
+            <h4>Transactions</h4>
+            <p id="financeCount">0</p>
+          </div>
         </div>
+      </section>
 
-        <!-- Client List -->
-        <div id="clientList" style="margin-top: 15px;">
-          <!-- Client entries will be added here -->
-        </div>
-      </div>
-
-      <!-- Daily Tasks List -->
-      <h2>📅 Today's Tasks</h2>
-      <ul id="taskList"></ul>
-
-      <!-- Daily Summary -->
-      <div class="summary">
-        <h3>📊 Today's Score: <span id="dailyScore">0</span>/100</h3>
-        <p>Average: <span id="dailyAvg">0</span></p>
-      </div>
-
-      <!-- Weekly & Monthly Stats -->
-      <div class="stats">
-        <h3>📈 Weekly Average: <span id="weeklyAvg">0</span></h3>
-        <h3>📆 Monthly Average: <span id="monthlyAvg">0</span></h3>
-      </div>
-
-      <!-- Export Buttons -->
-      <div class="export">
-        <button onclick="exportToCSV()">📥 Export to CSV</button>
-        <button onclick="generatePDF()">📄 Generate PDF Report</button>
-      </div>
-
-      <div style="text-align: center;">
-        <button class="clear-btn" onclick="clearToday()">🗑️ Clear Today's Tasks</button>
+      <div style="text-align: center; margin-top: 20px;">
         <button class="logout-btn" onclick="logout()">↩️ Logout</button>
       </div>
     </div>
 
     <footer>
-      <p>&copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417">+2348030827417</a></p>
+      &copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417" style="color: #fdcb6e;">+2348030827417</a>
     </footer>
   </div>
 
@@ -557,6 +661,12 @@
     // Global Variables
     let currentStaffId = null;
     let clients = [];
+    let staffActivities = [];
+    let learningLogs = [];
+    let sales = [];
+    let students = [];
+    let finances = [];
+    let galleryImages = [];
     let signInData = {};
 
     // DOM Elements
@@ -566,7 +676,36 @@
     const staffDisplay = document.getElementById("staffDisplay");
     const signInTimeElement = document.getElementById("signInTime");
     const locationInfoElement = document.getElementById("locationInfo");
-    const clientList = document.getElementById("clientList");
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = link.getAttribute('data-tab');
+        
+        // Remove active class
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-link').forEach(tab => {
+          tab.classList.remove('active');
+        });
+
+        // Add active class
+        document.getElementById(tabId).classList.add('active');
+        link.classList.add('active');
+
+        // Refresh content
+        if (tabId === 'clients') renderClients();
+        if (tabId === 'staff') renderStaff();
+        if (tabId === 'learning') renderLearning();
+        if (tabId === 'sales') renderSales();
+        if (tabId === 'registration') renderRegistrations();
+        if (tabId === 'finance') renderFinance();
+        if (tabId === 'gallery') renderGallery();
+        if (tabId === 'reports') updateReportStats();
+      });
+    });
 
     // Login
     function login() {
@@ -592,7 +731,12 @@
       }
     }
 
-    // Record Sign-In Time and Location
+    // Get Keys
+    function getTodayKey(prefix) {
+      return `${prefix}_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
+    }
+
+    // Record Sign-In Time and Location (GPS only)
     function recordSignIn() {
       const now = new Date();
       const timeStr = now.toLocaleTimeString();
@@ -616,8 +760,8 @@
             };
             
             locationInfoElement.innerHTML = `
-              📍 <strong>Lat:</strong> ${position.coords.latitude.toFixed(6)}<br>
-              📍 <strong>Lng:</strong> ${position.coords.longitude.toFixed(6)}<br>
+              📍 <strong>Latitude:</strong> ${position.coords.latitude.toFixed(6)}<br>
+              📍 <strong>Longitude:</strong> ${position.coords.longitude.toFixed(6)}<br>
               📏 <strong>Accuracy:</strong> ${position.coords.accuracy}m
             `;
             
@@ -640,7 +784,11 @@
 
     // Save sign-in data
     function saveSignInData(data) {
-      localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
+      try {
+        localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
     }
 
     // Display sign-in data
@@ -652,147 +800,12 @@
         signInTimeElement.textContent = `Signed in at ${data.time} on ${data.date}`;
         if (data.location) {
           locationInfoElement.innerHTML = `
-            📍 <strong>Lat:</strong> ${data.location.lat.toFixed(6)}<br>
-            📍 <strong>Lng:</strong> ${data.location.lng.toFixed(6)}<br>
+            📍 <strong>Latitude:</strong> ${data.location.lat.toFixed(6)}<br>
+            📍 <strong>Longitude:</strong> ${data.location.lng.toFixed(6)}<br>
             📏 <strong>Accuracy:</strong> ${data.location.accuracy}m
           `;
         }
       }
-    }
-
-    // Get Keys
-    function getTodayKey() {
-      return `tasks_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
-    }
-
-    function getClientKey() {
-      return `clients_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
-    }
-
-    // Load tasks
-    function loadTasks() {
-      const saved = localStorage.getItem(getTodayKey());
-      return saved ? JSON.parse(saved) : [];
-    }
-
-    // Save tasks
-    function saveTasks(tasks) {
-      localStorage.setItem(getTodayKey(), JSON.stringify(tasks));
-      updateDailyStats(tasks);
-      updateWeeklyMonthlyStats();
-    }
-
-    // Add Task
-    function addTask() {
-      const name = document.getElementById("taskName").value.trim();
-      const desc = document.getElementById("taskDesc").value.trim();
-      const score = parseInt(document.getElementById("taskScore").value);
-      const comment = document.getElementById("taskComment").value.trim();
-
-      if (!name || isNaN(score)) {
-        alert("Please enter task name and score.");
-        return;
-      }
-
-      const tasks = loadTasks();
-      const now = new Date();
-      
-      tasks.push({
-        id: Date.now(),
-        name,
-        desc,
-        score,
-        comment: comment || null,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-      });
-
-      saveTasks(tasks);
-      renderTasks();
-      clearForm();
-    }
-
-    // Render Tasks
-    function renderTasks() {
-      const tasks = loadTasks();
-      const taskList = document.getElementById("taskList");
-      taskList.innerHTML = "";
-
-      tasks.forEach(task => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <div class="task-header">
-            <span class="task-name">${task.name}</span>
-            <span class="task-score">${task.score}/10</span>
-          </div>
-          ${task.desc ? `<p class="task-desc">${task.desc}</p>` : ""}
-          ${task.comment ? `<div class="task-comment">💬 ${task.comment}</div>` : ""}
-          <div class="task-meta">
-            <span>📅 ${task.date}</span>
-            <span>⏰ ${task.time}</span>
-          </div>
-        `;
-        
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "🗑️ Delete";
-        deleteBtn.className = "delete-btn";
-        deleteBtn.onclick = () => deleteTask(task.id);
-        
-        li.appendChild(deleteBtn);
-        taskList.appendChild(li);
-      });
-    }
-
-    // Delete Task
-    function deleteTask(id) {
-      let tasks = loadTasks();
-      tasks = tasks.filter(t => t.id !== id);
-      saveTasks(tasks);
-      renderTasks();
-    }
-
-    // Update Daily Stats
-    function updateDailyStats(tasks) {
-      const total = tasks.reduce((sum, t) => sum + t.score, 0);
-      const avg = tasks.length > 0 ? (total / tasks.length).toFixed(2) : "0";
-
-      document.getElementById("dailyScore").textContent = total;
-      document.getElementById("dailyAvg").textContent = avg;
-    }
-
-    // Update Weekly & Monthly Averages
-    function updateWeeklyMonthlyStats() {
-      const allKeys = Object.keys(localStorage);
-      let weeklyScores = [];
-      let monthlyScores = [];
-
-      const todayPrefix = getTodayKey().split("_").slice(0, 3).join("_");
-
-      allKeys.forEach(key => {
-        if (key.startsWith(todayPrefix)) {
-          const tasks = JSON.parse(localStorage.getItem(key));
-          const avgScore = tasks.length > 0 ? tasks.reduce((a, b) => a + b.score, 0) / tasks.length : 0;
-
-          if (key.startsWith(`week_${currentStaffId}`)) {
-            weeklyScores.push(avgScore);
-          }
-          if (key.startsWith(`month_${currentStaffId}`)) {
-            monthlyScores.push(avgScore);
-          }
-        }
-      });
-
-      const weeklyAvg = weeklyScores.length > 0
-        ? (weeklyScores.reduce((a, b) => a + b, 0) / weeklyScores.length).toFixed(2)
-        : "0";
-
-      const monthlyAvg = monthlyScores.length > 0
-        ? (monthlyScores.reduce((a, b) => a + b, 0) / monthlyScores.length).toFixed(2)
-        : "0";
-
-      document.getElementById("weeklyAvg").textContent = weeklyAvg;
-      document.getElementById("monthlyAvg").textContent = monthlyAvg;
     }
 
     // Add Client
@@ -820,362 +833,885 @@
       };
 
       clients.push(client);
-      saveClients();
+      saveData('clients', clients);
       renderClients();
-      clearClientForm();
-    }
-
-    // Save Clients
-    function saveClients() {
-      localStorage.setItem(getClientKey(), JSON.stringify(clients));
+      clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
     }
 
     // Render Clients
     function renderClients() {
-      clientList.innerHTML = "";
+      const list = document.getElementById("clientList");
+      list.innerHTML = "";
       
       if (clients.length === 0) {
-        clientList.innerHTML = "<p>No clients recorded today.</p>";
+        list.innerHTML = "<p style='text-align:center; padding:20px;'>No clients recorded today.</p>";
         return;
       }
 
       clients.forEach(client => {
         const div = document.createElement("div");
-        div.className = "client-entry";
+        div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #00b894;";
         div.innerHTML = `
           <strong>${client.name}</strong>
           ${client.phone ? `<div>📞 ${client.phone}</div>` : ""}
           ${client.email ? `<div>✉️ ${client.email}</div>` : ""}
-          ${client.comment ? `<div class="task-comment">💬 ${client.comment}</div>` : ""}
-          <div class="task-meta">
-            <span>📅 ${client.date}</span>
-            <span>⏰ ${client.time}</span>
+          ${client.comment ? `<div style="color:#636e72; margin:8px 0;">💬 ${client.comment}</div>` : ""}
+          <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
+            📅 ${client.date} | ⏰ ${client.time}
           </div>
         `;
-        
-        const actions = document.createElement("div");
-        actions.className = "client-actions";
-        
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "🗑️ Delete";
-        deleteBtn.className = "delete-client";
-        deleteBtn.onclick = () => deleteClient(client.id);
-        
-        actions.appendChild(deleteBtn);
-        div.appendChild(actions);
-        clientList.appendChild(div);
+        list.appendChild(div);
       });
     }
 
-    // Delete Client
-    function deleteClient(id) {
-      clients = clients.filter(c => c.id !== id);
-      saveClients();
-      renderClients();
+    // Add Staff Activity
+    function addStaffActivity() {
+      const name = document.getElementById("staffName").value.trim();
+      const role = document.getElementById("staffRole").value;
+      const activity = document.getElementById("staffActivity").value.trim();
+      const photos = document.getElementById("staffPhotos").files;
+
+      if (!name || !role || !activity) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      const now = new Date();
+      const staff = {
+        id: Date.now(),
+        name,
+        role,
+        activity,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+        photos: []
+      };
+
+      // Process images
+      if (photos.length > 0) {
+        for (let i = 0; i < photos.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            staff.photos.push(e.target.result);
+            if (i === photos.length - 1) {
+              staffActivities.push(staff);
+              saveData('staff', staffActivities);
+              renderStaff();
+              clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
+            }
+          };
+          reader.readAsDataURL(photos[i]);
+        }
+      } else {
+        staffActivities.push(staff);
+        saveData('staff', staffActivities);
+        renderStaff();
+        clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
+      }
     }
 
-    // Clear Client Form
-    function clearClientForm() {
-      document.getElementById("clientName").value = "";
-      document.getElementById("clientPhone").value = "";
-      document.getElementById("clientEmail").value = "";
-      document.getElementById("clientComment").value = "";
+    // Render Staff
+    function renderStaff() {
+      const list = document.getElementById("staffList");
+      list.innerHTML = "";
+      
+      if (staffActivities.length === 0) {
+        list.innerHTML = "<p style='text-align:center; padding:20px;'>No staff activities recorded today.</p>";
+        return;
+      }
+
+      staffActivities.forEach(staff => {
+        const div = document.createElement("div");
+        div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #0984e3;";
+        div.innerHTML = `
+          <strong>${staff.name} (${staff.role})</strong>
+          <div style="color:#636e72; margin:8px 0;">${staff.activity}</div>
+          ${staff.photos.length > 0 ? `<div style="margin:10px 0;"><strong>Photos:</strong></div>` : ""}
+          <div style="display:flex; gap:5px; overflow-x:auto; padding:5px 0;">
+            ${staff.photos.map(photo => `
+              <div style="width:80px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
+                <img src="${photo}" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+            `).join('')}
+          </div>
+          <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
+            📅 ${staff.date} | ⏰ ${staff.time}
+          </div>
+        `;
+        list.appendChild(div);
+      });
     }
 
-    // Load Clients
-    function loadClients() {
-      const saved = localStorage.getItem(getClientKey());
-      if (saved) {
-        clients = JSON.parse(saved);
+    // Add Learning Log
+    function addLearningLog() {
+      const className = document.getElementById("className").value.trim();
+      const topics = document.getElementById("topicsCovered").value.trim();
+      const progress = document.getElementById("studentProgress").value.trim();
+      const photos = document.getElementById("learningPhotos").files;
+
+      if (!className || !topics) {
+        alert("Please fill required fields");
+        return;
+      }
+
+      const now = new Date();
+      const log = {
+        id: Date.now(),
+        className,
+        topics,
+        progress,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+        photos: []
+      };
+
+      // Process images
+      if (photos.length > 0) {
+        for (let i = 0; i < photos.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            log.photos.push(e.target.result);
+            galleryImages.push({
+              id: Date.now() + i,
+              src: e.target.result,
+              caption: `${className} - ${now.toLocaleDateString()}`,
+              timestamp: now.toISOString()
+            });
+            if (i === photos.length - 1) {
+              learningLogs.push(log);
+              saveData('learning', learningLogs);
+              saveData('gallery', galleryImages);
+              renderLearning();
+              renderGallery();
+              clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
+            }
+          };
+          reader.readAsDataURL(photos[i]);
+        }
+      } else {
+        learningLogs.push(log);
+        saveData('learning', learningLogs);
+        renderLearning();
+        clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
+      }
+    }
+
+    // Render Learning
+    function renderLearning() {
+      const list = document.getElementById("learningList");
+      list.innerHTML = "";
+      
+      if (learningLogs.length === 0) {
+        list.innerHTML = "<p style='text-align:center; padding:20px;'>No learning logs recorded today.</p>";
+        return;
+      }
+
+      learningLogs.forEach(log => {
+        const div = document.createElement("div");
+        div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #fdcb6e;";
+        div.innerHTML = `
+          <strong>${log.className}</strong>
+          <div style="color:#636e72; margin:8px 0;"><strong>Topics:</strong> ${log.topics}</div>
+          ${log.progress ? `<div style="color:#636e72; margin:8px 0;"><strong>Progress:</strong> ${log.progress}</div>` : ""}
+          ${log.photos.length > 0 ? `<div style="margin:10px 0;"><strong>Class Photos:</strong></div>` : ""}
+          <div style="display:flex; gap:5px; overflow-x:auto; padding:5px 0;">
+            ${log.photos.map(photo => `
+              <div style="width:80px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
+                <img src="${photo}" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+            `).join('')}
+          </div>
+          <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
+            📅 ${log.date} | ⏰ ${log.time}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Add Sale
+    function addSale() {
+      const item = document.getElementById("saleItem").value.trim();
+      const amount = parseFloat(document.getElementById("saleAmount").value);
+      const notes = document.getElementById("saleNotes").value.trim();
+
+      if (!item || isNaN(amount)) {
+        alert("Please fill all fields correctly");
+        return;
+      }
+
+      const now = new Date();
+      const sale = {
+        id: Date.now(),
+        item,
+        amount,
+        notes,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+
+      sales.push(sale);
+      saveData('sales', sales);
+      renderSales();
+      clearForm(['saleItem', 'saleAmount', 'saleNotes']);
+    }
+
+    // Render Sales
+    function renderSales() {
+      const list = document.getElementById("salesList");
+      list.innerHTML = "";
+      
+      if (sales.length === 0) {
+        list.innerHTML = "<p style='text-align:center; padding:20px;'>No sales recorded today.</p>";
+        return;
+      }
+
+      let total = 0;
+      sales.forEach(sale => {
+        total += sale.amount;
+        const div = document.createElement("div");
+        div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #fdcb6e;";
+        div.innerHTML = `
+          <strong>${sale.item}</strong>
+          <div style="color:#636e72; margin:8px 0;">Amount: ₦${sale.amount.toLocaleString()}</div>
+          ${sale.notes ? `<div style="color:#636e72; margin:8px 0;">📝 ${sale.notes}</div>` : ""}
+          <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
+            📅 ${sale.date} | ⏰ ${sale.time}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      document.getElementById("dailySalesTotal").textContent = `₦${total.toLocaleString()}`;
+    }
+
+    // Register Student
+    function registerStudent() {
+      const name = document.getElementById("studentName").value.trim();
+      const age = document.getElementById("studentAge").value.trim();
+      const className = document.getElementById("studentClass").value.trim();
+      const parent = document.getElementById("parentName").value.trim();
+      const phone = document.getElementById("parentPhone").value.trim();
+      const notes = document.getElementById("studentNotes").value.trim();
+
+      if (!name || !age || !className || !parent || !phone) {
+        alert("Please fill all required fields");
+        return;
+      }
+
+      const now = new Date();
+      const student = {
+        id: Date.now(),
+        name,
+        age,
+        className,
+        parent,
+        phone,
+        notes,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+
+      students.push(student);
+      saveData('students', students);
+      renderRegistrations();
+      clearForm(['studentName', 'studentAge', 'studentClass', 'parentName', 'parentPhone', 'studentNotes']);
+    }
+
+    // Render Registrations
+    function renderRegistrations() {
+      const list = document.getElementById("registrationList");
+      list.innerHTML = "";
+      
+      if (students.length === 0) {
+        list.innerHTML = "<p style='text-align:center; padding:20px;'>No new students registered today.</p>";
+        return;
+      }
+
+      students.forEach(student => {
+        const div = document.createElement("div");
+        div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #a55eea;";
+        div.innerHTML = `
+          <strong>${student.name}</strong>
+          <div style="color:#636e72; margin:8px 0;">Age: ${student.age} | Class: ${student.className}</div>
+          <div style="color:#636e72; margin:8px 0;">Parent: ${student.parent} | Phone: ${student.phone}</div>
+          ${student.notes ? `<div style="color:#636e72; margin:8px 0;">📝 ${student.notes}</div>` : ""}
+          <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
+            📅 ${student.date} | ⏰ ${student.time}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Add Finance
+    function addFinance() {
+      const type = document.getElementById("financeType").value;
+      const item = document.getElementById("financeItem").value.trim();
+      const amount = parseFloat(document.getElementById("financeAmount").value);
+      const notes = document.getElementById("financeNotes").value.trim();
+
+      if (!type || !item || isNaN(amount)) {
+        alert("Please fill all fields correctly");
+        return;
+      }
+
+      const now = new Date();
+      const transaction = {
+        id: Date.now(),
+        type,
+        item,
+        amount,
+        notes,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+
+      finances.push(transaction);
+      saveData('finances', finances);
+      renderFinance();
+      clearForm(['financeType', 'financeItem', 'financeAmount', 'financeNotes']);
+    }
+
+    // Render Finance
+    function renderFinance() {
+      const list = document.getElementById("financeList");
+      list.innerHTML = "";
+      
+      if (finances.length === 0) {
+        list.innerHTML = "<p style='text-align:center; padding:20px;'>No financial transactions recorded today.</p>";
+        return;
+      }
+
+      let income = 0;
+      let expenses = 0;
+      
+      finances.forEach(trans => {
+        if (trans.type === 'income') income += trans.amount;
+        else if (trans.type === 'expense') expenses += trans.amount;
+        
+        const div = document.createElement("div");
+        div.style.cssText = `background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid ${trans.type === 'income' ? '#00b894' : '#e17055'};`;
+        div.innerHTML = `
+          <strong>${trans.type === 'income' ? '💰' : '💸'} ${trans.item}</strong>
+          <div style="color:#636e72; margin:8px 0;">Amount: ₦${trans.amount.toLocaleString()}</div>
+          ${trans.notes ? `<div style="color:#636e72; margin:8px 0;">📝 ${trans.notes}</div>` : ""}
+          <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
+            📅 ${trans.date} | ⏰ ${trans.time}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      const net = income - expenses;
+      document.getElementById("totalIncome").textContent = `₦${income.toLocaleString()}`;
+      document.getElementById("totalExpenses").textContent = `₦${expenses.toLocaleString()}`;
+      document.getElementById("netBalance").textContent = `₦${net.toLocaleString()}`;
+    }
+
+    // Render Gallery
+    function renderGallery() {
+      const container = document.getElementById("galleryImages");
+      container.innerHTML = "";
+      
+      if (galleryImages.length === 0) {
+        container.innerHTML = "<p style='text-align:center; padding:20px;'>No images in gallery.</p>";
+        return;
+      }
+
+      galleryImages.forEach(img => {
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+        item.innerHTML = `
+          <img src="${img.src}" alt="Class photo">
+          <button class="delete-img" onclick="deleteGalleryImage(${img.id})">×</button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Delete Gallery Image
+    function deleteGalleryImage(id) {
+      if (confirm("Delete this image?")) {
+        galleryImages = galleryImages.filter(img => img.id !== id);
+        saveData('gallery', galleryImages);
+        renderGallery();
+      }
+    }
+
+    // Update Report Stats
+    function updateReportStats() {
+      document.getElementById("clientCount").textContent = clients.length;
+      document.getElementById("staffCount").textContent = staffActivities.length;
+      document.getElementById("learningCount").textContent = learningLogs.length;
+      document.getElementById("salesCount").textContent = sales.length;
+      document.getElementById("studentCount").textContent = students.length;
+      document.getElementById("financeCount").textContent = finances.length;
+    }
+
+    // Save Data
+    function saveData(key, data) {
+      try {
+        localStorage.setItem(getTodayKey(key), JSON.stringify(data));
+      } catch (e) {
+        console.error("Storage error:", e);
+        alert("Could not save data. Please check your browser storage.");
+      }
+    }
+
+    // Load Data
+    function loadData(key) {
+      try {
+        const saved = localStorage.getItem(getTodayKey(key));
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        console.error("Load error:", e);
+        return [];
+      }
+    }
+
+    // Clear Form Fields
+    function clearForm(fieldIds) {
+      fieldIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element && element.type === 'file') {
+          element.value = '';
+        } else if (element) {
+          element.value = '';
+        }
+      });
+    }
+
+    // Clear Functions
+    function clearClients() {
+      if (confirm("Clear all client records?")) {
+        clients = [];
+        saveData('clients', clients);
         renderClients();
+      }
+    }
+
+    function clearStaff() {
+      if (confirm("Clear all staff records?")) {
+        staffActivities = [];
+        saveData('staff', staffActivities);
+        renderStaff();
+      }
+    }
+
+    function clearLearning() {
+      if (confirm("Clear all learning records?")) {
+        learningLogs = [];
+        saveData('learning', learningLogs);
+        renderLearning();
+      }
+    }
+
+    function clearSales() {
+      if (confirm("Clear all sales records?")) {
+        sales = [];
+        saveData('sales', sales);
+        renderSales();
+      }
+    }
+
+    function clearRegistrations() {
+      if (confirm("Clear all student registrations?")) {
+        students = [];
+        saveData('students', students);
+        renderRegistrations();
+      }
+    }
+
+    function clearFinance() {
+      if (confirm("Clear all financial records?")) {
+        finances = [];
+        saveData('finances', finances);
+        renderFinance();
+      }
+    }
+
+    function clearGallery() {
+      if (confirm("Clear all gallery images?")) {
+        galleryImages = [];
+        saveData('gallery', galleryImages);
+        renderGallery();
       }
     }
 
     // Export to CSV
     function exportToCSV() {
-      const tasks = loadTasks();
-      if (tasks.length === 0 && clients.length === 0) {
-        alert("No data to export.");
-        return;
+      try {
+        let csv = "Category,Details,Amount,Date,Time\n";
+        
+        // Clients
+        clients.forEach(c => {
+          csv += `Client,"${c.name}; ${c.phone || ''}; ${c.email || ''}",,"${c.date}","${c.time}"\n`;
+        });
+        
+        // Staff
+        staffActivities.forEach(s => {
+          csv += `Staff,"${s.name} (${s.role}); ${s.activity}",,"${s.date}","${s.time}"\n`;
+        });
+        
+        // Learning
+        learningLogs.forEach(l => {
+          csv += `Learning,"${l.className}; Topics: ${l.topics}; Progress: ${l.progress}",,"${l.date}","${l.time}"\n`;
+        });
+        
+        // Sales
+        sales.forEach(s => {
+          csv += `Sale,"${s.item}; ${s.notes}",₦${s.amount},"${s.date}","${s.time}"\n`;
+        });
+        
+        // Students
+        students.forEach(st => {
+          csv += `Student,"${st.name}; Age: ${st.age}; Class: ${st.className}; Parent: ${st.parent}; Phone: ${st.phone}; ${st.notes}",,"${st.date}","${st.time}"\n`;
+        });
+        
+        // Finances
+        finances.forEach(f => {
+          csv += `${f.type.toUpperCase()},"${f.item}; ${f.notes}",₦${f.amount},"${f.date}","${f.time}"\n`;
+        });
+
+        downloadFile(csv, `performance_report_${currentStaffId}_${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
+      } catch (e) {
+        console.error("CSV export error:", e);
+        alert("Could not generate CSV. Please try again.");
       }
-
-      let csv = "Staff,Date,Sign-In,Lat,Lng,Accuracy,Task,Desc,Score,Comment,Client,ClientPhone,ClientEmail,ClientComment\n";
-      const date = new Date().toISOString().split("T")[0];
-      const signIn = signInData.time || 'Not recorded';
-      const lat = signInData.location ? signInData.location.lat.toFixed(6) : '';
-      const lng = signInData.location ? signInData.location.lng.toFixed(6) : '';
-      const accuracy = signInData.location ? signInData.location.accuracy : '';
-
-      // Add tasks
-      tasks.forEach(t => {
-        csv += `${currentStaffId},${date},"${signIn}","${lat}","${lng}","${accuracy}","${t.name}","${t.desc}","${t.score}","${t.comment || ''}","","","",""\n`;
-      });
-
-      // Add clients
-      clients.forEach(c => {
-        csv += `${currentStaffId},${date},"${signIn}","${lat}","${lng}","${accuracy}","","","","","${c.name}","${c.phone || ''}","${c.email || ''}","${c.comment || ''}"\n`;
-      });
-
-      downloadFile(csv, `report_${currentStaffId}_${date}.csv`, "text/csv");
     }
 
-    // Generate Comprehensive PDF Report - VERIFIED VERSION
+    // Generate Single-Page PDF Report with GPS Coordinates
     function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4'
+        });
 
-      const tasks = loadTasks();
-      const today = new Date().toLocaleDateString();
-      const dailyScore = document.getElementById("dailyScore").textContent;
-      const dailyAvg = document.getElementById("dailyAvg").textContent;
-      const weeklyAvg = document.getElementById("weeklyAvg").textContent;
-      const monthlyAvg = document.getElementById("monthlyAvg").textContent;
+        const today = new Date().toLocaleDateString();
+        const primaryColor = [108, 92, 231];
+        const textColor = [66, 66, 66];
+        const leftMargin = 20;
+        const contentWidth = 170;
 
-      // Set colors
-      const primaryColor = [108, 92, 231]; // #6c5ce7
-      const textColor = [66, 66, 66];
+        // Header
+        doc.setFillColor(...primaryColor);
+        doc.rect(0, 0, 210, 40, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(20);
+        doc.text("TOMSTUDIO DAILY PERFORMANCE TRACKER", 105, 20, null, null, "center");
+        doc.setFontSize(14);
+        doc.text("Comprehensive Daily Report", 105, 30, null, null, "center");
 
-      // Header
-      doc.setFillColor(...primaryColor);
-      doc.rect(0, 0, 210, 40, 'F'); // Background
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20);
-      doc.text("TOMSTUDIO BIZ HUB", 105, 20, null, null, "center");
-      doc.setFontSize(14);
-      doc.text("Daily Performance Report", 105, 30, null, null, "center");
+        // Reset color
+        doc.setTextColor(...textColor);
 
-      // Reset color
-      doc.setTextColor(...textColor);
+        // Function to add text with proper formatting
+        function addText(text, x, y, isBold = false, fontSize = 10) {
+          doc.setFontSize(fontSize);
+          doc.setFont("helvetica", isBold ? "bold" : "normal");
+          doc.text(text, x, y);
+          return y + 6;
+        }
 
-      // Staff Info - Section 1
-      let yPos = 50;
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("STAFF INFORMATION", 15, yPos);
-      yPos += 8;
-      doc.setFont("helvetica", "normal");
-      doc.text(`Staff ID: ${currentStaffId}`, 15, yPos);
-      yPos += 6;
-      doc.text(`Date: ${today}`, 15, yPos);
-      yPos += 6;
-      doc.text(`Sign-In: ${signInData.time || 'Not recorded'}`, 15, yPos);
-      yPos += 10;
+        // Function to add wrapped text
+        function addWrappedText(text, x, y, maxWidth, fontSize = 10) {
+          doc.setFontSize(fontSize);
+          const lines = doc.splitTextToSize(text, maxWidth);
+          lines.forEach(line => {
+            if (y > 280) {
+              doc.addPage();
+              y = 20;
+            }
+            doc.text(line, x, y);
+            y += 5;
+          });
+          return y;
+        }
 
-      // Location Info
-      if (signInData.location) {
-        doc.setFont("helvetica", "bold");
-        doc.text("GPS LOCATION", 15, yPos);
-        yPos += 8;
-        doc.setFont("helvetica", "normal");
-        doc.text(`Latitude: ${signInData.location.lat.toFixed(6)}`, 15, yPos);
-        yPos += 6;
-        doc.text(`Longitude: ${signInData.location.lng.toFixed(6)}`, 15, yPos);
-        yPos += 6;
-        doc.text(`Accuracy: ${signInData.location.accuracy}m`, 15, yPos);
-        yPos += 10;
-      }
-
-      // Client Info
-      if (clients.length > 0) {
-        doc.setFont("helvetica", "bold");
-        doc.text("CLIENT/VISITOR DETAILS", 15, yPos);
-        yPos += 8;
+        // Staff Information
+        let yPos = 50;
+        yPos = addText("STAFF INFORMATION", leftMargin, yPos, true, 12);
         
-        clients.forEach(client => {
-          if (yPos > 250) {
+        yPos = addText(`Staff ID: ${currentStaffId}`, leftMargin, yPos);
+        yPos = addText(`Date: ${today}`, leftMargin, yPos);
+        
+        if (signInData.location) {
+          yPos = addText("GPS LOCATION", leftMargin, yPos, true, 12);
+          yPos = addText(`Latitude: ${signInData.location.lat.toFixed(6)}`, leftMargin, yPos, false, 14);
+          yPos = addText(`Longitude: ${signInData.location.lng.toFixed(6)}`, leftMargin, yPos, false, 14);
+          yPos = addText(`Accuracy: ${signInData.location.accuracy}m`, leftMargin, yPos);
+        }
+        
+        yPos += 6;
+
+        // Clients Section
+        if (clients.length > 0) {
+          yPos = addText("CLIENTS/VISITORS", leftMargin, yPos, true, 12);
+          
+          clients.forEach(client => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
+            }
+            
+            yPos = addText(`${client.name}`, leftMargin, yPos, true);
+            
+            if (client.phone) {
+              yPos = addText(`📞 Phone: ${client.phone}`, leftMargin, yPos);
+            }
+            if (client.email) {
+              yPos = addText(`✉️ Email: ${client.email}`, leftMargin, yPos);
+            }
+            if (client.comment) {
+              yPos = addWrappedText(`💬 ${client.comment}`, leftMargin, yPos, contentWidth);
+            }
+            
+            yPos = addText(`${client.date} ${client.time}`, leftMargin, yPos);
+            yPos += 2;
+          });
+          
+          yPos += 4;
+        }
+
+        // Staff Activities
+        if (staffActivities.length > 0) {
+          if (yPos > 260) {
             doc.addPage();
             yPos = 20;
           }
           
-          doc.setFont("helvetica", "bold");
-          doc.text(`Name: ${client.name}`, 15, yPos);
-          yPos += 6;
-          doc.setFont("helvetica", "normal");
+          yPos = addText("ONSITE STAFF ACTIVITIES", leftMargin, yPos, true, 12);
           
-          if (client.phone) {
-            doc.text(`Phone: ${client.phone}`, 15, yPos);
-            yPos += 5;
-          }
-          if (client.email) {
-            doc.text(`Email: ${client.email}`, 15, yPos);
-            yPos += 5;
-          }
-          if (client.comment) {
-            doc.text("Comments:", 15, yPos);
-            yPos += 5;
-            const commentLines = doc.splitTextToSize(client.comment, 170);
-            commentLines.forEach(line => {
-              if (yPos > 270) {
-                doc.addPage();
-                yPos = 20;
-              }
-              doc.text(line, 15, yPos);
-              yPos += 5;
-            });
-            yPos += 2;
-          }
-          
-          doc.text(`Date: ${client.date} | Time: ${client.time}`, 15, yPos);
-          yPos += 8;
-        });
-        
-        yPos += 5;
-      }
-
-      // Performance Summary
-      doc.setFont("helvetica", "bold");
-      doc.text("PERFORMANCE SUMMARY", 15, yPos);
-      yPos += 8;
-      doc.setFont("helvetica", "normal");
-      doc.text(`Today's Score: ${dailyScore}/100`, 15, yPos);
-      yPos += 6;
-      doc.text(`Average: ${dailyAvg}`, 15, yPos);
-      yPos += 6;
-      doc.text(`Weekly Average: ${weeklyAvg}`, 15, yPos);
-      yPos += 6;
-      doc.text(`Monthly Average: ${monthlyAvg}`, 15, yPos);
-      yPos += 10;
-
-      // Tasks Table
-      if (tasks.length > 0) {
-        doc.setFont("helvetica", "bold");
-        doc.text("TODAY'S TASKS", 15, yPos);
-        yPos += 8;
-        
-        const tableData = tasks.map(t => [
-          t.name,
-          t.desc || "-",
-          t.score.toString(),
-          t.comment || "-"
-        ]);
-        
-        try {
-          doc.autoTable({
-            startY: yPos,
-            head: [['Task', 'Description', 'Score', 'Comment']],
-            body: tableData,
-            theme: 'grid',
-            headStyles: { 
-              fillColor: primaryColor,
-              textColor: [255, 255, 255],
-              fontSize: 10
-            },
-            bodyStyles: { 
-              fontSize: 9
-            },
-            styles: {
-              font: 'helvetica',
-              fontSize: 10
-            },
-            columnStyles: {
-              0: { cellWidth: 50 },
-              1: { cellWidth: 60 },
-              2: { cellWidth: 20 },
-              3: { cellWidth: 60 }
+          staffActivities.forEach(staff => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
             }
+            
+            yPos = addText(`${staff.name} (${staff.role})`, leftMargin, yPos, true);
+            yPos = addWrappedText(staff.activity, leftMargin, yPos, contentWidth);
+            yPos = addText(`${staff.date} ${staff.time}`, leftMargin, yPos);
+            yPos += 2;
           });
-        } catch (e) {
-          console.error("AutoTable error:", e);
-          yPos = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : yPos;
-          doc.text("Task data could not be displayed in table format.", 15, yPos);
+          
+          yPos += 4;
         }
-      }
 
-      // Footer
-      const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 20 : yPos + 20;
-      doc.setDrawColor(...primaryColor);
-      doc.line(15, finalY, 195, finalY);
-      doc.setFontSize(9);
-      doc.setTextColor(...textColor);
-      doc.text("App Design and Developed by Tomstudio Tech Academy", 15, finalY + 10);
-      doc.text("+2348030827417", 15, finalY + 15);
+        // Student Learning
+        if (learningLogs.length > 0) {
+          if (yPos > 260) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          yPos = addText("STUDENT LEARNING LOGS", leftMargin, yPos, true, 12);
+          
+          learningLogs.forEach(log => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
+            }
+            
+            yPos = addText(`${log.className}`, leftMargin, yPos, true);
+            yPos = addWrappedText(`Topics: ${log.topics}`, leftMargin, yPos, contentWidth);
+            if (log.progress) {
+              yPos = addWrappedText(`Progress: ${log.progress}`, leftMargin, yPos, contentWidth);
+            }
+            yPos = addText(`${log.date} ${log.time}`, leftMargin, yPos);
+            yPos += 2;
+          });
+          
+          yPos += 4;
+        }
 
-      // Finalize and save with multiple fallbacks
-      try {
-        // Method 1: Direct save
-        doc.save(`TOMSTUDIO_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
-      } catch (e) {
-        console.error("Save failed:", e);
-        
-        // Method 2: Blob + download
+        // Daily Sales
+        if (sales.length > 0) {
+          if (yPos > 260) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          yPos = addText("DAILY SALES", leftMargin, yPos, true, 12);
+          
+          let totalSales = sales.reduce((sum, s) => sum + s.amount, 0);
+          yPos = addText(`Today's Total Sales: ₦${totalSales.toLocaleString()}`, leftMargin, yPos, true);
+          
+          sales.forEach(sale => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
+            }
+            
+            yPos = addText(`${sale.item}`, leftMargin, yPos);
+            yPos = addText(`Amount: ₦${sale.amount.toLocaleString()}`, leftMargin, yPos);
+            if (sale.notes) {
+              yPos = addWrappedText(`📝 ${sale.notes}`, leftMargin, yPos, contentWidth);
+            }
+            yPos = addText(`${sale.date} ${sale.time}`, leftMargin, yPos);
+            yPos += 2;
+          });
+          
+          yPos += 4;
+        }
+
+        // New Student Registrations
+        if (students.length > 0) {
+          if (yPos > 260) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          yPos = addText("NEW STUDENT REGISTRATIONS", leftMargin, yPos, true, 12);
+          
+          students.forEach(student => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
+            }
+            
+            yPos = addText(`${student.name}`, leftMargin, yPos, true);
+            yPos = addText(`Age: ${student.age} | Class: ${student.className}`, leftMargin, yPos);
+            yPos = addText(`Parent: ${student.parent} | Phone: ${student.phone}`, leftMargin, yPos);
+            if (student.notes) {
+              yPos = addWrappedText(`📝 ${student.notes}`, leftMargin, yPos, contentWidth);
+            }
+            yPos = addText(`${student.date} ${student.time}`, leftMargin, yPos);
+            yPos += 2;
+          });
+          
+          yPos += 4;
+        }
+
+        // Income & Expenses
+        if (finances.length > 0) {
+          if (yPos > 260) {
+            doc.addPage();
+            yPos = 20;
+          }
+          
+          yPos = addText("INCOME & EXPENSES", leftMargin, yPos, true, 12);
+          
+          let income = 0;
+          let expenses = 0;
+          finances.forEach(f => {
+            if (f.type === 'income') income += f.amount;
+            else if (f.type === 'expense') expenses += f.amount;
+          });
+          
+          yPos = addText(`Total Income: ₦${income.toLocaleString()}`, leftMargin, yPos);
+          yPos = addText(`Total Expenses: ₦${expenses.toLocaleString()}`, leftMargin, yPos);
+          yPos = addText(`Net Balance: ₦${(income - expenses).toLocaleString()}`, leftMargin, yPos, true);
+          
+          finances.forEach(trans => {
+            if (yPos > 260) {
+              doc.addPage();
+              yPos = 20;
+            }
+            
+            yPos = addText(`${trans.type === 'income' ? '💰' : '💸'} ${trans.item}`, leftMargin, yPos, true);
+            yPos = addText(`Amount: ₦${trans.amount.toLocaleString()}`, leftMargin, yPos);
+            if (trans.notes) {
+              yPos = addWrappedText(`📝 ${trans.notes}`, leftMargin, yPos, contentWidth);
+            }
+            yPos = addText(`${trans.date} ${trans.time}`, leftMargin, yPos);
+            yPos += 2;
+          });
+        }
+
+        // Footer
+        doc.setDrawColor(...primaryColor);
+        doc.line(20, 285, 190, 285);
+        doc.setFontSize(9);
+        doc.setTextColor(255, 255, 255);
+        doc.text("App Design and Developed by Tomstudio Tech Academy", 105, 290, null, null, "center");
+        doc.text("+2348030827417", 105, 295, null, null, "center");
+
+        // Save with fallbacks
         try {
+          doc.save(`Performance_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
+        } catch (e) {
           const pdfBlob = doc.output('blob');
           const url = URL.createObjectURL(pdfBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `TOMSTUDIO_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`;
-          
+          a.download = `Performance_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
           setTimeout(() => URL.revokeObjectURL(url), 100);
-        } catch (e2) {
-          console.error("Fallback save failed:", e2);
-          
-          // Method 3: Open in new tab
-          try {
-            const url = doc.output('datauristring');
-            const newTab = window.open();
-            newTab.document.write(`<iframe width="100%" height="100%" src="${url}"></iframe>`);
-          } catch (e3) {
-            alert("Could not generate PDF. Please try again.");
-            console.error("All methods failed:", e3);
-          }
         }
+      } catch (e) {
+        console.error("PDF generation error:", e);
+        alert("Could not generate PDF. Please try again.");
       }
     }
 
     // Utility: Download File
     function downloadFile(content, filename, mimeType) {
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    // Clear Form
-    function clearForm() {
-      document.getElementById("taskName").value = "";
-      document.getElementById("taskDesc").value = "";
-      document.getElementById("taskScore").value = "";
-      document.getElementById("taskComment").value = "";
-    }
-
-    // Clear today's tasks
-    function clearToday() {
-      if (confirm("Are you sure you want to clear all data for today?")) {
-        localStorage.removeItem(getTodayKey());
-        localStorage.removeItem(getClientKey());
-        renderTasks();
-        clients = [];
-        renderClients();
-        updateDailyStats([]);
-        updateWeeklyMonthlyStats();
+      try {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+      } catch (e) {
+        console.error("Download error:", e);
+        alert("Could not download file. Please try again.");
       }
     }
 
     // Load all data
     function loadAllData() {
-      renderTasks();
-      updateWeeklyMonthlyStats();
-      displaySignInData();
-      loadClients();
+      try {
+        clients = loadData('clients');
+        staffActivities = loadData('staff');
+        learningLogs = loadData('learning');
+        sales = loadData('sales');
+        students = loadData('students');
+        finances = loadData('finances');
+        galleryImages = loadData('gallery') || [];
+        
+        renderClients();
+        renderStaff();
+        renderLearning();
+        renderSales();
+        renderRegistrations();
+        renderFinance();
+        renderGallery();
+        updateReportStats();
+        displaySignInData();
+      } catch (e) {
+        console.error("Load all data error:", e);
+        alert("Could not load data. Please try again.");
+      }
     }
 
     // Initialize
     window.onload = function() {
-      const savedSignIn = localStorage.getItem('tomstudio_signIn');
-      if (savedSignIn) {
-        signInData = JSON.parse(savedSignIn);
+      try {
+        // Check if localStorage is available
+        if (typeof localStorage === 'undefined') {
+          alert("Your browser does not support local storage. Some features may not work.");
+        }
+        
+        // Load any saved data
+        loadAllData();
+      } catch (e) {
+        console.error("Initialization error:", e);
+        alert("Application failed to initialize. Please refresh and try again.");
       }
     };
 
