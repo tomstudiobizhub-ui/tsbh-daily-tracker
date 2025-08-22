@@ -5,33 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#6c5ce7">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="description" content="Tomstudio Daily Performance Tracker - Full PWA with Image Support">
+  <meta name="format-detection" content="telephone=no">
   <title>TOMSTUDIO DAILY PERFORMANCE TRACKER</title>
-  
+
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="apple-touch-icon" href="logo-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="logo-512.png">
 
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <style>
+    /* Reset & Base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
     }
-
     body {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #333;
       min-height: 100vh;
       background-attachment: fixed;
       -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
     }
-
     .container {
       max-width: 1200px;
       margin: 10px auto;
       padding: 15px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(108, 92, 231, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); }
     }
 
     /* Login Screen */
@@ -41,44 +63,36 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.15);
       overflow: hidden;
       animation: fadeIn 0.6s ease;
+      min-height: 500px;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     #loginScreen {
       text-align: center;
       padding: 40px 20px;
     }
-
     #loginScreen img {
       width: 100px;
       height: 100px;
       margin: 0 auto 15px;
       border-radius: 50%;
       border: 4px solid #6c5ce7;
+      animation: pulse 2s infinite;
     }
-
     #loginScreen h1 {
       color: #6c5ce7;
       font-size: 2.2rem;
       margin-bottom: 8px;
+      font-weight: 700;
     }
-
     #loginScreen h3 {
       color: #2d3436;
       margin-bottom: 15px;
       font-weight: 600;
     }
-
     #loginScreen p {
       color: #636e72;
       margin-bottom: 20px;
       font-size: 1.1rem;
     }
-
     #loginScreen input {
       width: 100%;
       max-width: 300px;
@@ -89,8 +103,13 @@
       font-size: 16px;
       text-align: center;
       display: block;
+      transition: border 0.3s;
     }
-
+    #loginScreen input:focus {
+      border-color: #6c5ce7;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+    }
     #loginScreen button {
       background: linear-gradient(45deg, #6c5ce7, #a55eea);
       color: white;
@@ -101,6 +120,10 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
       margin-top: 10px;
+      transition: transform 0.2s;
+    }
+    #loginScreen button:hover {
+      transform: translateY(-2px);
     }
 
     /* Navigation */
@@ -113,8 +136,8 @@
       overflow-x: auto;
       gap: 2px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      scrollbar-width: thin;
     }
-
     nav a {
       display: block;
       padding: 12px 20px;
@@ -124,12 +147,16 @@
       border-radius: 10px;
       white-space: nowrap;
       transition: all 0.3s;
+      flex-shrink: 0;
     }
-
     nav a.active {
       background: #6c5ce7;
       color: white;
       box-shadow: 0 3px 10px rgba(108, 92, 231, 0.4);
+    }
+    nav a:hover:not(.active) {
+      background: #f1f2f6;
+      color: #2d3436;
     }
 
     /* Main App */
@@ -137,7 +164,6 @@
       display: none;
       padding: 20px;
     }
-
     #mainApp img.mal {
       width: 80px;
       height: 80px;
@@ -145,20 +171,19 @@
       border: 3px solid #6c5ce7;
       margin: 0 auto 15px;
       display: block;
+      animation: pulse 2s infinite;
     }
-
     #mainApp h1 {
       text-align: center;
       color: #6c5ce7;
       margin-bottom: 8px;
       font-size: 1.8rem;
+      font-weight: 700;
     }
-
     #mainApp h1 span {
       color: #2d3436;
       font-weight: 700;
     }
-
     #mainApp p {
       text-align: center;
       color: #636e72;
@@ -175,17 +200,14 @@
       margin-bottom: 25px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
-
     .sign-in-info h3 {
       margin-bottom: 12px;
       font-size: 1.4rem;
     }
-
     .sign-in-info p {
       margin: 8px 0;
       font-size: 1rem;
     }
-
     .time-location-btn {
       background: #2d3436;
       color: white;
@@ -197,15 +219,19 @@
       width: 100%;
       margin-top: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+    .time-location-btn:hover {
+      background: #1e272e;
     }
 
     /* Tab Content */
     .tab-content {
       display: none;
     }
-
     .tab-content.active {
       display: block;
+      animation: fadeIn 0.4s ease;
     }
 
     /* Form */
@@ -216,33 +242,35 @@
       margin-bottom: 25px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
-
     .form h3 {
       color: #6c5ce7;
       margin-bottom: 18px;
       text-align: center;
       font-size: 1.4rem;
+      font-weight: 600;
     }
-
-    .form input, .form textarea, .form select {
+    .form input,
+    .form textarea,
+    .form select {
       width: 100%;
       padding: 14px;
       margin: 10px 0;
       border: 2px solid #ddd;
       border-radius: 10px;
       font-size: 15px;
+      transition: border 0.3s;
     }
-
-    .form input:focus, .form textarea:focus, .form select:focus {
+    .form input:focus,
+    .form textarea:focus,
+    .form select:focus {
       border-color: #6c5ce7;
       outline: none;
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
     }
-
     .form textarea {
       min-height: 90px;
       resize: vertical;
     }
-
     .form button {
       background: linear-gradient(45deg, #6c5ce7, #a55eea);
       color: white;
@@ -254,6 +282,10 @@
       width: 100%;
       font-weight: 600;
       box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      transition: transform 0.2s;
+    }
+    .form button:hover {
+      transform: translateY(-2px);
     }
 
     /* Image Upload */
@@ -263,8 +295,17 @@
       text-align: center;
       margin: 15px 0;
       border-radius: 10px;
+      background: #fdfdfd;
+      transition: border 0.3s;
     }
-
+    .image-upload:hover {
+      border-color: #6c5ce7;
+      background: #f8f9ff;
+    }
+    .image-upload p {
+      margin-bottom: 10px;
+      color: #636e72;
+    }
     .image-preview {
       display: flex;
       gap: 10px;
@@ -272,7 +313,6 @@
       padding: 10px 0;
       margin: 10px 0;
     }
-
     .image-item {
       position: relative;
       width: 120px;
@@ -280,14 +320,13 @@
       border-radius: 10px;
       overflow: hidden;
       flex-shrink: 0;
+      border: 2px solid #ddd;
     }
-
     .image-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .image-item .delete-img {
       position: absolute;
       top: 5px;
@@ -300,6 +339,13 @@
       border-radius: 50%;
       font-size: 12px;
       cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-item .delete-img:hover {
+      background: #e84393;
     }
 
     /* Gallery */
@@ -309,20 +355,18 @@
       gap: 10px;
       margin: 15px 0;
     }
-
     .gallery-item {
       position: relative;
       height: 150px;
       border-radius: 10px;
       overflow: hidden;
+      border: 2px solid #ddd;
     }
-
     .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .gallery-item .delete-img {
       position: absolute;
       top: 5px;
@@ -335,6 +379,10 @@
       border-radius: 50%;
       font-size: 12px;
       cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Export */
@@ -344,7 +392,6 @@
       margin: 25px 0;
       flex-wrap: wrap;
     }
-
     .export button {
       flex: 1;
       min-width: 140px;
@@ -356,10 +403,15 @@
       font-size: 15px;
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(236, 90, 159, 0.4);
+      transition: transform 0.2s;
+    }
+    .export button:hover {
+      transform: translateY(-2px);
     }
 
     /* Buttons */
-    .clear-btn, .logout-btn {
+    .clear-btn,
+    .logout-btn {
       background: #2d3436;
       color: white;
       border: none;
@@ -368,6 +420,11 @@
       font-size: 15px;
       cursor: pointer;
       margin: 8px 4px;
+      transition: background 0.3s;
+    }
+    .clear-btn:hover,
+    .logout-btn:hover {
+      background: #1e272e;
     }
 
     /* Summary Cards */
@@ -377,7 +434,6 @@
       flex-wrap: wrap;
       margin: 15px 0;
     }
-
     .summary-card {
       flex: 1;
       min-width: 200px;
@@ -385,14 +441,13 @@
       padding: 15px;
       border-radius: 8px;
       text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     }
-
     .summary-card h4 {
       font-size: 0.9rem;
       color: #636e72;
       margin-bottom: 5px;
     }
-
     .summary-card p {
       font-size: 1.4rem;
       font-weight: bold;
@@ -408,6 +463,13 @@
       margin-top: 30px;
       font-weight: 600;
     }
+    footer a {
+      color: #fdcb6e;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
 
     /* Responsive */
     @media (max-width: 768px) {
@@ -415,43 +477,91 @@
         margin: 10px;
         padding: 12px;
       }
-      
       #loginScreen {
         padding: 30px 15px;
       }
-      
       #loginScreen h1 {
         font-size: 1.8rem;
       }
-      
       #mainApp {
         padding: 15px;
       }
-      
       .export {
         flex-direction: column;
       }
-      
       .export button {
         width: 100%;
       }
-      
       .summary-box {
         flex-direction: column;
       }
+      nav {
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body, .container {
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+      }
+      .no-print, nav, .form, .image-upload, .clear-btn, .logout-btn {
+        display: none !important;
+      }
+      .tab-content {
+        display: block !important;
+      }
+    }
+
+    /* Loading Spinner */
+    .loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #6c5ce7;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2d3436;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-50px);
+      transition: all 0.4s;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Action completed!</div>
 
     <!-- Login Screen -->
     <div id="loginScreen" class="screen">
       <img src="logo-192.png" alt="TOMSTUDIO Logo">
       <h1>TOMSTUDIO DAILY PERFORMANCE TRACKER</h1>
-      <h3>COMPLETE FIELD OPERATIONS</h3>
+      <h3>COMPLETE OFFICE/FIELD OPERATIONS</h3>
       <p>Please log in with your Staff ID</p>
-      <input type="text" id="staffId" placeholder="Enter Staff ID" maxlength="10" />
+      <input type="text" id="staffId" placeholder="Enter Staff ID" maxlength="20" />
       <button onclick="login()">🔓 Log In</button>
     </div>
 
@@ -460,7 +570,6 @@
       <div style="text-align: center;">
         <img src="logo-192.png" alt="TOMSTUDIO Logo" class="mal">
       </div>
-      
       <h1>🎯 Welcome, <span id="staffDisplay"></span>!</h1>
       <p>Track your daily performance and activities.</p>
 
@@ -478,7 +587,7 @@
       <nav>
         <a href="#" class="tab-link active" data-tab="clients">Clients/Visitors</a>
         <a href="#" class="tab-link" data-tab="staff">Onsite Staff</a>
-        <a href="#" class="tab-link" data-tab="learning">Student Learning</a>
+        <a href="#" class="tab-link" data-tab="learning">CBT Schl/Students </a>
         <a href="#" class="tab-link" data-tab="sales">Daily Sales</a>
         <a href="#" class="tab-link" data-tab="registration">New Students</a>
         <a href="#" class="tab-link" data-tab="finance">Income & Expenses</a>
@@ -497,7 +606,6 @@
           <button onclick="addClient()">✅ Add Client</button>
           <button onclick="clearClients()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
         </div>
-
         <div id="clientList"></div>
       </section>
 
@@ -508,21 +616,27 @@
           <input type="text" id="staffName" placeholder="Staff Name" />
           <select id="staffRole">
             <option value="">Select Role</option>
-            <option value="Teacher">Teacher</option>
-            <option value="Cleaner">Cleaner</option>
-            <option value="Security">Security</option>
+            <option value="Teacher">Manager</option>
+            <option value="Teacher">Executive Director</option>
+            <option value="Teacher">Acting Manager</option>
+            <option value="Cleaner">Tech Coach</option>
+            <option value="Cleaner">CBT Coach</option>
+            <option value="Security">Students</option>
+            <option value="Security">Photographer</option>
             <option value="Maintenance">Maintenance</option>
             <option value="Admin">Admin</option>
+            <option value="Admin">Special personnel</option>
+            <option value="Admin">Other personnel</option>
           </select>
           <textarea id="staffActivity" placeholder="Daily activities and tasks completed..."></textarea>
           <div class="image-upload">
             <p>📸 Upload Activity Photos</p>
-            <input type="file" id="staffPhotos" accept="image/*" multiple>
+            <input type="file" id="staffPhotos" accept="image/" multiple>
           </div>
+          <div class="image-preview" id="staffPhotoPreview"></div>
           <button onclick="addStaffActivity()">✅ Record Activity</button>
           <button onclick="clearStaff()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
         </div>
-
         <div id="staffList"></div>
       </section>
 
@@ -535,12 +649,12 @@
           <textarea id="studentProgress" placeholder="Student progress and challenges..."></textarea>
           <div class="image-upload">
             <p>📸 Upload Class Activity Photos</p>
-            <input type="file" id="learningPhotos" accept="image/*" multiple>
+            <input type="file" id="learningPhotos" accept="image/" multiple>
           </div>
+          <div class="image-preview" id="learningPhotoPreview"></div>
           <button onclick="addLearningLog()">✅ Record Learning</button>
           <button onclick="clearLearning()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
         </div>
-
         <div id="learningList"></div>
       </section>
 
@@ -554,7 +668,6 @@
           <button onclick="addSale()">✅ Record Sale</button>
           <button onclick="clearSales()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
         </div>
-
         <div id="salesList"></div>
         <div style="background:white; padding:15px; border-radius:10px; margin:15px 0;">
           <h4>💰 Today's Total Sales: <span id="dailySalesTotal">₦0</span></h4>
@@ -574,7 +687,6 @@
           <button onclick="registerStudent()">✅ Register Student</button>
           <button onclick="clearRegistrations()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
         </div>
-
         <div id="registrationList"></div>
       </section>
 
@@ -593,7 +705,6 @@
           <button onclick="addFinance()">✅ Record Transaction</button>
           <button onclick="clearFinance()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
         </div>
-
         <div id="financeList"></div>
         <div style="background:white; padding:15px; border-radius:10px; margin:15px 0;">
           <h4>📊 Today's Summary:</h4>
@@ -612,10 +723,10 @@
       <section id="reports" class="tab-content">
         <h2>📄 Comprehensive Reports</h2>
         <div class="export">
-          <button onclick="generatePDF()">📄 Generate PDF Report</button>
+          <button onclick="generatePDF()">📄 Generate PDF Report (with Images)</button>
           <button onclick="exportToCSV()">📥 Export to CSV</button>
+          <button onclick="backupData()">☁️ Backup to Cloud</button>
         </div>
-        
         <div class="summary-box" style="margin: 20px 0;">
           <div class="summary-card">
             <h4>Clients</h4>
@@ -650,7 +761,7 @@
     </div>
 
     <footer>
-      &copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417" style="color: #fdcb6e;">+2348030827417</a>
+      &copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417">+2348030827417</a>
     </footer>
   </div>
 
@@ -658,7 +769,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
   <script>
-    // Global Variables
+    // ========================
+    // 1. GLOBAL VARIABLES
+    // ========================
     let currentStaffId = null;
     let clients = [];
     let staffActivities = [];
@@ -668,6 +781,8 @@
     let finances = [];
     let galleryImages = [];
     let signInData = {};
+    let unsavedChanges = false;
+    let isOnline = navigator.onLine;
 
     // DOM Elements
     const loginScreen = document.getElementById("loginScreen");
@@ -676,38 +791,64 @@
     const staffDisplay = document.getElementById("staffDisplay");
     const signInTimeElement = document.getElementById("signInTime");
     const locationInfoElement = document.getElementById("locationInfo");
+    const toast = document.getElementById("toast");
 
-    // Tab Navigation
-    document.querySelectorAll('.tab-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const tabId = link.getAttribute('data-tab');
-        
-        // Remove active class
-        document.querySelectorAll('.tab-content').forEach(tab => {
-          tab.classList.remove('active');
-        });
-        document.querySelectorAll('.tab-link').forEach(tab => {
-          tab.classList.remove('active');
-        });
+    // ========================
+    // 2. UTILITY FUNCTIONS
+    // ========================
+    function showToast(message, duration = 3000) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, duration);
+    }
 
-        // Add active class
-        document.getElementById(tabId).classList.add('active');
-        link.classList.add('active');
+    function getTodayKey(prefix) {
+      return `${prefix}_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
+    }
 
-        // Refresh content
-        if (tabId === 'clients') renderClients();
-        if (tabId === 'staff') renderStaff();
-        if (tabId === 'learning') renderLearning();
-        if (tabId === 'sales') renderSales();
-        if (tabId === 'registration') renderRegistrations();
-        if (tabId === 'finance') renderFinance();
-        if (tabId === 'gallery') renderGallery();
-        if (tabId === 'reports') updateReportStats();
+    function getAllKeys(prefix) {
+      return Object.keys(localStorage).filter(k => k.startsWith(prefix + "_"));
+    }
+
+    function saveData(key, data) {
+      try {
+        localStorage.setItem(getTodayKey(key), JSON.stringify(data));
+        unsavedChanges = true;
+        showToast(`${key} saved!`);
+      } catch (e) {
+        console.error("Storage error:", e);
+        showToast("Could not save data. Storage full?");
+      }
+    }
+
+    function loadData(key) {
+      try {
+        const saved = localStorage.getItem(getTodayKey(key));
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        console.error("Load error:", e);
+        return [];
+      }
+    }
+
+    function clearForm(fieldIds) {
+      fieldIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element && element.type === 'file') {
+          element.value = '';
+          if (id === 'staffPhotos') document.getElementById('staffPhotoPreview').innerHTML = '';
+          if (id === 'learningPhotos') document.getElementById('learningPhotoPreview').innerHTML = '';
+        } else if (element) {
+          element.value = '';
+        }
       });
-    });
+    }
 
-    // Login
+    // ========================
+    // 3. LOGIN & LOGOUT
+    // ========================
     function login() {
       const id = staffIdInput.value.trim();
       if (!id) {
@@ -719,29 +860,26 @@
       loginScreen.style.display = "none";
       mainApp.style.display = "block";
       loadAllData();
+      showToast(`Welcome, ${id}!`);
     }
 
-    // Logout
     function logout() {
       if (confirm("Log out?")) {
         currentStaffId = null;
         loginScreen.style.display = "block";
         mainApp.style.display = "none";
         staffIdInput.value = "";
+        showToast("Logged out.");
       }
     }
 
-    // Get Keys
-    function getTodayKey(prefix) {
-      return `${prefix}_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
-    }
-
-    // Record Sign-In Time and Location (GPS only)
+    // ========================
+    // 4. GPS & SIGN IN
+    // ========================
     function recordSignIn() {
       const now = new Date();
       const timeStr = now.toLocaleTimeString();
       const dateStr = now.toLocaleDateString();
-      
       signInData = {
         time: timeStr,
         date: dateStr,
@@ -749,8 +887,7 @@
       };
 
       if (navigator.geolocation) {
-        locationInfoElement.textContent = "📍 Getting GPS coordinates...";
-        
+        locationInfoElement.innerHTML = '<div class="loader"></div>';
         navigator.geolocation.getCurrentPosition(
           (position) => {
             signInData.location = {
@@ -758,19 +895,19 @@
               lng: position.coords.longitude,
               accuracy: position.coords.accuracy
             };
-            
             locationInfoElement.innerHTML = `
               📍 <strong>Latitude:</strong> ${position.coords.latitude.toFixed(6)}<br>
               📍 <strong>Longitude:</strong> ${position.coords.longitude.toFixed(6)}<br>
               📏 <strong>Accuracy:</strong> ${position.coords.accuracy}m
             `;
-            
             saveSignInData(signInData);
+            showToast("GPS location recorded!");
           },
           (error) => {
             console.log("Location error:", error);
             locationInfoElement.textContent = "📍 Location: Permission denied or unavailable";
             saveSignInData(signInData);
+            showToast("Could not get GPS.");
           },
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
         );
@@ -778,11 +915,9 @@
         locationInfoElement.textContent = "📍 Location: Not supported by browser";
         saveSignInData(signInData);
       }
-
       signInTimeElement.textContent = `Signed in at ${timeStr} on ${dateStr}`;
     }
 
-    // Save sign-in data
     function saveSignInData(data) {
       try {
         localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
@@ -791,7 +926,6 @@
       }
     }
 
-    // Display sign-in data
     function displaySignInData() {
       const saved = localStorage.getItem(`signin_${currentStaffId}`);
       if (saved) {
@@ -808,46 +942,39 @@
       }
     }
 
-    // Add Client
-    function addClient() {
-      const name = document.getElementById("clientName").value.trim();
-      const phone = document.getElementById("clientPhone").value.trim();
-      const email = document.getElementById("clientEmail").value.trim();
-      const comment = document.getElementById("clientComment").value.trim();
+    // ========================
+    // 5. TAB NAVIGATION
+    // ========================
+    document.querySelectorAll('.tab-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = link.getAttribute('data-tab');
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        link.classList.add('active');
 
-      if (!name) {
-        alert("Please enter client name");
-        return;
-      }
+        if (tabId === 'clients') renderClients();
+        if (tabId === 'staff') renderStaff();
+        if (tabId === 'learning') renderLearning();
+        if (tabId === 'sales') renderSales();
+        if (tabId === 'registration') renderRegistrations();
+        if (tabId === 'finance') renderFinance();
+        if (tabId === 'gallery') renderGallery();
+        if (tabId === 'reports') updateReportStats();
+      });
+    });
 
-      const now = new Date();
-      const client = {
-        id: Date.now(),
-        name,
-        phone,
-        email,
-        comment,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-      };
-
-      clients.push(client);
-      saveData('clients', clients);
-      renderClients();
-      clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
-    }
-
-    // Render Clients
+    // ========================
+    // 6. DATA RENDERING
+    // ========================
     function renderClients() {
       const list = document.getElementById("clientList");
       list.innerHTML = "";
-      
       if (clients.length === 0) {
         list.innerHTML = "<p style='text-align:center; padding:20px;'>No clients recorded today.</p>";
         return;
       }
-
       clients.forEach(client => {
         const div = document.createElement("div");
         div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #00b894;";
@@ -864,63 +991,13 @@
       });
     }
 
-    // Add Staff Activity
-    function addStaffActivity() {
-      const name = document.getElementById("staffName").value.trim();
-      const role = document.getElementById("staffRole").value;
-      const activity = document.getElementById("staffActivity").value.trim();
-      const photos = document.getElementById("staffPhotos").files;
-
-      if (!name || !role || !activity) {
-        alert("Please fill all fields");
-        return;
-      }
-
-      const now = new Date();
-      const staff = {
-        id: Date.now(),
-        name,
-        role,
-        activity,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString(),
-        photos: []
-      };
-
-      // Process images
-      if (photos.length > 0) {
-        for (let i = 0; i < photos.length; i++) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            staff.photos.push(e.target.result);
-            if (i === photos.length - 1) {
-              staffActivities.push(staff);
-              saveData('staff', staffActivities);
-              renderStaff();
-              clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
-            }
-          };
-          reader.readAsDataURL(photos[i]);
-        }
-      } else {
-        staffActivities.push(staff);
-        saveData('staff', staffActivities);
-        renderStaff();
-        clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
-      }
-    }
-
-    // Render Staff
     function renderStaff() {
       const list = document.getElementById("staffList");
       list.innerHTML = "";
-      
       if (staffActivities.length === 0) {
         list.innerHTML = "<p style='text-align:center; padding:20px;'>No staff activities recorded today.</p>";
         return;
       }
-
       staffActivities.forEach(staff => {
         const div = document.createElement("div");
         div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #0984e3;";
@@ -943,71 +1020,13 @@
       });
     }
 
-    // Add Learning Log
-    function addLearningLog() {
-      const className = document.getElementById("className").value.trim();
-      const topics = document.getElementById("topicsCovered").value.trim();
-      const progress = document.getElementById("studentProgress").value.trim();
-      const photos = document.getElementById("learningPhotos").files;
-
-      if (!className || !topics) {
-        alert("Please fill required fields");
-        return;
-      }
-
-      const now = new Date();
-      const log = {
-        id: Date.now(),
-        className,
-        topics,
-        progress,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString(),
-        photos: []
-      };
-
-      // Process images
-      if (photos.length > 0) {
-        for (let i = 0; i < photos.length; i++) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            log.photos.push(e.target.result);
-            galleryImages.push({
-              id: Date.now() + i,
-              src: e.target.result,
-              caption: `${className} - ${now.toLocaleDateString()}`,
-              timestamp: now.toISOString()
-            });
-            if (i === photos.length - 1) {
-              learningLogs.push(log);
-              saveData('learning', learningLogs);
-              saveData('gallery', galleryImages);
-              renderLearning();
-              renderGallery();
-              clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
-            }
-          };
-          reader.readAsDataURL(photos[i]);
-        }
-      } else {
-        learningLogs.push(log);
-        saveData('learning', learningLogs);
-        renderLearning();
-        clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
-      }
-    }
-
-    // Render Learning
     function renderLearning() {
       const list = document.getElementById("learningList");
       list.innerHTML = "";
-      
       if (learningLogs.length === 0) {
         list.innerHTML = "<p style='text-align:center; padding:20px;'>No learning logs recorded today.</p>";
         return;
       }
-
       learningLogs.forEach(log => {
         const div = document.createElement("div");
         div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #fdcb6e;";
@@ -1031,44 +1050,13 @@
       });
     }
 
-    // Add Sale
-    function addSale() {
-      const item = document.getElementById("saleItem").value.trim();
-      const amount = parseFloat(document.getElementById("saleAmount").value);
-      const notes = document.getElementById("saleNotes").value.trim();
-
-      if (!item || isNaN(amount)) {
-        alert("Please fill all fields correctly");
-        return;
-      }
-
-      const now = new Date();
-      const sale = {
-        id: Date.now(),
-        item,
-        amount,
-        notes,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-      };
-
-      sales.push(sale);
-      saveData('sales', sales);
-      renderSales();
-      clearForm(['saleItem', 'saleAmount', 'saleNotes']);
-    }
-
-    // Render Sales
     function renderSales() {
       const list = document.getElementById("salesList");
       list.innerHTML = "";
-      
       if (sales.length === 0) {
         list.innerHTML = "<p style='text-align:center; padding:20px;'>No sales recorded today.</p>";
         return;
       }
-
       let total = 0;
       sales.forEach(sale => {
         total += sale.amount;
@@ -1084,54 +1072,16 @@
         `;
         list.appendChild(div);
       });
-
       document.getElementById("dailySalesTotal").textContent = `₦${total.toLocaleString()}`;
     }
 
-    // Register Student
-    function registerStudent() {
-      const name = document.getElementById("studentName").value.trim();
-      const age = document.getElementById("studentAge").value.trim();
-      const className = document.getElementById("studentClass").value.trim();
-      const parent = document.getElementById("parentName").value.trim();
-      const phone = document.getElementById("parentPhone").value.trim();
-      const notes = document.getElementById("studentNotes").value.trim();
-
-      if (!name || !age || !className || !parent || !phone) {
-        alert("Please fill all required fields");
-        return;
-      }
-
-      const now = new Date();
-      const student = {
-        id: Date.now(),
-        name,
-        age,
-        className,
-        parent,
-        phone,
-        notes,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-      };
-
-      students.push(student);
-      saveData('students', students);
-      renderRegistrations();
-      clearForm(['studentName', 'studentAge', 'studentClass', 'parentName', 'parentPhone', 'studentNotes']);
-    }
-
-    // Render Registrations
     function renderRegistrations() {
       const list = document.getElementById("registrationList");
       list.innerHTML = "";
-      
       if (students.length === 0) {
         list.innerHTML = "<p style='text-align:center; padding:20px;'>No new students registered today.</p>";
         return;
       }
-
       students.forEach(student => {
         const div = document.createElement("div");
         div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #a55eea;";
@@ -1148,53 +1098,18 @@
       });
     }
 
-    // Add Finance
-    function addFinance() {
-      const type = document.getElementById("financeType").value;
-      const item = document.getElementById("financeItem").value.trim();
-      const amount = parseFloat(document.getElementById("financeAmount").value);
-      const notes = document.getElementById("financeNotes").value.trim();
-
-      if (!type || !item || isNaN(amount)) {
-        alert("Please fill all fields correctly");
-        return;
-      }
-
-      const now = new Date();
-      const transaction = {
-        id: Date.now(),
-        type,
-        item,
-        amount,
-        notes,
-        timestamp: now.toISOString(),
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
-      };
-
-      finances.push(transaction);
-      saveData('finances', finances);
-      renderFinance();
-      clearForm(['financeType', 'financeItem', 'financeAmount', 'financeNotes']);
-    }
-
-    // Render Finance
     function renderFinance() {
       const list = document.getElementById("financeList");
       list.innerHTML = "";
-      
       if (finances.length === 0) {
         list.innerHTML = "<p style='text-align:center; padding:20px;'>No financial transactions recorded today.</p>";
         return;
       }
-
       let income = 0;
       let expenses = 0;
-      
       finances.forEach(trans => {
         if (trans.type === 'income') income += trans.amount;
         else if (trans.type === 'expense') expenses += trans.amount;
-        
         const div = document.createElement("div");
         div.style.cssText = `background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid ${trans.type === 'income' ? '#00b894' : '#e17055'};`;
         div.innerHTML = `
@@ -1207,23 +1122,19 @@
         `;
         list.appendChild(div);
       });
-
       const net = income - expenses;
       document.getElementById("totalIncome").textContent = `₦${income.toLocaleString()}`;
       document.getElementById("totalExpenses").textContent = `₦${expenses.toLocaleString()}`;
       document.getElementById("netBalance").textContent = `₦${net.toLocaleString()}`;
     }
 
-    // Render Gallery
     function renderGallery() {
       const container = document.getElementById("galleryImages");
       container.innerHTML = "";
-      
       if (galleryImages.length === 0) {
         container.innerHTML = "<p style='text-align:center; padding:20px;'>No images in gallery.</p>";
         return;
       }
-
       galleryImages.forEach(img => {
         const item = document.createElement("div");
         item.className = "gallery-item";
@@ -1235,16 +1146,326 @@
       });
     }
 
-    // Delete Gallery Image
+    // ========================
+    // 7. IMAGE HANDLING
+    // ========================
+    function previewImages(inputId, previewId) {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      preview.innerHTML = '';
+      if (input.files) {
+        Array.from(input.files).forEach(file => {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const item = document.createElement("div");
+            item.className = "image-item";
+            item.innerHTML = `
+              <img src="${e.target.result}" alt="Preview">
+              <button class="delete-img" onclick="this.parentElement.remove()">×</button>
+            `;
+            preview.appendChild(item);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    }
+
+    document.getElementById("staffPhotos").addEventListener("change", () => previewImages("staffPhotos", "staffPhotoPreview"));
+    document.getElementById("learningPhotos").addEventListener("change", () => previewImages("learningPhotos", "learningPhotoPreview"));
+
+    // ========================
+    // 8. DATA ENTRY FUNCTIONS
+    // ========================
+    function addClient() {
+      const name = document.getElementById("clientName").value.trim();
+      const phone = document.getElementById("clientPhone").value.trim();
+      const email = document.getElementById("clientEmail").value.trim();
+      const comment = document.getElementById("clientComment").value.trim();
+      if (!name) {
+        alert("Please enter client name");
+        return;
+      }
+      const now = new Date();
+      const client = {
+        id: Date.now(),
+        name,
+        phone,
+        email,
+        comment,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+      clients.push(client);
+      saveData('clients', clients);
+      renderClients();
+      clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
+      showToast("Client added!");
+    }
+
+    function addStaffActivity() {
+      const name = document.getElementById("staffName").value.trim();
+      const role = document.getElementById("staffRole").value;
+      const activity = document.getElementById("staffActivity").value.trim();
+      const photos = document.getElementById("staffPhotos").files;
+      if (!name || !role || !activity) {
+        alert("Please fill all fields");
+        return;
+      }
+      const now = new Date();
+      const staff = {
+        id: Date.now(),
+        name,
+        role,
+        activity,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+        photos: []
+      };
+      if (photos.length > 0) {
+        let loaded = 0;
+        for (let i = 0; i < photos.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            staff.photos.push(e.target.result);
+            galleryImages.push({
+              id: Date.now() + i,
+              src: e.target.result,
+              caption: `${name} - ${now.toLocaleDateString()}`,
+              timestamp: now.toISOString()
+            });
+            loaded++;
+            if (loaded === photos.length) {
+              staffActivities.push(staff);
+              saveData('staff', staffActivities);
+              saveData('gallery', galleryImages);
+              renderStaff();
+              renderGallery();
+              clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
+              showToast("Staff activity recorded!");
+            }
+          };
+          reader.readAsDataURL(photos[i]);
+        }
+      } else {
+        staffActivities.push(staff);
+        saveData('staff', staffActivities);
+        renderStaff();
+        clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
+        showToast("Staff activity recorded!");
+      }
+    }
+
+    function addLearningLog() {
+      const className = document.getElementById("className").value.trim();
+      const topics = document.getElementById("topicsCovered").value.trim();
+      const progress = document.getElementById("studentProgress").value.trim();
+      const photos = document.getElementById("learningPhotos").files;
+      if (!className || !topics) {
+        alert("Please fill required fields");
+        return;
+      }
+      const now = new Date();
+      const log = {
+        id: Date.now(),
+        className,
+        topics,
+        progress,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+        photos: []
+      };
+      if (photos.length > 0) {
+        let loaded = 0;
+        for (let i = 0; i < photos.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            log.photos.push(e.target.result);
+            galleryImages.push({
+              id: Date.now() + i,
+              src: e.target.result,
+              caption: `${className} - ${now.toLocaleDateString()}`,
+              timestamp: now.toISOString()
+            });
+            loaded++;
+            if (loaded === photos.length) {
+              learningLogs.push(log);
+              saveData('learning', learningLogs);
+              saveData('gallery', galleryImages);
+              renderLearning();
+              renderGallery();
+              clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
+              showToast("Learning log saved!");
+            }
+          };
+          reader.readAsDataURL(photos[i]);
+        }
+      } else {
+        learningLogs.push(log);
+        saveData('learning', learningLogs);
+        renderLearning();
+        clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
+        showToast("Learning log saved!");
+      }
+    }
+
+    function addSale() {
+      const item = document.getElementById("saleItem").value.trim();
+      const amount = parseFloat(document.getElementById("saleAmount").value);
+      const notes = document.getElementById("saleNotes").value.trim();
+      if (!item || isNaN(amount)) {
+        alert("Please fill all fields correctly");
+        return;
+      }
+      const now = new Date();
+      const sale = {
+        id: Date.now(),
+        item,
+        amount,
+        notes,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+      sales.push(sale);
+      saveData('sales', sales);
+      renderSales();
+      clearForm(['saleItem', 'saleAmount', 'saleNotes']);
+      showToast("Sale recorded!");
+    }
+
+    function registerStudent() {
+      const name = document.getElementById("studentName").value.trim();
+      const age = document.getElementById("studentAge").value.trim();
+      const className = document.getElementById("studentClass").value.trim();
+      const parent = document.getElementById("parentName").value.trim();
+      const phone = document.getElementById("parentPhone").value.trim();
+      const notes = document.getElementById("studentNotes").value.trim();
+      if (!name || !age || !className || !parent || !phone) {
+        alert("Please fill all required fields");
+        return;
+      }
+      const now = new Date();
+      const student = {
+        id: Date.now(),
+        name,
+        age,
+        className,
+        parent,
+        phone,
+        notes,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+      students.push(student);
+      saveData('students', students);
+      renderRegistrations();
+      clearForm(['studentName', 'studentAge', 'studentClass', 'parentName', 'parentPhone', 'studentNotes']);
+      showToast("Student registered!");
+    }
+
+    function addFinance() {
+      const type = document.getElementById("financeType").value;
+      const item = document.getElementById("financeItem").value.trim();
+      const amount = parseFloat(document.getElementById("financeAmount").value);
+      const notes = document.getElementById("financeNotes").value.trim();
+      if (!type || !item || isNaN(amount)) {
+        alert("Please fill all fields correctly");
+        return;
+      }
+      const now = new Date();
+      const transaction = {
+        id: Date.now(),
+        type,
+        item,
+        amount,
+        notes,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+      finances.push(transaction);
+      saveData('finances', finances);
+      renderFinance();
+      clearForm(['financeType', 'financeItem', 'financeAmount', 'financeNotes']);
+      showToast("Transaction recorded!");
+    }
+
+    // ========================
+    // 9. CLEAR FUNCTIONS
+    // ========================
+    function clearClients() {
+      if (confirm("Clear all client records?")) {
+        clients = [];
+        saveData('clients', clients);
+        renderClients();
+        showToast("Clients cleared!");
+      }
+    }
+    function clearStaff() {
+      if (confirm("Clear all staff records?")) {
+        staffActivities = [];
+        saveData('staff', staffActivities);
+        renderStaff();
+        showToast("Staff records cleared!");
+      }
+    }
+    function clearLearning() {
+      if (confirm("Clear all learning records?")) {
+        learningLogs = [];
+        saveData('learning', learningLogs);
+        renderLearning();
+        showToast("Learning logs cleared!");
+      }
+    }
+    function clearSales() {
+      if (confirm("Clear all sales records?")) {
+        sales = [];
+        saveData('sales', sales);
+        renderSales();
+        showToast("Sales cleared!");
+      }
+    }
+    function clearRegistrations() {
+      if (confirm("Clear all student registrations?")) {
+        students = [];
+        saveData('students', students);
+        renderRegistrations();
+        showToast("Student registrations cleared!");
+      }
+    }
+    function clearFinance() {
+      if (confirm("Clear all financial records?")) {
+        finances = [];
+        saveData('finances', finances);
+        renderFinance();
+        showToast("Finances cleared!");
+      }
+    }
+    function clearGallery() {
+      if (confirm("Clear all gallery images?")) {
+        galleryImages = [];
+        saveData('gallery', galleryImages);
+        renderGallery();
+        showToast("Gallery cleared!");
+      }
+    }
+
     function deleteGalleryImage(id) {
       if (confirm("Delete this image?")) {
         galleryImages = galleryImages.filter(img => img.id !== id);
         saveData('gallery', galleryImages);
         renderGallery();
+        showToast("Image deleted!");
       }
     }
 
-    // Update Report Stats
+    // ========================
+    // 10. REPORTS & EXPORT
+    // ========================
     function updateReportStats() {
       document.getElementById("clientCount").textContent = clients.length;
       document.getElementById("staffCount").textContent = staffActivities.length;
@@ -1254,139 +1475,61 @@
       document.getElementById("financeCount").textContent = finances.length;
     }
 
-    // Save Data
-    function saveData(key, data) {
-      try {
-        localStorage.setItem(getTodayKey(key), JSON.stringify(data));
-      } catch (e) {
-        console.error("Storage error:", e);
-        alert("Could not save data. Please check your browser storage.");
-      }
-    }
-
-    // Load Data
-    function loadData(key) {
-      try {
-        const saved = localStorage.getItem(getTodayKey(key));
-        return saved ? JSON.parse(saved) : [];
-      } catch (e) {
-        console.error("Load error:", e);
-        return [];
-      }
-    }
-
-    // Clear Form Fields
-    function clearForm(fieldIds) {
-      fieldIds.forEach(id => {
-        const element = document.getElementById(id);
-        if (element && element.type === 'file') {
-          element.value = '';
-        } else if (element) {
-          element.value = '';
-        }
-      });
-    }
-
-    // Clear Functions
-    function clearClients() {
-      if (confirm("Clear all client records?")) {
-        clients = [];
-        saveData('clients', clients);
-        renderClients();
-      }
-    }
-
-    function clearStaff() {
-      if (confirm("Clear all staff records?")) {
-        staffActivities = [];
-        saveData('staff', staffActivities);
-        renderStaff();
-      }
-    }
-
-    function clearLearning() {
-      if (confirm("Clear all learning records?")) {
-        learningLogs = [];
-        saveData('learning', learningLogs);
-        renderLearning();
-      }
-    }
-
-    function clearSales() {
-      if (confirm("Clear all sales records?")) {
-        sales = [];
-        saveData('sales', sales);
-        renderSales();
-      }
-    }
-
-    function clearRegistrations() {
-      if (confirm("Clear all student registrations?")) {
-        students = [];
-        saveData('students', students);
-        renderRegistrations();
-      }
-    }
-
-    function clearFinance() {
-      if (confirm("Clear all financial records?")) {
-        finances = [];
-        saveData('finances', finances);
-        renderFinance();
-      }
-    }
-
-    function clearGallery() {
-      if (confirm("Clear all gallery images?")) {
-        galleryImages = [];
-        saveData('gallery', galleryImages);
-        renderGallery();
-      }
-    }
-
-    // Export to CSV
     function exportToCSV() {
       try {
         let csv = "Category,Details,Amount,Date,Time\n";
-        
-        // Clients
         clients.forEach(c => {
           csv += `Client,"${c.name}; ${c.phone || ''}; ${c.email || ''}",,"${c.date}","${c.time}"\n`;
         });
-        
-        // Staff
         staffActivities.forEach(s => {
           csv += `Staff,"${s.name} (${s.role}); ${s.activity}",,"${s.date}","${s.time}"\n`;
         });
-        
-        // Learning
         learningLogs.forEach(l => {
           csv += `Learning,"${l.className}; Topics: ${l.topics}; Progress: ${l.progress}",,"${l.date}","${l.time}"\n`;
         });
-        
-        // Sales
         sales.forEach(s => {
           csv += `Sale,"${s.item}; ${s.notes}",₦${s.amount},"${s.date}","${s.time}"\n`;
         });
-        
-        // Students
         students.forEach(st => {
           csv += `Student,"${st.name}; Age: ${st.age}; Class: ${st.className}; Parent: ${st.parent}; Phone: ${st.phone}; ${st.notes}",,"${st.date}","${st.time}"\n`;
         });
-        
-        // Finances
         finances.forEach(f => {
           csv += `${f.type.toUpperCase()},"${f.item}; ${f.notes}",₦${f.amount},"${f.date}","${f.time}"\n`;
         });
-
         downloadFile(csv, `performance_report_${currentStaffId}_${new Date().toISOString().split("T")[0]}.csv`, "text/csv");
+        showToast("CSV exported!");
       } catch (e) {
         console.error("CSV export error:", e);
-        alert("Could not generate CSV. Please try again.");
+        alert("Export failed.");
       }
     }
 
-    // Generate Single-Page PDF Report with GPS Coordinates
+    function backupData() {
+      const backup = {
+        clients,
+        staffActivities,
+        learningLogs,
+        sales,
+        students,
+        finances,
+        galleryImages,
+        signInData,
+        timestamp: new Date().toISOString(),
+        staffId: currentStaffId
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `tomstudio_backup_${currentStaffId}_${new Date().toISOString().split("T")[0]}.json`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+      showToast("Backup created!");
+    }
+
+    // ========================
+    // 11. PDF GENERATION (WITH IMAGES)
+    // ========================
     function generatePDF() {
       try {
         const { jsPDF } = window.jspdf;
@@ -1400,7 +1543,7 @@
         const primaryColor = [108, 92, 231];
         const textColor = [66, 66, 66];
         const leftMargin = 20;
-        const contentWidth = 170;
+        let yPos = 50;
 
         // Header
         doc.setFillColor(...primaryColor);
@@ -1409,22 +1552,18 @@
         doc.setFontSize(20);
         doc.text("TOMSTUDIO DAILY PERFORMANCE TRACKER", 105, 20, null, null, "center");
         doc.setFontSize(14);
-        doc.text("Comprehensive Daily Report", 105, 30, null, null, "center");
-
-        // Reset color
+        doc.text("Daily Report with Images", 105, 30, null, null, "center");
         doc.setTextColor(...textColor);
 
-        // Function to add text with proper formatting
-        function addText(text, x, y, isBold = false, fontSize = 10) {
-          doc.setFontSize(fontSize);
-          doc.setFont("helvetica", isBold ? "bold" : "normal");
+        function addText(text, x, y, bold = false, size = 10) {
+          doc.setFontSize(size);
+          doc.setFont("helvetica", bold ? "bold" : "normal");
           doc.text(text, x, y);
           return y + 6;
         }
 
-        // Function to add wrapped text
-        function addWrappedText(text, x, y, maxWidth, fontSize = 10) {
-          doc.setFontSize(fontSize);
+        function addWrapped(text, x, y, maxWidth, size = 10) {
+          doc.setFontSize(size);
           const lines = doc.splitTextToSize(text, maxWidth);
           lines.forEach(line => {
             if (y > 280) {
@@ -1437,194 +1576,81 @@
           return y;
         }
 
-        // Staff Information
-        let yPos = 50;
+        function addImage(imgData, caption = "") {
+          if (yPos > 250) {
+            doc.addPage();
+            yPos = 20;
+          }
+          const imgProps = doc.getImageProperties(imgData);
+          const imgWidth = 50;
+          const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+          doc.addImage(imgData, 'JPEG', leftMargin, yPos, imgWidth, imgHeight);
+          yPos += imgHeight + 2;
+          if (caption) yPos = addText(caption, leftMargin, yPos, false, 9);
+          yPos += 4;
+        }
+
+        // Staff Info
         yPos = addText("STAFF INFORMATION", leftMargin, yPos, true, 12);
-        
         yPos = addText(`Staff ID: ${currentStaffId}`, leftMargin, yPos);
         yPos = addText(`Date: ${today}`, leftMargin, yPos);
-        
         if (signInData.location) {
           yPos = addText("GPS LOCATION", leftMargin, yPos, true, 12);
-          yPos = addText(`Latitude: ${signInData.location.lat.toFixed(6)}`, leftMargin, yPos, false, 14);
-          yPos = addText(`Longitude: ${signInData.location.lng.toFixed(6)}`, leftMargin, yPos, false, 14);
+          yPos = addText(`Latitude: ${signInData.location.lat.toFixed(6)}`, leftMargin, yPos);
+          yPos = addText(`Longitude: ${signInData.location.lng.toFixed(6)}`, leftMargin, yPos);
           yPos = addText(`Accuracy: ${signInData.location.accuracy}m`, leftMargin, yPos);
         }
-        
         yPos += 6;
 
-        // Clients Section
+        // Clients
         if (clients.length > 0) {
           yPos = addText("CLIENTS/VISITORS", leftMargin, yPos, true, 12);
-          
-          clients.forEach(client => {
-            if (yPos > 260) {
-              doc.addPage();
-              yPos = 20;
-            }
-            
-            yPos = addText(`${client.name}`, leftMargin, yPos, true);
-            
-            if (client.phone) {
-              yPos = addText(`📞 Phone: ${client.phone}`, leftMargin, yPos);
-            }
-            if (client.email) {
-              yPos = addText(`✉️ Email: ${client.email}`, leftMargin, yPos);
-            }
-            if (client.comment) {
-              yPos = addWrappedText(`💬 ${client.comment}`, leftMargin, yPos, contentWidth);
-            }
-            
-            yPos = addText(`${client.date} ${client.time}`, leftMargin, yPos);
+          clients.forEach(c => {
+            if (yPos > 260) { doc.addPage(); yPos = 20; }
+            yPos = addText(c.name, leftMargin, yPos, true);
+            if (c.phone) yPos = addText(`📞 ${c.phone}`, leftMargin, yPos);
+            if (c.email) yPos = addText(`✉️ ${c.email}`, leftMargin, yPos);
+            if (c.comment) yPos = addWrapped(`💬 ${c.comment}`, leftMargin, yPos, 170);
+            yPos = addText(`${c.date} ${c.time}`, leftMargin, yPos);
             yPos += 2;
           });
-          
           yPos += 4;
         }
 
-        // Staff Activities
-        if (staffActivities.length > 0) {
-          if (yPos > 260) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
-          yPos = addText("ONSITE STAFF ACTIVITIES", leftMargin, yPos, true, 12);
-          
-          staffActivities.forEach(staff => {
-            if (yPos > 260) {
-              doc.addPage();
-              yPos = 20;
-            }
-            
-            yPos = addText(`${staff.name} (${staff.role})`, leftMargin, yPos, true);
-            yPos = addWrappedText(staff.activity, leftMargin, yPos, contentWidth);
-            yPos = addText(`${staff.date} ${staff.time}`, leftMargin, yPos);
-            yPos += 2;
-          });
-          
-          yPos += 4;
-        }
-
-        // Student Learning
+        // Learning with Images
         if (learningLogs.length > 0) {
-          if (yPos > 260) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
           yPos = addText("STUDENT LEARNING LOGS", leftMargin, yPos, true, 12);
-          
           learningLogs.forEach(log => {
-            if (yPos > 260) {
-              doc.addPage();
-              yPos = 20;
-            }
-            
-            yPos = addText(`${log.className}`, leftMargin, yPos, true);
-            yPos = addWrappedText(`Topics: ${log.topics}`, leftMargin, yPos, contentWidth);
-            if (log.progress) {
-              yPos = addWrappedText(`Progress: ${log.progress}`, leftMargin, yPos, contentWidth);
-            }
+            if (yPos > 260) { doc.addPage(); yPos = 20; }
+            yPos = addText(log.className, leftMargin, yPos, true);
+            yPos = addWrapped(`Topics: ${log.topics}`, leftMargin, yPos, 170);
+            if (log.progress) yPos = addWrapped(`Progress: ${log.progress}`, leftMargin, yPos, 170);
+            log.photos.forEach(photo => addImage(photo, `Class: ${log.className}`));
             yPos = addText(`${log.date} ${log.time}`, leftMargin, yPos);
             yPos += 2;
           });
-          
           yPos += 4;
         }
 
-        // Daily Sales
-        if (sales.length > 0) {
-          if (yPos > 260) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
-          yPos = addText("DAILY SALES", leftMargin, yPos, true, 12);
-          
-          let totalSales = sales.reduce((sum, s) => sum + s.amount, 0);
-          yPos = addText(`Today's Total Sales: ₦${totalSales.toLocaleString()}`, leftMargin, yPos, true);
-          
-          sales.forEach(sale => {
-            if (yPos > 260) {
-              doc.addPage();
-              yPos = 20;
-            }
-            
-            yPos = addText(`${sale.item}`, leftMargin, yPos);
-            yPos = addText(`Amount: ₦${sale.amount.toLocaleString()}`, leftMargin, yPos);
-            if (sale.notes) {
-              yPos = addWrappedText(`📝 ${sale.notes}`, leftMargin, yPos, contentWidth);
-            }
-            yPos = addText(`${sale.date} ${sale.time}`, leftMargin, yPos);
+        // Staff with Images
+        if (staffActivities.length > 0) {
+          yPos = addText("ONSITE STAFF ACTIVITIES", leftMargin, yPos, true, 12);
+          staffActivities.forEach(staff => {
+            if (yPos > 260) { doc.addPage(); yPos = 20; }
+            yPos = addText(`${staff.name} (${staff.role})`, leftMargin, yPos, true);
+            yPos = addWrapped(staff.activity, leftMargin, yPos, 170);
+            staff.photos.forEach(photo => addImage(photo, `Staff: ${staff.name}`));
+            yPos = addText(`${staff.date} ${staff.time}`, leftMargin, yPos);
             yPos += 2;
           });
-          
           yPos += 4;
         }
 
-        // New Student Registrations
-        if (students.length > 0) {
-          if (yPos > 260) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
-          yPos = addText("NEW STUDENT REGISTRATIONS", leftMargin, yPos, true, 12);
-          
-          students.forEach(student => {
-            if (yPos > 260) {
-              doc.addPage();
-              yPos = 20;
-            }
-            
-            yPos = addText(`${student.name}`, leftMargin, yPos, true);
-            yPos = addText(`Age: ${student.age} | Class: ${student.className}`, leftMargin, yPos);
-            yPos = addText(`Parent: ${student.parent} | Phone: ${student.phone}`, leftMargin, yPos);
-            if (student.notes) {
-              yPos = addWrappedText(`📝 ${student.notes}`, leftMargin, yPos, contentWidth);
-            }
-            yPos = addText(`${student.date} ${student.time}`, leftMargin, yPos);
-            yPos += 2;
-          });
-          
-          yPos += 4;
-        }
-
-        // Income & Expenses
-        if (finances.length > 0) {
-          if (yPos > 260) {
-            doc.addPage();
-            yPos = 20;
-          }
-          
-          yPos = addText("INCOME & EXPENSES", leftMargin, yPos, true, 12);
-          
-          let income = 0;
-          let expenses = 0;
-          finances.forEach(f => {
-            if (f.type === 'income') income += f.amount;
-            else if (f.type === 'expense') expenses += f.amount;
-          });
-          
-          yPos = addText(`Total Income: ₦${income.toLocaleString()}`, leftMargin, yPos);
-          yPos = addText(`Total Expenses: ₦${expenses.toLocaleString()}`, leftMargin, yPos);
-          yPos = addText(`Net Balance: ₦${(income - expenses).toLocaleString()}`, leftMargin, yPos, true);
-          
-          finances.forEach(trans => {
-            if (yPos > 260) {
-              doc.addPage();
-              yPos = 20;
-            }
-            
-            yPos = addText(`${trans.type === 'income' ? '💰' : '💸'} ${trans.item}`, leftMargin, yPos, true);
-            yPos = addText(`Amount: ₦${trans.amount.toLocaleString()}`, leftMargin, yPos);
-            if (trans.notes) {
-              yPos = addWrappedText(`📝 ${trans.notes}`, leftMargin, yPos, contentWidth);
-            }
-            yPos = addText(`${trans.date} ${trans.time}`, leftMargin, yPos);
-            yPos += 2;
-          });
+        // Gallery Images
+        if (galleryImages.length > 0) {
+          yPos = addText("CLASS GALLERY", leftMargin, yPos, true, 12);
+          galleryImages.forEach(img => addImage(img.src, img.caption || "Class Photo"));
         }
 
         // Footer
@@ -1635,94 +1661,53 @@
         doc.text("App Design and Developed by Tomstudio Tech Academy", 105, 290, null, null, "center");
         doc.text("+2348030827417", 105, 295, null, null, "center");
 
-        // Save with fallbacks
-        try {
-          doc.save(`Performance_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
-        } catch (e) {
-          const pdfBlob = doc.output('blob');
-          const url = URL.createObjectURL(pdfBlob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `Performance_Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          setTimeout(() => URL.revokeObjectURL(url), 100);
-        }
+        doc.save(`Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
+        showToast("PDF generated!");
       } catch (e) {
-        console.error("PDF generation error:", e);
-        alert("Could not generate PDF. Please try again.");
+        alert("PDF generation failed. Some images may be too large.");
+        console.error(e);
       }
     }
 
-    // Utility: Download File
+    // ========================
+    // 12. UTILITIES
+    // ========================
     function downloadFile(content, filename, mimeType) {
-      try {
-        const blob = new Blob([content], { type: mimeType });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 100);
-      } catch (e) {
-        console.error("Download error:", e);
-        alert("Could not download file. Please try again.");
-      }
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
     }
 
-    // Load all data
     function loadAllData() {
-      try {
-        clients = loadData('clients');
-        staffActivities = loadData('staff');
-        learningLogs = loadData('learning');
-        sales = loadData('sales');
-        students = loadData('students');
-        finances = loadData('finances');
-        galleryImages = loadData('gallery') || [];
-        
-        renderClients();
-        renderStaff();
-        renderLearning();
-        renderSales();
-        renderRegistrations();
-        renderFinance();
-        renderGallery();
-        updateReportStats();
-        displaySignInData();
-      } catch (e) {
-        console.error("Load all data error:", e);
-        alert("Could not load data. Please try again.");
-      }
+      clients = loadData('clients');
+      staffActivities = loadData('staff');
+      learningLogs = loadData('learning');
+      sales = loadData('sales');
+      students = loadData('students');
+      finances = loadData('finances');
+      galleryImages = loadData('gallery') || [];
+      renderClients(); renderStaff(); renderLearning(); renderSales();
+      renderRegistrations(); renderFinance(); renderGallery(); updateReportStats();
+      displaySignInData();
     }
 
-    // Initialize
+    // ========================
+    // 13. INIT & SERVICE WORKER
+    // ========================
     window.onload = function() {
-      try {
-        // Check if localStorage is available
-        if (typeof localStorage === 'undefined') {
-          alert("Your browser does not support local storage. Some features may not work.");
-        }
-        
-        // Load any saved data
-        loadAllData();
-      } catch (e) {
-        console.error("Initialization error:", e);
-        alert("Application failed to initialize. Please refresh and try again.");
+      loadAllData();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(e => console.log('SW failed:', e));
       }
+      window.addEventListener('online', () => { isOnline = true; showToast("Back online!"); });
+      window.addEventListener('offline', () => { isOnline = false; showToast("You are offline."); });
     };
-
-    // Register Service Worker for PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('SW registered'))
-          .catch(err => console.log('SW registration failed', err));
-      });
-    }
   </script>
 </body>
 </html>
