@@ -8,16 +8,13 @@
   <meta name="description" content="Tomstudio Daily Performance Tracker - Full PWA with Image Support">
   <meta name="format-detection" content="telephone=no">
   <title>TOMSTUDIO DAILY PERFORMANCE TRACKER</title>
-
   <!-- PWA Manifest -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="apple-touch-icon" href="logo-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="logo-512.png">
-
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <!-- Styles -->
   <style>
     /* Reset & Base */
@@ -40,7 +37,6 @@
       margin: 10px auto;
       padding: 15px;
     }
-
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -55,7 +51,6 @@
       70% { box-shadow: 0 0 0 10px rgba(108, 92, 231, 0); }
       100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); }
     }
-
     /* Login Screen */
     .screen {
       background: white;
@@ -125,7 +120,6 @@
     #loginScreen button:hover {
       transform: translateY(-2px);
     }
-
     /* Navigation */
     nav {
       background: white;
@@ -158,7 +152,6 @@
       background: #f1f2f6;
       color: #2d3436;
     }
-
     /* Main App */
     #mainApp {
       display: none;
@@ -190,7 +183,6 @@
       margin-bottom: 25px;
       font-size: 1rem;
     }
-
     /* Sign In Section */
     .sign-in-info {
       background: linear-gradient(45deg, #00b894, #00cec9);
@@ -224,7 +216,6 @@
     .time-location-btn:hover {
       background: #1e272e;
     }
-
     /* Tab Content */
     .tab-content {
       display: none;
@@ -233,7 +224,6 @@
       display: block;
       animation: fadeIn 0.4s ease;
     }
-
     /* Form */
     .form {
       background: #f8f9fa;
@@ -287,7 +277,6 @@
     .form button:hover {
       transform: translateY(-2px);
     }
-
     /* Image Upload */
     .image-upload {
       border: 2px dashed #ddd;
@@ -347,7 +336,6 @@
     .image-item .delete-img:hover {
       background: #e84393;
     }
-
     /* Gallery */
     .gallery {
       display: grid;
@@ -384,7 +372,6 @@
       align-items: center;
       justify-content: center;
     }
-
     /* Export */
     .export {
       display: flex;
@@ -408,7 +395,6 @@
     .export button:hover {
       transform: translateY(-2px);
     }
-
     /* Buttons */
     .clear-btn,
     .logout-btn {
@@ -426,7 +412,6 @@
     .logout-btn:hover {
       background: #1e272e;
     }
-
     /* Summary Cards */
     .summary-box {
       display: flex;
@@ -453,7 +438,6 @@
       font-weight: bold;
       color: #2d3436;
     }
-
     /* Footer */
     footer {
       text-align: center;
@@ -470,7 +454,6 @@
     footer a:hover {
       text-decoration: underline;
     }
-
     /* Responsive */
     @media (max-width: 768px) {
       .container {
@@ -499,7 +482,6 @@
         font-size: 0.9rem;
       }
     }
-
     /* Print Styles */
     @media print {
       body, .container {
@@ -513,7 +495,6 @@
         display: block !important;
       }
     }
-
     /* Loading Spinner */
     .loader {
       border: 5px solid #f3f3f3;
@@ -528,7 +509,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     /* Toast Notifications */
     .toast {
       position: fixed;
@@ -548,13 +528,164 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* Admin Tab Styles */
+    #adminTab {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .admin-header {
+      background: #6c5ce7;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+  
+    .staff-list-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .staff-list {
+      width: 30%;
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      max-height: 600px;
+      overflow-y: auto;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .staff-item {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      transition: background 0.2s;
+    }
+    .staff-item:hover {
+      background: #f1f2f6;
+    }
+    .staff-item.active {
+      background: #6c5ce7;
+      color: white;
+    }
+    .staff-data-container {
+      width: 70%;
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    .data-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+    .data-section h4 {
+      color: #6c5ce7;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #f1f2f6;
+      padding-bottom: 5px;
+    }
+    .chat-container {
+      margin-top: 20px;
+      border-top: 2px solid #eee;
+      padding-top: 15px;
+    }
+    .chat-messages {
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #f8f9fa;
+    }
+    .message {
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+    .message.admin {
+      background: #6c5ce7;
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .message.staff {
+      background: #f1f2f6;
+      color: #333;
+      align-self: left;
+    }
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      padding: 10px 15px;
+    }
+    .chat-input button {
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .search-bar {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .badge.clients {
+      background: #00b894;
+      color: white;
+    }
+    .badge.staff {
+      background: #0984e3;
+      color: white;
+    }
+    .badge.learning {
+      background: #fdcb6e;
+      color: #333;
+    }
+    .badge.sales {
+      background: #e17055;
+      color: white;
+    }
+    .badge.students {
+      background: #a55eea;
+      color: white;
+    }
+    .badge.finance {
+      background: #fd79a8;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Toast Notification -->
     <div id="toast" class="toast">Action completed!</div>
-
     <!-- Login Screen -->
     <div id="loginScreen" class="screen">
       <img src="logo-192.png" alt="TOMSTUDIO Logo">
@@ -564,7 +695,6 @@
       <input type="text" id="staffId" placeholder="Enter Staff ID" maxlength="20" />
       <button onclick="login()">🔓 Log In</button>
     </div>
-
     <!-- Main App -->
     <div id="mainApp" class="screen">
       <div style="text-align: center;">
@@ -572,7 +702,6 @@
       </div>
       <h1>🎯 Welcome, <span id="staffDisplay"></span>!</h1>
       <p>Track your daily performance and activities.</p>
-
       <!-- Sign In Section -->
       <div class="sign-in-info">
         <h3>📍 Daily Sign In & GPS Location</h3>
@@ -582,19 +711,18 @@
           🕒 Record Sign-In & Get GPS Coordinates
         </button>
       </div>
-
       <!-- Navigation Tabs -->
       <nav>
         <a href="#" class="tab-link active" data-tab="clients">Clients/Visitors</a>
         <a href="#" class="tab-link" data-tab="staff">Onsite Staff</a>
-        <a href="#" class="tab-link" data-tab="learning">CBT Schl/Students </a>
+        <a href="#" class="tab-link" data-tab="learning"> Student Learning </a>
         <a href="#" class="tab-link" data-tab="sales">Daily Sales</a>
         <a href="#" class="tab-link" data-tab="registration">New Students</a>
         <a href="#" class="tab-link" data-tab="finance">Income & Expenses</a>
         <a href="#" class="tab-link" data-tab="gallery">Class Gallery</a>
         <a href="#" class="tab-link" data-tab="reports">Reports</a>
+        <a href="#" class="tab-link" data-tab="admin">Admin</a>
       </nav>
-
       <!-- Clients/Visitors Tab -->
       <section id="clients" class="tab-content active">
         <div class="form">
@@ -608,7 +736,6 @@
         </div>
         <div id="clientList"></div>
       </section>
-
       <!-- Onsite Staff Tab -->
       <section id="staff" class="tab-content">
         <div class="form">
@@ -621,12 +748,16 @@
             <option value="Teacher">Acting Manager</option>
             <option value="Cleaner">Tech Coach</option>
             <option value="Cleaner">CBT Coach</option>
-            <option value="Security">Students</option>
-            <option value="Security">Photographer</option>
+            <option value="Security">Student</option>
+            <option value="Photographer">Photographer</option>
             <option value="Maintenance">Maintenance</option>
+            <option value="Receptionist">Receptionist</option>
+            <option value="Accountant">Accountant</option>
             <option value="Admin">Admin</option>
-            <option value="Admin">Special personnel</option>
-            <option value="Admin">Other personnel</option>
+            <option value="IT">IT</option>
+            <option value="Volunteer">Volunteer</option>
+            <option value="Special personnel">Special personnel</option>
+            <option value="Other personnel">Other personnel</option>
           </select>
           <textarea id="staffActivity" placeholder="Daily activities and tasks completed..."></textarea>
           <div class="image-upload">
@@ -639,7 +770,6 @@
         </div>
         <div id="staffList"></div>
       </section>
-
       <!-- Student Learning Tab -->
       <section id="learning" class="tab-content">
         <div class="form">
@@ -657,7 +787,6 @@
         </div>
         <div id="learningList"></div>
       </section>
-
       <!-- Daily Sales Tab -->
       <section id="sales" class="tab-content">
         <div class="form">
@@ -673,7 +802,6 @@
           <h4>💰 Today's Total Sales: <span id="dailySalesTotal">₦0</span></h4>
         </div>
       </section>
-
       <!-- New Student Registration -->
       <section id="registration" class="tab-content">
         <div class="form">
@@ -689,7 +817,6 @@
         </div>
         <div id="registrationList"></div>
       </section>
-
       <!-- Income & Expenses -->
       <section id="finance" class="tab-content">
         <div class="form">
@@ -711,14 +838,12 @@
           <p>Income: <span id="totalIncome">₦0</span> | Expenses: <span id="totalExpenses">₦0</span> | Net: <span id="netBalance">₦0</span></p>
         </div>
       </section>
-
       <!-- Class Gallery Tab -->
       <section id="gallery" class="tab-content">
         <h2>🖼️ Class Gallery</h2>
         <button onclick="clearGallery()" class="clear-btn" style="margin:10px 0;">🗑️ Clear All Images</button>
         <div class="gallery" id="galleryImages"></div>
       </section>
-
       <!-- Reports Tab -->
       <section id="reports" class="tab-content">
         <h2>📄 Comprehensive Reports</h2>
@@ -754,17 +879,32 @@
           </div>
         </div>
       </section>
-
+      <!-- Admin Tab -->
+      <section id="admin" class="tab-content">
+        <div id="adminTab">
+          <div class="admin-header">
+            <h2>🔐 Admin Dashboard</h2>
+            <p style="color: #ddd;">Manage staff performance and communications</p>
+          </div>
+          <div class="staff-list-container">
+            <div class="staff-list">
+              <input type="text" class="search-bar" placeholder="Search staff..." id="staffSearch" onkeyup="searchStaff()">
+              <div id="staffList"></div>
+            </div>
+            <div class="staff-data-container" id="staffDataContainer">
+              <p class="text-center">Select a staff member to view their data and send messages</p>
+            </div>
+          </div>
+        </div>
+      </section>
       <div style="text-align: center; margin-top: 20px;">
         <button class="logout-btn" onclick="logout()">↩️ Logout</button>
       </div>
     </div>
-
     <footer>
       &copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417">+2348030827417</a>
     </footer>
   </div>
-
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
@@ -783,7 +923,9 @@
     let signInData = {};
     let unsavedChanges = false;
     let isOnline = navigator.onLine;
-
+    let staffList = [];
+    let adminMessages = {};
+    
     // DOM Elements
     const loginScreen = document.getElementById("loginScreen");
     const mainApp = document.getElementById("mainApp");
@@ -792,7 +934,11 @@
     const signInTimeElement = document.getElementById("signInTime");
     const locationInfoElement = document.getElementById("locationInfo");
     const toast = document.getElementById("toast");
-
+    
+    // Admin Tab Elements
+    const staffListElement = document.getElementById("staffList");
+    const staffDataContainer = document.getElementById("staffDataContainer");
+    
     // ========================
     // 2. UTILITY FUNCTIONS
     // ========================
@@ -803,15 +949,39 @@
         toast.classList.remove("show");
       }, duration);
     }
-
+    
     function getTodayKey(prefix) {
       return `${prefix}_${currentStaffId}_${new Date().toISOString().split("T")[0]}`;
     }
-
+    
     function getAllKeys(prefix) {
       return Object.keys(localStorage).filter(k => k.startsWith(prefix + "_"));
     }
-
+    
+    function getAllStaffIds() {
+      const staffIds = new Set();
+      
+      // Get staff IDs from all data types
+      const prefixes = ['clients', 'staff', 'learning', 'sales', 'students', 'finances', 'gallery', 'signin'];
+      
+      prefixes.forEach(prefix => {
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith(prefix + "_")) {
+            const parts = key.split('_');
+            if (parts.length >= 2) {
+              // Extract staff ID (part after prefix)
+              const staffId = parts[1];
+              if (staffId && staffId !== 'undefined') {
+                staffIds.add(staffId);
+              }
+            }
+          }
+        });
+      });
+      
+      return Array.from(staffIds);
+    }
+    
     function saveData(key, data) {
       try {
         localStorage.setItem(getTodayKey(key), JSON.stringify(data));
@@ -822,7 +992,7 @@
         showToast("Could not save data. Storage full?");
       }
     }
-
+    
     function loadData(key) {
       try {
         const saved = localStorage.getItem(getTodayKey(key));
@@ -832,7 +1002,18 @@
         return [];
       }
     }
-
+    
+    function loadDataForStaff(key, staffId) {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const saved = localStorage.getItem(`${key}_${staffId}_${today}`);
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        console.error("Load error:", e);
+        return [];
+      }
+    }
+    
     function clearForm(fieldIds) {
       fieldIds.forEach(id => {
         const element = document.getElementById(id);
@@ -845,7 +1026,7 @@
         }
       });
     }
-
+    
     // ========================
     // 3. LOGIN & LOGOUT
     // ========================
@@ -862,7 +1043,7 @@
       loadAllData();
       showToast(`Welcome, ${id}!`);
     }
-
+    
     function logout() {
       if (confirm("Log out?")) {
         currentStaffId = null;
@@ -872,7 +1053,7 @@
         showToast("Logged out.");
       }
     }
-
+    
     // ========================
     // 4. GPS & SIGN IN
     // ========================
@@ -885,7 +1066,7 @@
         date: dateStr,
         timestamp: now.toISOString()
       };
-
+      
       if (navigator.geolocation) {
         locationInfoElement.innerHTML = '<div class="loader"></div>';
         navigator.geolocation.getCurrentPosition(
@@ -917,7 +1098,7 @@
       }
       signInTimeElement.textContent = `Signed in at ${timeStr} on ${dateStr}`;
     }
-
+    
     function saveSignInData(data) {
       try {
         localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
@@ -925,7 +1106,7 @@
         console.error("Storage error:", e);
       }
     }
-
+    
     function displaySignInData() {
       const saved = localStorage.getItem(`signin_${currentStaffId}`);
       if (saved) {
@@ -941,7 +1122,7 @@
         }
       }
     }
-
+    
     // ========================
     // 5. TAB NAVIGATION
     // ========================
@@ -953,7 +1134,7 @@
         document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         link.classList.add('active');
-
+        
         if (tabId === 'clients') renderClients();
         if (tabId === 'staff') renderStaff();
         if (tabId === 'learning') renderLearning();
@@ -962,9 +1143,10 @@
         if (tabId === 'finance') renderFinance();
         if (tabId === 'gallery') renderGallery();
         if (tabId === 'reports') updateReportStats();
+        if (tabId === 'admin') showAdminDashboard();
       });
     });
-
+    
     // ========================
     // 6. DATA RENDERING
     // ========================
@@ -990,7 +1172,7 @@
         list.appendChild(div);
       });
     }
-
+    
     function renderStaff() {
       const list = document.getElementById("staffList");
       list.innerHTML = "";
@@ -1019,7 +1201,7 @@
         list.appendChild(div);
       });
     }
-
+    
     function renderLearning() {
       const list = document.getElementById("learningList");
       list.innerHTML = "";
@@ -1049,7 +1231,7 @@
         list.appendChild(div);
       });
     }
-
+    
     function renderSales() {
       const list = document.getElementById("salesList");
       list.innerHTML = "";
@@ -1074,7 +1256,7 @@
       });
       document.getElementById("dailySalesTotal").textContent = `₦${total.toLocaleString()}`;
     }
-
+    
     function renderRegistrations() {
       const list = document.getElementById("registrationList");
       list.innerHTML = "";
@@ -1097,7 +1279,7 @@
         list.appendChild(div);
       });
     }
-
+    
     function renderFinance() {
       const list = document.getElementById("financeList");
       list.innerHTML = "";
@@ -1127,7 +1309,7 @@
       document.getElementById("totalExpenses").textContent = `₦${expenses.toLocaleString()}`;
       document.getElementById("netBalance").textContent = `₦${net.toLocaleString()}`;
     }
-
+    
     function renderGallery() {
       const container = document.getElementById("galleryImages");
       container.innerHTML = "";
@@ -1145,7 +1327,7 @@
         container.appendChild(item);
       });
     }
-
+    
     // ========================
     // 7. IMAGE HANDLING
     // ========================
@@ -1169,10 +1351,10 @@
         });
       }
     }
-
+    
     document.getElementById("staffPhotos").addEventListener("change", () => previewImages("staffPhotos", "staffPhotoPreview"));
     document.getElementById("learningPhotos").addEventListener("change", () => previewImages("learningPhotos", "learningPhotoPreview"));
-
+    
     // ========================
     // 8. DATA ENTRY FUNCTIONS
     // ========================
@@ -1202,7 +1384,7 @@
       clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
       showToast("Client added!");
     }
-
+    
     function addStaffActivity() {
       const name = document.getElementById("staffName").value.trim();
       const role = document.getElementById("staffRole").value;
@@ -1256,7 +1438,7 @@
         showToast("Staff activity recorded!");
       }
     }
-
+    
     function addLearningLog() {
       const className = document.getElementById("className").value.trim();
       const topics = document.getElementById("topicsCovered").value.trim();
@@ -1310,7 +1492,7 @@
         showToast("Learning log saved!");
       }
     }
-
+    
     function addSale() {
       const item = document.getElementById("saleItem").value.trim();
       const amount = parseFloat(document.getElementById("saleAmount").value);
@@ -1335,7 +1517,7 @@
       clearForm(['saleItem', 'saleAmount', 'saleNotes']);
       showToast("Sale recorded!");
     }
-
+    
     function registerStudent() {
       const name = document.getElementById("studentName").value.trim();
       const age = document.getElementById("studentAge").value.trim();
@@ -1366,7 +1548,7 @@
       clearForm(['studentName', 'studentAge', 'studentClass', 'parentName', 'parentPhone', 'studentNotes']);
       showToast("Student registered!");
     }
-
+    
     function addFinance() {
       const type = document.getElementById("financeType").value;
       const item = document.getElementById("financeItem").value.trim();
@@ -1393,7 +1575,7 @@
       clearForm(['financeType', 'financeItem', 'financeAmount', 'financeNotes']);
       showToast("Transaction recorded!");
     }
-
+    
     // ========================
     // 9. CLEAR FUNCTIONS
     // ========================
@@ -1405,6 +1587,7 @@
         showToast("Clients cleared!");
       }
     }
+    
     function clearStaff() {
       if (confirm("Clear all staff records?")) {
         staffActivities = [];
@@ -1413,6 +1596,7 @@
         showToast("Staff records cleared!");
       }
     }
+    
     function clearLearning() {
       if (confirm("Clear all learning records?")) {
         learningLogs = [];
@@ -1421,6 +1605,7 @@
         showToast("Learning logs cleared!");
       }
     }
+    
     function clearSales() {
       if (confirm("Clear all sales records?")) {
         sales = [];
@@ -1429,6 +1614,7 @@
         showToast("Sales cleared!");
       }
     }
+    
     function clearRegistrations() {
       if (confirm("Clear all student registrations?")) {
         students = [];
@@ -1437,6 +1623,7 @@
         showToast("Student registrations cleared!");
       }
     }
+    
     function clearFinance() {
       if (confirm("Clear all financial records?")) {
         finances = [];
@@ -1445,6 +1632,7 @@
         showToast("Finances cleared!");
       }
     }
+    
     function clearGallery() {
       if (confirm("Clear all gallery images?")) {
         galleryImages = [];
@@ -1453,7 +1641,7 @@
         showToast("Gallery cleared!");
       }
     }
-
+    
     function deleteGalleryImage(id) {
       if (confirm("Delete this image?")) {
         galleryImages = galleryImages.filter(img => img.id !== id);
@@ -1462,7 +1650,7 @@
         showToast("Image deleted!");
       }
     }
-
+    
     // ========================
     // 10. REPORTS & EXPORT
     // ========================
@@ -1474,7 +1662,7 @@
       document.getElementById("studentCount").textContent = students.length;
       document.getElementById("financeCount").textContent = finances.length;
     }
-
+    
     function exportToCSV() {
       try {
         let csv = "Category,Details,Amount,Date,Time\n";
@@ -1503,7 +1691,7 @@
         alert("Export failed.");
       }
     }
-
+    
     function backupData() {
       const backup = {
         clients,
@@ -1526,7 +1714,7 @@
       setTimeout(() => URL.revokeObjectURL(url), 100);
       showToast("Backup created!");
     }
-
+    
     // ========================
     // 11. PDF GENERATION (WITH IMAGES)
     // ========================
@@ -1538,13 +1726,12 @@
           unit: 'mm',
           format: 'a4'
         });
-
         const today = new Date().toLocaleDateString();
         const primaryColor = [108, 92, 231];
         const textColor = [66, 66, 66];
         const leftMargin = 20;
         let yPos = 50;
-
+        
         // Header
         doc.setFillColor(...primaryColor);
         doc.rect(0, 0, 210, 40, 'F');
@@ -1554,19 +1741,19 @@
         doc.setFontSize(14);
         doc.text("Daily Report with Images", 105, 30, null, null, "center");
         doc.setTextColor(...textColor);
-
+        
         function addText(text, x, y, bold = false, size = 10) {
           doc.setFontSize(size);
           doc.setFont("helvetica", bold ? "bold" : "normal");
           doc.text(text, x, y);
           return y + 6;
         }
-
+        
         function addWrapped(text, x, y, maxWidth, size = 10) {
           doc.setFontSize(size);
           const lines = doc.splitTextToSize(text, maxWidth);
           lines.forEach(line => {
-            if (y > 280) {
+            if (yPos > 280) {
               doc.addPage();
               y = 20;
             }
@@ -1575,7 +1762,7 @@
           });
           return y;
         }
-
+        
         function addImage(imgData, caption = "") {
           if (yPos > 250) {
             doc.addPage();
@@ -1584,13 +1771,12 @@
           const imgProps = doc.getImageProperties(imgData);
           const imgWidth = 50;
           const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-
           doc.addImage(imgData, 'JPEG', leftMargin, yPos, imgWidth, imgHeight);
           yPos += imgHeight + 2;
           if (caption) yPos = addText(caption, leftMargin, yPos, false, 9);
           yPos += 4;
         }
-
+        
         // Staff Info
         yPos = addText("STAFF INFORMATION", leftMargin, yPos, true, 12);
         yPos = addText(`Staff ID: ${currentStaffId}`, leftMargin, yPos);
@@ -1601,8 +1787,9 @@
           yPos = addText(`Longitude: ${signInData.location.lng.toFixed(6)}`, leftMargin, yPos);
           yPos = addText(`Accuracy: ${signInData.location.accuracy}m`, leftMargin, yPos);
         }
+        
         yPos += 6;
-
+        
         // Clients
         if (clients.length > 0) {
           yPos = addText("CLIENTS/VISITORS", leftMargin, yPos, true, 12);
@@ -1617,7 +1804,7 @@
           });
           yPos += 4;
         }
-
+        
         // Learning with Images
         if (learningLogs.length > 0) {
           yPos = addText("STUDENT LEARNING LOGS", leftMargin, yPos, true, 12);
@@ -1632,7 +1819,7 @@
           });
           yPos += 4;
         }
-
+        
         // Staff with Images
         if (staffActivities.length > 0) {
           yPos = addText("ONSITE STAFF ACTIVITIES", leftMargin, yPos, true, 12);
@@ -1646,13 +1833,13 @@
           });
           yPos += 4;
         }
-
+        
         // Gallery Images
         if (galleryImages.length > 0) {
           yPos = addText("CLASS GALLERY", leftMargin, yPos, true, 12);
           galleryImages.forEach(img => addImage(img.src, img.caption || "Class Photo"));
         }
-
+        
         // Footer
         doc.setDrawColor(...primaryColor);
         doc.line(20, 285, 190, 285);
@@ -1660,7 +1847,6 @@
         doc.setTextColor(255, 255, 255);
         doc.text("App Design and Developed by Tomstudio Tech Academy", 105, 290, null, null, "center");
         doc.text("+2348030827417", 105, 295, null, null, "center");
-
         doc.save(`Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
         showToast("PDF generated!");
       } catch (e) {
@@ -1668,9 +1854,328 @@
         console.error(e);
       }
     }
-
+    
     // ========================
-    // 12. UTILITIES
+    // 12. ADMIN DASHBOARD FUNCTIONS
+    // ========================
+    function showAdminDashboard() {
+      // Get all staff IDs from localStorage
+      staffList = getAllStaffIds();
+      
+      // Load admin messages
+      loadAdminMessages();
+      
+      // Render staff list
+      renderStaffList();
+    }
+    
+    function renderStaffList() {
+      staffListElement.innerHTML = '';
+      
+      if (staffList.length === 0) {
+        staffListElement.innerHTML = '<p>No staff data available</p>';
+        return;
+      }
+      
+      staffList.forEach(staffId => {
+        const item = document.createElement('div');
+        item.className = 'staff-item';
+        item.textContent = staffId;
+        
+        // Add badge with data count
+        const dataCount = getDataCountForStaff(staffId);
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = dataCount;
+        item.appendChild(badge);
+        
+        item.addEventListener('click', () => loadStaffData(staffId));
+        staffListElement.appendChild(item);
+      });
+      
+      // Select first staff member by default
+      if (staffList.length > 0) {
+        loadStaffData(staffList[0]);
+      }
+    }
+    
+    function searchStaff() {
+      const searchTerm = document.getElementById('staffSearch').value.toLowerCase();
+      const items = staffListElement.getElementsByClassName('staff-item');
+      
+      for (let item of items) {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      }
+    }
+    
+    function getDataCountForStaff(staffId) {
+      let count = 0;
+      const prefixes = ['clients', 'staff', 'learning', 'sales', 'students', 'finances'];
+      
+      prefixes.forEach(prefix => {
+        try {
+          const today = new Date().toISOString().split("T")[0];
+          const data = localStorage.getItem(`${prefix}_${staffId}_${today}`);
+          if (data) {
+            count += JSON.parse(data).length;
+          }
+        } catch (e) {
+          console.error(`Error getting data for ${prefix} and staff ${staffId}:`, e);
+        }
+      });
+      
+      return count;
+    }
+    
+    function loadStaffData(staffId) {
+      // Clear previous selection
+      document.querySelectorAll('.staff-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // Set current selection
+      const selected = document.querySelector(`.staff-item:contains('${staffId}')`);
+      if (selected) {
+        selected.classList.add('active');
+      }
+      
+      // Load all data for this staff member
+      const clientsData = loadDataForStaff('clients', staffId);
+      const staffData = loadDataForStaff('staff', staffId);
+      const learningData = loadDataForStaff('learning', staffId);
+      const salesData = loadDataForStaff('sales', staffId);
+      const studentsData = loadDataForStaff('students', staffId);
+      const financesData = loadDataForStaff('finances', staffId);
+      const signInData = loadSignInDataForStaff(staffId);
+      
+      // Render staff data
+      let html = '';
+      
+      // Sign In Data
+      if (signInData) {
+        html += `
+          <div class="data-section">
+            <h4>📍 Sign In Data</h4>
+            <p><strong>Date:</strong> ${signInData.date}</p>
+            <p><strong>Time:</strong> ${signInData.time}</p>
+        `;
+        
+        if (signInData.location) {
+          html += `
+            <p><strong>Latitude:</strong> ${signInData.location.lat.toFixed(6)}</p>
+            <p><strong>Longitude:</strong> ${signInData.location.lng.toFixed(6)}</p>
+            <p><strong>Accuracy:</strong> ${signInData.location.accuracy}m</p>
+          `;
+        }
+        html += '</div>';
+      }
+      
+      // Clients Data
+      if (clientsData.length > 0) {
+        html += `<div class="data-section"><h4>📝 Clients/Visitors <span class="badge clients">${clientsData.length}</span></h4>`;
+        clientsData.forEach(client => {
+          html += `
+            <p><strong>${client.name}</strong> ${client.phone ? `(${client.phone})` : ''}</p>
+            <p style="color:#636e72; font-size:0.9em; margin:5px 0;">${client.comment || 'No comment'}</p>
+            <p style="color:#636e72; font-size:0.8em;">${client.date} ${client.time}</p>
+            <hr style="margin:10px 0;">
+          `;
+        });
+        html += '</div>';
+      }
+      
+      // Staff Activities
+      if (staffData.length > 0) {
+        html += `<div class="data-section"><h4>👷 Staff Activities <span class="badge staff">${staffData.length}</span></h4>`;
+        staffData.forEach(activity => {
+          html += `
+            <p><strong>${activity.name} (${activity.role})</strong></p>
+            <p style="color:#636e72; margin:5px 0;">${activity.activity}</p>
+          `;
+          
+          if (activity.photos && activity.photos.length > 0) {
+            html += `<div style="display:flex; gap:5px; margin:5px 0;">`;
+            activity.photos.forEach(photo => {
+              html += `<img src="${photo}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">`;
+            });
+            html += '</div>';
+          }
+          
+          html += `<p style="color:#636e72; font-size:0.8em;">${activity.date} ${activity.time}</p>
+                   <hr style="margin:10px 0;">`;
+        });
+        html += '</div>';
+      }
+      
+      // Learning Logs
+      if (learningData.length > 0) {
+        html += `<div class="data-section"><h4>📚 Learning Logs <span class="badge learning">${learningData.length}</span></h4>`;
+        learningData.forEach(log => {
+          html += `
+            <p><strong>${log.className}</strong></p>
+            <p style="color:#636e72; margin:5px 0;"><strong>Topics:</strong> ${log.topics}</p>
+            ${log.progress ? `<p style="color:#636e72; margin:5px 0;"><strong>Progress:</strong> ${log.progress}</p>` : ''}
+          `;
+          
+          if (log.photos && log.photos.length > 0) {
+            html += `<div style="display:flex; gap:5px; margin:5px 0;">`;
+            log.photos.forEach(photo => {
+              html += `<img src="${photo}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">`;
+            });
+            html += '</div>';
+          }
+          
+          html += `<p style="color:#636e72; font-size:0.8em;">${log.date} ${log.time}</p>
+                   <hr style="margin:10px 0;">`;
+        });
+        html += '</div>';
+      }
+      
+      // Sales Data
+      if (salesData.length > 0) {
+        html += `<div class="data-section"><h4>💰 Sales <span class="badge sales">${salesData.length}</span></h4>`;
+        salesData.forEach(sale => {
+          html += `
+            <p><strong>${sale.item}</strong></p>
+            <p style="color:#636e72; margin:5px 0;">Amount: ₦${sale.amount.toLocaleString()}</p>
+            ${sale.notes ? `<p style="color:#636e72; margin:5px 0;">${sale.notes}</p>` : ''}
+            <p style="color:#636e72; font-size:0.8em;">${sale.date} ${sale.time}</p>
+            <hr style="margin:10px 0;">`;
+        });
+        html += '</div>';
+      }
+      
+      // Student Registrations
+      if (studentsData.length > 0) {
+        html += `<div class="data-section"><h4>🎓 Student Registrations <span class="badge students">${studentsData.length}</span></h4>`;
+        studentsData.forEach(student => {
+          html += `
+            <p><strong>${student.name}</strong> (Age: ${student.age}, Class: ${student.className})</p>
+            <p style="color:#636e72; margin:5px 0;">Parent: ${student.parent} (${student.phone})</p>
+            ${student.notes ? `<p style="color:#636e72; margin:5px 0;">${student.notes}</p>` : ''}
+            <p style="color:#636e72; font-size:0.8em;">${student.date} ${student.time}</p>
+            <hr style="margin:10px 0;">`;
+        });
+        html += '</div>';
+      }
+      
+      // Finance Data
+      if (financesData.length > 0) {
+        html += `<div class="data-section"><h4>📊 Finance <span class="badge finance">${financesData.length}</span></h4>`;
+        financesData.forEach(trans => {
+          html += `
+            <p><strong>${trans.type === 'income' ? '💰 Income' : '💸 Expense'}: ${trans.item}</strong></p>
+            <p style="color:#636e72; margin:5px 0;">Amount: ₦${trans.amount.toLocaleString()}</p>
+            ${trans.notes ? `<p style="color:#636e72; margin:5px 0;">${trans.notes}</p>` : ''}
+            <p style="color:#636e72; font-size:0.8em;">${trans.date} ${trans.time}</p>
+            <hr style="margin:10px 0;">`;
+        });
+        html += '</div>';
+      }
+      
+      // Chat/Messaging Section
+      html += `
+        <div class="chat-container">
+          <h4>💬 Communication</h4>
+          <div class="chat-messages" id="chatMessages_${staffId}">
+            ${renderMessages(staffId)}
+          </div>
+          <div class="chat-input">
+            <input type="text" id="messageInput_${staffId}" placeholder="Send a message to ${staffId}...">
+            <button onclick="sendMessage('${staffId}')">Send</button>
+          </div>
+        </div>
+      `;
+      
+      staffDataContainer.innerHTML = html;
+    }
+    
+    function loadSignInDataForStaff(staffId) {
+      try {
+        const data = localStorage.getItem(`signin_${staffId}`);
+        return data ? JSON.parse(data) : null;
+      } catch (e) {
+        console.error(`Error loading sign-in data for ${staffId}:`, e);
+        return null;
+      }
+    }
+    
+    function loadAdminMessages() {
+      try {
+        const saved = localStorage.getItem('admin_messages');
+        adminMessages = saved ? JSON.parse(saved) : {};
+      } catch (e) {
+        console.error("Error loading admin messages:", e);
+        adminMessages = {};
+      }
+    }
+    
+    function saveAdminMessages() {
+      try {
+        localStorage.setItem('admin_messages', JSON.stringify(adminMessages));
+      } catch (e) {
+        console.error("Error saving admin messages:", e);
+      }
+    }
+    
+    function sendMessage(staffId) {
+      const input = document.getElementById(`messageInput_${staffId}`);
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Create message object
+      const now = new Date();
+      const messageObj = {
+        id: Date.now(),
+        sender: 'admin',
+        message: message,
+        timestamp: now.toISOString(),
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString()
+      };
+      
+      // Add to message history
+      if (!adminMessages[staffId]) {
+        adminMessages[staffId] = [];
+      }
+      adminMessages[staffId].push(messageObj);
+      
+      // Save and update display
+      saveAdminMessages();
+      document.getElementById(`messageInput_${staffId}`).value = '';
+      document.getElementById(`chatMessages_${staffId}`).innerHTML = renderMessages(staffId);
+      
+      showToast(`Message sent to ${staffId}`);
+    }
+    
+    function renderMessages(staffId) {
+      if (!adminMessages[staffId] || adminMessages[staffId].length === 0) {
+        return '<div class="message">No messages yet. Start a conversation with this staff member.</div>';
+      }
+      
+      return adminMessages[staffId].map(msg => {
+        const date = new Date(msg.timestamp);
+        const formattedTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        return `
+          <div class="message ${msg.sender}">
+            ${msg.message}
+            <div style="font-size:0.7em; opacity:0.7; margin-top:3px;">
+              ${formattedTime}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // ========================
+    // 13. UTILITIES
     // ========================
     function downloadFile(content, filename, mimeType) {
       const blob = new Blob([content], { type: mimeType });
@@ -1683,7 +2188,7 @@
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 100);
     }
-
+    
     function loadAllData() {
       clients = loadData('clients');
       staffActivities = loadData('staff');
@@ -1696,9 +2201,9 @@
       renderRegistrations(); renderFinance(); renderGallery(); updateReportStats();
       displaySignInData();
     }
-
+    
     // ========================
-    // 13. INIT & SERVICE WORKER
+    // 14. INIT & SERVICE WORKER
     // ========================
     window.onload = function() {
       loadAllData();
