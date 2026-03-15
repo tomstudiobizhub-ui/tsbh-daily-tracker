@@ -1,2165 +1,2219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#6c5ce7">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="description" content="Tomstudio Daily Performance Tracker - Full PWA with Image Support">
-  <meta name="format-detection" content="telephone=no">
-  <title>TOMSTUDIO DAILY PERFORMANCE TRACKER</title>
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="logo.png" type="image/png">
-  <link rel="apple-touch-icon" href="logo-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="logo-512.png">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Styles -->
-  <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', 'Segoe UI', sans-serif;
-    }
-    body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #333;
-      min-height: 100vh;
-      background-attachment: fixed;
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.5;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 10px auto;
-      padding: 15px;
-    }
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideIn {
-      from { transform: translateX(-100%); }
-      to { transform: translateX(0); }
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(108, 92, 231, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); }
-    }
-    /* Login Screen */
-    .screen {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      overflow: hidden;
-      animation: fadeIn 0.6s ease;
-      min-height: 500px;
-    }
-    #loginScreen {
-      text-align: center;
-      padding: 40px 20px;
-    }
-    #loginScreen img {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 15px;
-      border-radius: 50%;
-      border: 4px solid #6c5ce7;
-      animation: pulse 2s infinite;
-    }
-    #loginScreen h1 {
-      color: #6c5ce7;
-      font-size: 2.2rem;
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-    #loginScreen h3 {
-      color: #2d3436;
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-    #loginScreen p {
-      color: #636e72;
-      margin-bottom: 20px;
-      font-size: 1.1rem;
-    }
-    #loginScreen input {
-      width: 100%;
-      max-width: 300px;
-      padding: 14px;
-      margin: 12px auto;
-      border: 2px solid #ddd;
-      border-radius: 50px;
-      font-size: 16px;
-      text-align: center;
-      display: block;
-      transition: border 0.3s;
-    }
-    #loginScreen input:focus {
-      border-color: #6c5ce7;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
-    }
-    #loginScreen button {
-      background: linear-gradient(45deg, #6c5ce7, #a55eea);
-      color: white;
-      border: none;
-      padding: 14px 35px;
-      border-radius: 50px;
-      font-size: 17px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-      margin-top: 10px;
-      transition: transform 0.2s;
-    }
-    #loginScreen button:hover {
-      transform: translateY(-2px);
-    }
-    /* Navigation */
-    nav {
-      background: white;
-      border-radius: 15px;
-      padding: 5px;
-      margin: 15px 0;
-      display: flex;
-      overflow-x: auto;
-      gap: 2px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      scrollbar-width: thin;
-      position: relative;
-    }
-    nav::-webkit-scrollbar {
-      height: 6px;
-    }
-    nav::-webkit-scrollbar-track {
-      background: #f1f2f6;
-      border-radius: 10px;
-    }
-    nav::-webkit-scrollbar-thumb {
-      background: #6c5ce7;
-      border-radius: 10px;
-    }
-    nav a {
-      display: block;
-      padding: 12px 20px;
-      color: #636e72;
-      text-decoration: none;
-      font-weight: 600;
-      border-radius: 10px;
-      white-space: nowrap;
-      transition: all 0.3s;
-      flex-shrink: 0;
-    }
-    nav a.active {
-      background: #6c5ce7;
-      color: white;
-      box-shadow: 0 3px 10px rgba(108, 92, 231, 0.4);
-    }
-    nav a:hover:not(.active) {
-      background: #f1f2f6;
-      color: #2d3436;
-    }
-    /* Main App */
-    #mainApp {
-      display: none;
-      padding: 20px;
-    }
-    #mainApp img.mal {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #6c5ce7;
-      margin: 0 auto 15px;
-      display: block;
-      animation: pulse 2s infinite;
-    }
-    #mainApp h1 {
-      text-align: center;
-      color: #6c5ce7;
-      margin-bottom: 8px;
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-    #mainApp h1 span {
-      color: #2d3436;
-      font-weight: 700;
-    }
-    #mainApp p {
-      text-align: center;
-      color: #636e72;
-      margin-bottom: 25px;
-      font-size: 1rem;
-    }
-    /* Sign In Section */
-    .sign-in-info {
-      background: linear-gradient(45deg, #00b894, #00cec9);
-      color: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    }
-    .sign-in-info h3 {
-      margin-bottom: 12px;
-      font-size: 1.4rem;
-    }
-    .sign-in-info p {
-      margin: 8px 0;
-      font-size: 1rem;
-    }
-    .time-location-btn {
-      background: #2d3436;
-      color: white;
-      border: none;
-      padding: 13px 25px;
-      border-radius: 50px;
-      font-size: 15px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      transition: background 0.3s;
-    }
-    .time-location-btn:hover {
-      background: #1e272e;
-    }
-    /* Tab Content */
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-    /* Form */
-    .form {
-      background: #f8f9fa;
-      padding: 25px;
-      border-radius: 15px;
-      margin-bottom: 25px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    .form h3 {
-      color: #6c5ce7;
-      margin-bottom: 18px;
-      text-align: center;
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
-    .form input,
-    .form textarea,
-    .form select {
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 15px;
-      transition: border 0.3s;
-    }
-    .form input:focus,
-    .form textarea:focus,
-    .form select:focus {
-      border-color: #6c5ce7;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
-    }
-    .form textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-    .form button {
-      background: linear-gradient(45deg, #6c5ce7, #a55eea);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 17px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: 600;
-      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-      transition: transform 0.2s;
-    }
-    .form button:hover {
-      transform: translateY(-2px);
-    }
-    /* Image Upload */
-    .image-upload {
-      border: 2px dashed #ddd;
-      padding: 20px;
-      text-align: center;
-      margin: 15px 0;
-      border-radius: 10px;
-      background: #fdfdfd;
-      transition: border 0.3s;
-    }
-    .image-upload:hover {
-      border-color: #6c5ce7;
-      background: #f8f9ff;
-    }
-    .image-upload p {
-      margin-bottom: 10px;
-      color: #636e72;
-    }
-    .image-preview {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 10px 0;
-      margin: 10px 0;
-    }
-    .image-item {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      border-radius: 10px;
-      overflow: hidden;
-      flex-shrink: 0;
-      border: 2px solid #ddd;
-    }
-    .image-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .image-item .delete-img {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(225, 112, 85, 0.9);
-      color: white;
-      border: none;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .image-item .delete-img:hover {
-      background: #e84393;
-    }
-    /* Gallery */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
-      margin: 15px 0;
-    }
-    .gallery-item {
-      position: relative;
-      height: 150px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid #ddd;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .gallery-item .delete-img {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(225, 112, 85, 0.9);
-      color: white;
-      border: none;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Export */
-    .export {
-      display: flex;
-      gap: 12px;
-      margin: 25px 0;
-      flex-wrap: wrap;
-    }
-    .export button {
-      flex: 1;
-      min-width: 140px;
-      background: linear-gradient(45deg, #fd79a8, #e84393);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 50px;
-      font-size: 15px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(236, 90, 159, 0.4);
-      transition: transform 0.2s;
-    }
-    .export button:hover {
-      transform: translateY(-2px);
-    }
-    /* Buttons */
-    .clear-btn,
-    .logout-btn {
-      background: #2d3436;
-      color: white;
-      border: none;
-      padding: 11px 22px;
-      border-radius: 50px;
-      font-size: 15px;
-      cursor: pointer;
-      margin: 8px 4px;
-      transition: background 0.3s;
-    }
-    .clear-btn:hover,
-    .logout-btn:hover {
-      background: #1e272e;
-    }
-    /* Summary Cards */
-    .summary-box {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin: 15px 0;
-    }
-    .summary-card {
-      flex: 1;
-      min-width: 200px;
-      background: #f1f2f6;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    }
-    .summary-card h4 {
-      font-size: 0.9rem;
-      color: #636e72;
-      margin-bottom: 5px;
-    }
-    .summary-card p {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #2d3436;
-    }
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: white;
-      font-size: 0.9rem;
-      margin-top: 30px;
-      font-weight: 600;
-    }
-    footer a {
-      color: #fdcb6e;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    /* Responsive */
-    @media (max-width: 768px) {
-      .container {
-        margin: 10px;
-        padding: 12px;
-      }
-      #loginScreen {
-        padding: 30px 15px;
-      }
-      #loginScreen h1 {
-        font-size: 1.8rem;
-      }
-      #mainApp {
-        padding: 15px;
-      }
-      .export {
-        flex-direction: column;
-      }
-      .export button {
-        width: 100%;
-      }
-      .summary-box {
-        flex-direction: column;
-      }
-      nav {
-        font-size: 0.9rem;
-      }
-      .staff-list-container {
-        flex-direction: column;
-      }
-      .staff-list {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      .staff-data-container {
-        width: 100%;
-      }
-      .chat-input {
-        flex-direction: column;
-      }
-      .chat-input input {
-        margin-bottom: 10px;
-      }
-    }
-    /* Print Styles */
-    @media print {
-      body, .container {
-        background: white !important;
-        -webkit-print-color-adjust: exact;
-      }
-      .no-print, nav, .form, .image-upload, .clear-btn, .logout-btn {
-        display: none !important;
-      }
-      .tab-content {
-        display: block !important;
-      }
-    }
-    /* Loading Spinner */
-    .loader {
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #6c5ce7;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    /* Toast Notifications */
-    .toast {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #2d3436;
-      color: white;
-      padding: 15px 25px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      z-index: 1000;
-      opacity: 0;
-      transform: translateY(-50px);
-      transition: all 0.4s;
-    }
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    /* Admin Tab Styles */
-    #adminTab {
-      background: #f8f9fa;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    .admin-header {
-      background: #6c5ce7;
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    .staff-list-container {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .staff-list {
-      width: 30%;
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      max-height: 600px;
-      overflow-y: auto;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
-    .staff-item {
-      padding: 12px;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-      border-radius: 5px;
-      margin-bottom: 5px;
-      transition: background 0.2s;
-    }
-    .staff-item:hover {
-      background: #f1f2f6;
-    }
-    .staff-item.active {
-      background: #6c5ce7;
-      color: white;
-    }
-    .staff-data-container {
-      width: 70%;
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
-    .data-section {
-      margin-bottom: 20px;
-      padding: 15px;
-      border: 1px solid #eee;
-      border-radius: 8px;
-    }
-    .data-section h4 {
-      color: #6c5ce7;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #f1f2f6;
-      padding-bottom: 5px;
-    }
-    .chat-container {
-      margin-top: 20px;
-      border-top: 2px solid #eee;
-      padding-top: 15px;
-    }
-    .chat-messages {
-      height: 200px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
-      background: #f8f9fa;
-    }
-    .message {
-      padding: 8px 12px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      max-width: 80%;
-    }
-    .message.admin {
-      background: #6c5ce7;
-      color: white;
-      align-self: flex-end;
-      margin-left: auto;
-    }
-    .message.staff {
-      background: #f1f2f6;
-      color: #333;
-      align-self: left;
-    }
-    .chat-input {
-      display: flex;
-      gap: 10px;
-    }
-    .chat-input input {
-      flex: 1;
-      border: 1px solid #ddd;
-      border-radius: 25px;
-      padding: 10px 15px;
-    }
-    .chat-input button {
-      background: #6c5ce7;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-    .search-bar {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 25px;
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-left: 8px;
-    }
-    .badge.clients {
-      background: #00b894;
-      color: white;
-    }
-    .badge.staff {
-      background: #0984e3;
-      color: white;
-    }
-    .badge.learning {
-      background: #fdcb6e;
-      color: #333;
-    }
-    .badge.sales {
-      background: #e17055;
-      color: white;
-    }
-    .badge.students {
-      background: #a55eea;
-      color: white;
-    }
-    .badge.finance {
-      background: #fd79a8;
-      color: white;
-    }
-    /* Admin Login Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background-color: white;
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    .modal h3 {
-      color: #6c5ce7;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .modal input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-    }
-    .modal button {
-      background: #6c5ce7;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
-    }
-    .modal button.cancel {
-      background: #636e72;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TOMSTUDIO BIZ HUB v4.0 | Professional Operations Manager</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00D68F">
+    <meta name="description" content="Professional Job Tracking & Performance Management System v4.0">
+    <link rel="icon" type="image/png" href="logo-192.png">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #00D68F;
+            --primary-dark: #00b87a;
+            --primary-light: #33e0a5;
+            --secondary: #0047AB;
+            --secondary-dark: #003680;
+            --white: #ffffff;
+            --black: #0a0a0a;
+            --gray: #666666;
+            --gray-light: #f5f5f5;
+            --gray-dark: #2d2d2d;
+            --border: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --sidebar-width: 260px;
+        }
+
+        [data-theme="dark"] {
+            --white: #1a1a1a;
+            --black: #f5f5f5;
+            --gray-light: #2d2d2d;
+            --border: #404040;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #00D68F 0%, #0047AB 100%);
+            color: var(--black);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* LOGIN PAGE */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .login-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 45px 35px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 214, 143, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .login-logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .login-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .login-toggle {
+            display: flex;
+            background: var(--gray-light);
+            border-radius: 14px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+
+        .login-toggle button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .login-toggle button.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 214, 143, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--black);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: var(--primary);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--gray-light);
+            color: var(--black);
+        }
+
+        .form-group textarea {
+            padding: 14px 16px;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 214, 143, 0.15);
+            background: var(--white);
+        }
+
+        .form-group .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 40px;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 6px 20px rgba(0, 214, 143, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 214, 143, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: var(--white);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+            color: var(--white);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: var(--black);
+        }
+
+        .btn-sm { padding: 10px 16px; font-size: 0.85rem; width: auto; }
+        .btn-block { width: 100%; }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid var(--border);
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-msg {
+            margin-top: 18px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .login-msg.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            display: block;
+        }
+
+        .login-msg.success {
+            background: rgba(0, 214, 143, 0.1);
+            color: var(--primary-dark);
+            border: 1px solid rgba(0, 214, 143, 0.3);
+            display: block;
+        }
+
+        /* MAIN APP */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--white);
+            padding: 25px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            border-right: 3px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .sidebar-close {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .sidebar-close:hover {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .sidebar-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 214, 143, 0.4);
+        }
+
+        .sidebar-logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar-menu button {
+            width: 100%;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            text-align: left;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .sidebar-menu button:hover {
+            background: rgba(0, 214, 143, 0.2);
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu button.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 214, 143, 0.4);
+        }
+
+        .sidebar-menu button i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu .menu-category {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            padding: 12px 16px 6px;
+            font-weight: 700;
+        }
+
+        .sidebar-footer {
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .user-details h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 25px;
+            background: var(--gray-light);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .top-bar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .theme-toggle, .notification-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: none;
+            background: var(--white);
+            color: var(--black);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover, .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .notification-btn {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            margin-bottom: 22px;
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s;
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card .icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+        }
+
+        .filter-bar select, .filter-bar input {
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            background: var(--white);
+            color: var(--black);
+            min-width: 130px;
+            flex: 1;
+        }
+
+        .filter-bar select:focus, .filter-bar input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .job-card {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .job-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 5px 20px rgba(0, 214, 143, 0.2);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .job-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: linear-gradient(135deg, #ffc107, #e0a800); color: var(--black); }
+        .status-in-progress { background: linear-gradient(135deg, var(--secondary), var(--secondary-dark)); }
+        .status-review { background: linear-gradient(135deg, #6f42c1, #5a32a3); }
+        .status-delivered { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .status-cancelled { background: linear-gradient(135deg, #dc3545, #c82333); }
+
+        .job-meta {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .hub-badge {
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .hub-tech-academy .hub-badge { background: #0047AB; }
+        .hub-printing .hub-badge { background: #DC3545; }
+        .hub-photography .hub-badge { background: #6F42C1; }
+        .hub-gadgets .hub-badge { background: #FD7E14; }
+        .hub-cbt .hub-badge { background: #20C997; }
+        .hub-tech-lab .hub-badge { background: #E83E8C; }
+        .hub-online-shop .hub-badge { background: #00D68F; }
+        .hub-graphics-design .hub-badge { background: #FFC107; color: var(--black); }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--gray-light);
+            font-weight: 700;
+            color: var(--black);
+            font-size: 0.8rem;
+        }
+
+        .data-table tr:hover {
+            background: var(--gray-light);
+        }
+
+        .announcement-card {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+            color: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .announcement-card.warning {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: var(--black);
+            border-left-color: #dc3545;
+        }
+
+        .announcement-card.success {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-left-color: var(--secondary);
+        }
+
+        .announcement-card.alert {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            border-left-color: #ffc107;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.4s ease;
+            max-width: 350px;
+            color: var(--black);
+            border-left: 5px solid var(--primary);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.success { border-left-color: var(--primary); }
+        .notification.error { border-left-color: #dc3545; }
+        .notification.warning { border-left-color: #ffc107; }
+        .notification.info { border-left-color: var(--secondary); }
+
+        .mobile-menu-toggle {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: none;
+            background: var(--white);
+            color: var(--black);
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: var(--white);
+        }
+
+        .loading-logo {
+            width: 110px;
+            height: 110px;
+            background: var(--white);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 22px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 15px 50px rgba(0, 214, 143, 0.5);
+        }
+
+        .hidden { display: none !important; }
+
+        .view-container {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .id-card-preview {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            border-radius: 18px;
+            padding: 22px;
+            max-width: 360px;
+            margin: 22px auto;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .id-card-preview::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+
+        .id-card-photo {
+            width: 90px;
+            height: 90px;
+            background: var(--white);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid var(--white);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .id-card-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            max-width: 550px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            color: var(--black);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--black);
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #dc3545;
+            transform: rotate(90deg);
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .sidebar-close {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .filter-bar {
+                flex-direction: column;
+            }
+            .filter-bar select, .filter-bar input {
+                width: 100%;
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 35px 25px;
+            }
+            .login-logo {
+                width: 80px;
+                height: 80px;
+            }
+            .login-header h1 {
+                font-size: 1.3rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-card {
+                padding: 18px;
+            }
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #dc3545;
+        }
+
+        .error-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">Action completed!</div>
-    
-    <!-- Admin Login Modal -->
-    <div id="adminModal" class="modal">
-      <div class="modal-content">
-        <h3>🔐 Admin Access</h3>
-        <input type="password" id="adminPassword" placeholder="Enter Admin Password">
-        <button onclick="checkAdminPassword()">Access Admin</button>
-        <button class="cancel" onclick="closeAdminModal()">Cancel</button>
-      </div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-logo">
+            <img src="logo-192.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <i class="fas fa-bullseye" style="display: none; color: #00D68F;"></i>
+        </div>
+        <h2 style="font-size: 1.3rem; margin-bottom: 8px; font-weight: 700;">TOMSTUDIO BIZ HUB</h2>
+        <p style="opacity: 0.9; font-size: 0.85rem;">Version 4.0 - Professional Operations Manager</p>
     </div>
-    
-    <!-- Login Screen -->
-    <div id="loginScreen" class="screen">
-      <img src="logo-192.png" alt="TOMSTUDIO Logo">
-      <h1>TOMSTUDIO DAILY PERFORMANCE TRACKER</h1>
-      <h3>COMPLETE OFFICE/FIELD OPERATIONS</h3>
-      <p>Please log in with your Staff ID</p>
-      <input type="text" id="staffId" placeholder="Enter Staff ID" maxlength="20" />
-      <button onclick="login()">🔓 Log In</button>
-    </div>
-    <!-- Main App -->
-    <div id="mainApp" class="screen">
-      <div style="text-align: center;">
-        <img src="logo-192.png" alt="TOMSTUDIO Logo" class="mal">
-      </div>
-      <h1>🎯 Welcome, <span id="staffDisplay"></span>!</h1>
-      <p>Track your daily performance and activities.</p>
-      <!-- Sign In Section -->
-      <div class="sign-in-info">
-        <h3>📍 Daily Sign In & GPS Location</h3>
-        <p id="signInTime">Not signed in</p>
-        <p id="locationInfo">Location: Not tracked</p>
-        <button class="time-location-btn" onclick="recordSignIn()">
-          🕒 Record Sign-In & Get GPS Coordinates
-        </button>
-      </div>
-      <!-- Navigation Tabs -->
-      <nav>
-        <a href="#" class="tab-link active" data-tab="clients">Clients/Visitors</a>
-        <a href="#" class="tab-link" data-tab="staff">Onsite Staff</a>
-        <a href="#" class="tab-link" data-tab="learning"> Student Learning </a>
-        <a href="#" class="tab-link" data-tab="sales">Daily Sales</a>
-        <a href="#" class="tab-link" data-tab="registration">New Students</a>
-        <a href="#" class="tab-link" data-tab="finance">Income & Expenses</a>
-        <a href="#" class="tab-link" data-tab="gallery">Class Gallery</a>
-        <a href="#" class="tab-link" data-tab="reports">Reports</a>
-        <a href="#" class="tab-link" data-tab="admin">Admin</a>
-      </nav>
-      <!-- Clients/Visitors Tab -->
-      <section id="clients" class="tab-content active">
-        <div class="form">
-          <h3>📝 Client/Visitor Details</h3>
-          <input type="text" id="clientName" placeholder="Client Name" />
-          <input type="text" id="clientPhone" placeholder="Phone Number" />
-          <input type="email" id="clientEmail" placeholder="Email (optional)" />
-          <textarea id="clientComment" placeholder="Purpose of visit, feedback, or comments..."></textarea>
-          <button onclick="addClient()">✅ Add Client</button>
-          <button onclick="clearClients()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
-        </div>
-        <div id="clientList"></div>
-      </section>
-      <!-- Onsite Staff Tab -->
-      <section id="staff" class="tab-content">
-        <div class="form">
-          <h3>👷 Onsite Staff Daily Tasks</h3>
-          <input type="text" id="staffName" placeholder="Staff Name" />
-          <select id="staffRole">
-            <option value="">Select Role</option>
-            <option value="Teacher">Manager</option>
-            <option value="Teacher">Executive Director</option>
-            <option value="Teacher">Acting Manager</option>
-            <option value="Cleaner">Tech Coach</option>
-            <option value="Cleaner">CBT Coach</option>
-            <option value="Security">Student</option>
-            <option value="Security">Photographer</option>
-            <option value="Maintenance">Maintenance</option>
-            <option value="Admin">Receptionist</option>
-            <option value="Admin">Accountant</option>
-            <option value="Admin">Admin</option>
-            <option value="Admin">IT</option>
-            <option value="Admin">Volunteer</option>
-            <option value="Admin">Special personnel</option>
-            <option value="Admin">Other personnel</option>
-          </select>
-          <textarea id="staffActivity" placeholder="Daily activities and tasks completed..."></textarea>
-          <div class="image-upload">
-            <p>📸 Upload Activity Photos</p>
-            <input type="file" id="staffPhotos" accept="image/" multiple>
-          </div>
-          <div class="image-preview" id="staffPhotoPreview"></div>
-          <button onclick="addStaffActivity()">✅ Record Activity</button>
-          <button onclick="clearStaff()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
-        </div>
-        <div id="staffList"></div>
-      </section>
-      <!-- Student Learning Tab -->
-      <section id="learning" class="tab-content">
-        <div class="form">
-          <h3>📚 Student Learning Log</h3>
-          <input type="text" id="className" placeholder="Class Name (e.g., Primary 3)" />
-          <textarea id="topicsCovered" placeholder="Topics covered today..."></textarea>
-          <textarea id="studentProgress" placeholder="Student progress and challenges..."></textarea>
-          <div class="image-upload">
-            <p>📸 Upload Class Activity Photos</p>
-            <input type="file" id="learningPhotos" accept="image/" multiple>
-          </div>
-          <div class="image-preview" id="learningPhotoPreview"></div>
-          <button onclick="addLearningLog()">✅ Record Learning</button>
-          <button onclick="clearLearning()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
-        </div>
-        <div id="learningList"></div>
-      </section>
-      <!-- Daily Sales Tab -->
-      <section id="sales" class="tab-content">
-        <div class="form">
-          <h3>💰 Daily Sales</h3>
-          <input type="text" id="saleItem" placeholder="Item Sold" />
-          <input type="number" id="saleAmount" placeholder="Amount (₦)" />
-          <textarea id="saleNotes" placeholder="Additional notes..."></textarea>
-          <button onclick="addSale()">✅ Record Sale</button>
-          <button onclick="clearSales()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
-        </div>
-        <div id="salesList"></div>
-        <div style="background:white; padding:15px; border-radius:10px; margin:15px 0;">
-          <h4>💰 Today's Total Sales: <span id="dailySalesTotal">₦0</span></h4>
-        </div>
-      </section>
-      <!-- New Student Registration -->
-      <section id="registration" class="tab-content">
-        <div class="form">
-          <h3>🎓 New Student Registration</h3>
-          <input type="text" id="studentName" placeholder="Student Name" />
-          <input type="text" id="studentAge" placeholder="Age" />
-          <input type="text" id="studentClass" placeholder="Class" />
-          <input type="text" id="parentName" placeholder="Parent/Guardian Name" />
-          <input type="text" id="parentPhone" placeholder="Parent Phone" />
-          <textarea id="studentNotes" placeholder="Additional information..."></textarea>
-          <button onclick="registerStudent()">✅ Register Student</button>
-          <button onclick="clearRegistrations()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
-        </div>
-        <div id="registrationList"></div>
-      </section>
-      <!-- Income & Expenses -->
-      <section id="finance" class="tab-content">
-        <div class="form">
-          <h3>📊 Income & Expenses</h3>
-          <select id="financeType">
-            <option value="">Select Type</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
-          <input type="text" id="financeItem" placeholder="Item/Description" />
-          <input type="number" id="financeAmount" placeholder="Amount (₦)" />
-          <textarea id="financeNotes" placeholder="Additional notes..."></textarea>
-          <button onclick="addFinance()">✅ Record Transaction</button>
-          <button onclick="clearFinance()" class="clear-btn" style="width:auto; margin-top:10px;">🗑️ Clear All</button>
-        </div>
-        <div id="financeList"></div>
-        <div style="background:white; padding:15px; border-radius:10px; margin:15px 0;">
-          <h4>📊 Today's Summary:</h4>
-          <p>Income: <span id="totalIncome">₦0</span> | Expenses: <span id="totalExpenses">₦0</span> | Net: <span id="netBalance">₦0</span></p>
-        </div>
-      </section>
-      <!-- Class Gallery Tab -->
-      <section id="gallery" class="tab-content">
-        <h2>🖼️ Class Gallery</h2>
-        <button onclick="clearGallery()" class="clear-btn" style="margin:10px 0;">🗑️ Clear All Images</button>
-        <div class="gallery" id="galleryImages"></div>
-      </section>
-      <!-- Reports Tab -->
-      <section id="reports" class="tab-content">
-        <h2>📄 Comprehensive Reports</h2>
-        <div class="export">
-          <button onclick="generatePDF()">📄 Generate PDF Report (with Images)</button>
-          <button onclick="exportToCSV()">📥 Export to CSV</button>
-          <button onclick="backupData()">☁️ Backup to Cloud</button>
-        </div>
-        <div class="summary-box" style="margin: 20px 0;">
-          <div class="summary-card">
-            <h4>Clients</h4>
-            <p id="clientCount">0</p>
-          </div>
-          <div class="summary-card">
-            <h4>Staff</h4>
-            <p id="staffCount">0</p>
-          </div>
-          <div class="summary-card">
-            <h4>Learning</h4>
-            <p id="learningCount">0</p>
-          </div>
-          <div class="summary-card">
-            <h4>Sales</h4>
-            <p id="salesCount">0</p>
-          </div>
-          <div class="summary-card">
-            <h4>Students</h4>
-            <p id="studentCount">0</p>
-          </div>
-          <div class="summary-card">
-            <h4>Transactions</h4>
-            <p id="financeCount">0</p>
-          </div>
-        </div>
-      </section>
-      <!-- Admin Tab -->
-      <section id="admin" class="tab-content">
-        <div id="adminTab">
-          <div class="admin-header">
-            <h2>🔐 Admin Dashboard</h2>
-            <p style="color: #ddd;">Manage staff performance and communications</p>
-          </div>
-          <div class="staff-list-container">
-            <div class="staff-list">
-              <input type="text" class="search-bar" placeholder="Search staff..." id="staffSearch" onkeyup="searchStaff()">
-              <div id="staffList"></div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo">
+                        <img src="logo-192.png" alt="TOMSTUDIO Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <i class="fas fa-bullseye" style="display: none;"></i>
+                    </div>
+                    <h1>TOMSTUDIO BIZ HUB</h1>
+                    <p>Professional Operations Manager v4.0</p>
+                </div>
+
+                <div class="login-toggle">
+                    <button id="staff-login-btn" class="active" onclick="app.setLoginType('staff')">
+                        <i class="fas fa-user"></i> Staff
+                    </button>
+                    <button id="admin-login-btn" onclick="app.setLoginType('admin')">
+                        <i class="fas fa-shield-alt"></i> Admin
+                    </button>
+                </div>
+
+                <form onsubmit="event.preventDefault(); app.login();">
+                    <div class="form-group" id="staff-id-group">
+                        <label>
+                            <i class="fas fa-user-circle"></i>
+                            <span id="login-id-label">Staff ID / Email / Phone</span>
+                        </label>
+                        <input type="text" id="login-id" placeholder="Enter your credentials">
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <input type="password" id="login-pass" placeholder="Enter password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Sign In</span>
+                    </button>
+                </form>
+
+                <div class="login-footer">
+                    <p style="margin-bottom: 10px; color: var(--gray); font-size: 0.85rem;">
+                        New Staff? <a href="#" onclick="app.showRegister()">Register Here</a>
+                    </p>
+                    <p style="font-size: 0.75rem; color: var(--gray);">
+                        <i class="fas fa-info-circle"></i> Admin: Enter password only
+                    </p>
+                </div>
+
+                <div id="login-msg" class="login-msg"></div>
             </div>
-            <div class="staff-data-container" id="staffDataContainer">
-              <p class="text-center">Select a staff member to view their data and send messages</p>
-            </div>
-          </div>
         </div>
-      </section>
-      <div style="text-align: center; margin-top: 20px;">
-        <button class="logout-btn" onclick="logout()">↩️ Logout</button>
-      </div>
     </div>
-    <footer>
-      &copy; <strong>App Design and Developed by Tomstudio Tech Academy</strong> | Contact: <a href="tel:+2348030827417">+2348030827417</a>
-    </footer>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-<script>
-  // ========================
-  // 1. GLOBAL VARIABLES
-  // ========================
-  let currentStaffId = null;
-  let clients = [];
-  let staffActivities = [];
-  let learningLogs = [];
-  let sales = [];
-  let students = [];
-  let finances = [];
-  let galleryImages = [];
-  let signInData = {};
-  let unsavedChanges = false;
-  let isOnline = navigator.onLine;
-  let staffList = [];
-  let adminMessages = {};
-  let isAdminAuthenticated = false;
-  const ADMIN_PASSWORD = "tomstudio123"; // Default password - should be changed in production
 
-  // DOM Elements
-  const loginScreen = document.getElementById("loginScreen");
-  const mainApp = document.getElementById("mainApp");
-  const staffIdInput = document.getElementById("staffId");
-  const staffDisplay = document.getElementById("staffDisplay");
-  const signInTimeElement = document.getElementById("signInTime");
-  const locationInfoElement = document.getElementById("locationInfo");
-  const toast = document.getElementById("toast");
-  const adminModal = document.getElementById("adminModal");
-  const adminPasswordInput = document.getElementById("adminPassword");
+    <!-- MAIN APP -->
+    <div id="app-container" class="app-container hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="sidebar-close" onclick="document.getElementById('sidebar').classList.remove('active')">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <img src="logo-192.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <i class="fas fa-bullseye" style="display: none; color: white;"></i>
+                </div>
+                <h2>TOMSTUDIO BIZ HUB</h2>
+                <p>v4.0 Professional</p>
+            </div>
 
-  // Admin Tab Elements
-  const staffListElement = document.getElementById("staffList");
-  const staffDataContainer = document.getElementById("staffDataContainer");
+            <ul class="sidebar-menu">
+                <div class="menu-category">Main</div>
+                <li>
+                    <button class="active" onclick="app.showView('dashboard')">
+                        <i class="fas fa-home"></i> Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button onclick="app.showView('jobs')">
+                        <i class="fas fa-briefcase"></i> Jobs
+                    </button>
+                </li>
+                <li>
+                    <button onclick="app.showView('new-job')">
+                        <i class="fas fa-plus-circle"></i> New Job
+                    </button>
+                </li>
+                <li>
+                    <button onclick="app.showView('reports')">
+                        <i class="fas fa-clipboard-list"></i> Reports
+                    </button>
+                </li>
 
-  // ========================
-  // 2. UTILITY FUNCTIONS
-  // ========================
-  function showToast(message, duration = 3000) {
-    toast.textContent = message;
-    toast.classList.add("show");
-    setTimeout(() => {
-      toast.classList.remove("show");
-    }, duration);
-  }
+                <div class="menu-category hidden" id="admin-menu-category">Admin</div>
+                <li id="admin-staff-tab" class="hidden">
+                    <button onclick="app.showView('admin-staff')">
+                        <i class="fas fa-users-cog"></i> Staff Management
+                    </button>
+                </li>
+                <li id="admin-approvals-tab" class="hidden">
+                    <button onclick="app.showView('admin-approvals')">
+                        <i class="fas fa-user-check"></i> Approvals & ID Cards
+                    </button>
+                </li>
+                <li id="admin-announcements-tab" class="hidden">
+                    <button onclick="app.showView('admin-announcements')">
+                        <i class="fas fa-bullhorn"></i> Announcements
+                    </button>
+                </li>
+            </ul>
 
-  // Get consistent date string (YYYY-MM-DD) without timezone issues
-  function getTodayString() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="user-name">User</h4>
+                        <p id="user-role">Role</p>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-sm btn-block" onclick="app.logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
 
-  function getTodayKey(prefix) {
-    if (!currentStaffId) return null;
-    return `${prefix}_${currentStaffId}_${getTodayString()}`;
-  }
+        <main class="main-content">
+            <div class="top-bar">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="mobile-menu-toggle" onclick="document.getElementById('sidebar').classList.add('active')">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="top-actions">
+                    <button class="notification-btn" onclick="app.showAnnouncements()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <button class="theme-toggle" onclick="app.toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                </div>
+            </div>
 
-  function getAllStaffIds() {
-    const staffIds = new Set();
-    const prefixes = ['clients', 'staff', 'learning', 'sales', 'students', 'finances', 'gallery', 'signin'];
-    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="view-container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-calendar-day"></i></div>
+                        <div class="number" id="stat-today">0</div>
+                        <div class="label">Today's Jobs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-calendar-week"></i></div>
+                        <div class="number" id="stat-week">0</div>
+                        <div class="label">This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="number" id="stat-delivered">0</div>
+                        <div class="label">Delivered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon"><i class="fas fa-clock"></i></div>
+                        <div class="number" id="stat-pending">0</div>
+                        <div class="label">Pending</div>
+                    </div>
+                </div>
 
-    Object.keys(localStorage).forEach(key => {
-      prefixes.forEach(prefix => {
-        if (key.startsWith(prefix + "_")) {
-          const rest = key.substring(prefix.length + 1); // Remove prefix
-          const lastUnderscore = rest.lastIndexOf("_");
-          if (lastUnderscore > 0) {
-            const potentialDate = rest.substring(lastUnderscore + 1);
-            const staffIdPart = rest.substring(0, lastUnderscore);
-            if (datePattern.test(potentialDate) && staffIdPart && staffIdPart !== 'undefined') {
-              staffIds.add(staffIdPart);
+                <div class="card">
+                    <h3><i class="fas fa-briefcase"></i> Recent Jobs</h3>
+                    <div id="recent-jobs-list"></div>
+                </div>
+            </div>
+
+            <!-- Jobs View -->
+            <div id="view-jobs" class="view-container hidden">
+                <div class="card">
+                    <h3><i class="fas fa-list"></i> Job Inventory</h3>
+                    <div class="filter-bar">
+                        <input type="text" id="job-search" placeholder="🔍 Search jobs..." onkeyup="app.renderJobs()">
+                        <select id="job-time-filter" onchange="app.renderJobs()">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                        <select id="job-status-filter" onchange="app.renderJobs()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="review">Under Review</option>
+                            <option value="delivered">Delivered</option>
+                        </select>
+                        <select id="job-hub-filter" onchange="app.renderJobs()">
+                            <option value="all">All Hubs</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="CBT">CBT</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                        </select>
+                    </div>
+                    <div id="all-jobs-list"></div>
+                </div>
+            </div>
+
+            <!-- New Job View -->
+            <div id="view-new-job" class="view-container hidden">
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> Create New Job</h3>
+                    <form onsubmit="event.preventDefault(); app.createJob();">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> Client Name *</label>
+                            <input type="text" id="job-client" placeholder="Client full name" required>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Client Contact *</label>
+                            <input type="tel" id="job-client-contact" placeholder="Phone number" required>
+                            <i class="fas fa-phone input-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> Client Email</label>
+                            <input type="email" id="job-client-email" placeholder="Email address">
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> Job Title *</label>
+                            <input type="text" id="job-title" placeholder="Brief job title" required>
+                            <i class="fas fa-tag input-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-align-left"></i> Job Details *</label>
+                            <textarea id="job-details" placeholder="Detailed job description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-building"></i> Hub *</label>
+                            <select id="job-hub" required>
+                                <option value="">Select Hub...</option>
+                                <option value="Tech Academy">Tech Academy</option>
+                                <option value="Printing">Printing</option>
+                                <option value="Photography">Photography</option>
+                                <option value="Gadgets">Gadgets</option>
+                                <option value="CBT">CBT</option>
+                                <option value="Tech Lab">Tech Lab</option>
+                                <option value="Online Shop">Online Shop</option>
+                                <option value="Graphics Design">Graphics Design</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Due Date *</label>
+                            <input type="date" id="job-due" required>
+                            <i class="fas fa-calendar input-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-bolt"></i> Priority</label>
+                            <select id="job-priority">
+                                <option value="Normal">Normal</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="fas fa-check-circle"></i> Create Job
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Reports View -->
+            <div id="view-reports" class="view-container hidden">
+                <div class="card">
+                    <h3><i class="fas fa-file-alt"></i> My Reports</h3>
+                    <div id="my-reports-list"></div>
+                </div>
+            </div>
+
+            <!-- Admin Staff View -->
+            <div id="view-admin-staff" class="view-container hidden">
+                <div class="card">
+                    <h3><i class="fas fa-users"></i> Staff Directory</h3>
+                    <div id="staff-list"></div>
+                </div>
+            </div>
+
+            <!-- Admin Approvals View -->
+            <div id="view-admin-approvals" class="view-container hidden">
+                <div class="card">
+                    <h3><i class="fas fa-user-check"></i> Staff Approvals</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-clock"></i></div>
+                            <div class="number" id="pending-approvals-count">0</div>
+                            <div class="label">Awaiting Approval</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas fa-check"></i></div>
+                            <div class="number" id="approved-today">0</div>
+                            <div class="label">Approved Today</div>
+                        </div>
+                    </div>
+                    <div id="pending-staff-list"></div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-id-card"></i> ID Card Generation</h3>
+                    <div class="form-group">
+                        <label>Select Staff</label>
+                        <select id="idcard-staff-select" onchange="app.previewIDCard()">
+                            <option value="">Choose staff member...</option>
+                        </select>
+                    </div>
+                    <div id="id-card-preview"></div>
+                    <button class="btn btn-success btn-block" onclick="app.downloadIDCard()">
+                        <i class="fas fa-download"></i> Download ID Card as PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Announcements View -->
+            <div id="view-admin-announcements" class="view-container hidden">
+                <div class="card">
+                    <h3><i class="fas fa-bullhorn"></i> Create Announcement</h3>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="announce-message" placeholder="Enter announcement message..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="announce-type">
+                            <option value="info">ℹ️ Information</option>
+                            <option value="warning">⚠️ Warning</option>
+                            <option value="alert">🚨 Alert</option>
+                            <option value="success">✅ Success</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Audience</label>
+                        <select id="announce-target">
+                            <option value="all">All Staff</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="CBT">CBT</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="app.postAnnouncement()">
+                        <i class="fas fa-paper-plane"></i> Post Announcement
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-history"></i> All Announcements</h3>
+                    <div id="all-announcements-list"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVqFiFiSwNhnMpeuv_KNJyUhby_CmX0Nw",
+            authDomain: "tsbh-daily-performance-tracker.firebaseapp.com",
+            projectId: "tsbh-daily-performance-tracker",
+            storageBucket: "tsbh-daily-performance-tracker.firebasestorage.app",
+            messagingSenderId: "829971849666",
+            appId: "1:829971849666:web:fdcab382fa3e46f8ea365b",
+            measurementId: "G-BPQPQ7V9JC"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const app = {
+            currentUser: null,
+            userData: null,
+            loginType: 'staff',
+
+            init: () => {
+                console.log('🚀 TOMSTUDIO BIZ HUB v4.0 Initializing...');
+                
+                setTimeout(() => {
+                    document.getElementById('loading-screen').classList.add('hidden');
+                }, 2000);
+
+                const savedTheme = localStorage.getItem('tsbh-theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                app.updateThemeIcon(savedTheme);
+
+                const adminSession = sessionStorage.getItem('ts_admin_session');
+                if (adminSession) {
+                    app.userData = JSON.parse(adminSession);
+                    app.initializeApp();
+                    return;
+                }
+
+                auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        try {
+                            const doc = await db.collection('users').doc(user.uid).get();
+                            if (doc.exists) {
+                                app.userData = doc.data();
+                                app.currentUser = user;
+                                app.initializeApp();
+                            } else {
+                                app.logout();
+                            }
+                        } catch (error) {
+                            console.error('Error loading user:', error);
+                            app.showNotification('Error loading user data', 'error');
+                        }
+                    } else {
+                        app.showLogin();
+                    }
+                });
+            },
+
+            initializeApp: () => {
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('app-container').classList.remove('hidden');
+                document.getElementById('user-name').innerText = app.userData.name;
+                document.getElementById('user-role').innerText = app.userData.role;
+                
+                const isAdmin = app.userData.role === 'admin' || sessionStorage.getItem('ts_admin_session') || app.userData?.isAdmin;
+                if (isAdmin) {
+                    document.getElementById('admin-menu-category').classList.remove('hidden');
+                    document.getElementById('admin-staff-tab').classList.remove('hidden');
+                    document.getElementById('admin-approvals-tab').classList.remove('hidden');
+                    document.getElementById('admin-announcements-tab').classList.remove('hidden');
+                }
+
+                app.showView('dashboard');
+                app.loadDashboard();
+            },
+
+            showLogin: () => {
+                document.getElementById('login-page').classList.remove('hidden');
+                document.getElementById('app-container').classList.add('hidden');
+            },
+
+            showRegister: () => {
+                const name = prompt('Enter your full name:');
+                if (!name) return;
+                
+                const email = prompt('Enter your email:');
+                if (!email) return;
+                
+                const phone = prompt('Enter your phone number:');
+                if (!phone) return;
+
+                const branch = prompt('Enter branch code (e.g., IGB-1):');
+                if (!branch) return;
+
+                const hub = prompt('Enter hub (Tech Academy, Printing, Photography, Gadgets, CBT, Tech Lab, Online Shop, Graphics Design):');
+                if (!hub) return;
+
+                const role = prompt('Enter role (Intern, Apprentice, IT, Accountant, Secretary, Executive Director, HOD, Branch Manager, General Manager, CEO, Other):');
+                if (!role) return;
+
+                const pass = prompt('Create password:');
+                if (!pass) return;
+
+                app.register(name, email, phone, branch, hub, role, pass);
+            },
+
+            register: async (name, email, phone, branch, hub, role, pass) => {
+                try {
+                    const credential = await auth.createUserWithEmailAndPassword(email, pass);
+                    const staffId = `${branch.substring(0,3).toUpperCase()}-${hub.substring(0,3).toUpperCase()}-${role.substring(0,3).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                    
+                    await db.collection('users').doc(credential.user.uid).set({
+                        name,
+                        email,
+                        phone,
+                        branch,
+                        hub,
+                        role,
+                        staffId,
+                        portfolio: `${name} | ${hub} | ${role}`,
+                        approved: false,
+                        isAuthorizer: false,
+                        authorizerLevel: null,
+                        isAdmin: false,
+                        rating: 0,
+                        jobsCompleted: 0,
+                        reportsSubmitted: 0,
+                        passportPhoto: null,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    app.showNotification(`Registration successful! Your Staff ID: ${staffId}. Wait for Admin Approval.`, 'success');
+                    setTimeout(() => {
+                        app.showLogin();
+                    }, 3000);
+                } catch (error) {
+                    app.showNotification('Registration error: ' + error.message, 'error');
+                }
+            },
+
+            setLoginType: (type) => {
+                app.loginType = type;
+                document.getElementById('staff-login-btn').classList.toggle('active', type === 'staff');
+                document.getElementById('admin-login-btn').classList.toggle('active', type === 'admin');
+                
+                const staffIdGroup = document.getElementById('staff-id-group');
+                const loginIdLabel = document.getElementById('login-id-label');
+                const loginId = document.getElementById('login-id');
+                
+                if (type === 'admin') {
+                    staffIdGroup.classList.add('hidden');
+                    loginIdLabel.innerText = 'Admin Password';
+                    loginId.type = 'password';
+                    loginId.placeholder = 'Enter admin password';
+                } else {
+                    staffIdGroup.classList.remove('hidden');
+                    loginIdLabel.innerText = 'Staff ID / Email / Phone';
+                    loginId.type = 'text';
+                    loginId.placeholder = 'Enter your credentials';
+                }
+                
+                loginId.value = '';
+                document.getElementById('login-pass').value = '';
+                document.getElementById('login-msg').style.display = 'none';
+            },
+
+            toggleTheme: () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('tsbh-theme', next);
+                app.updateThemeIcon(next);
+                app.showNotification(`Switched to ${next} mode`, 'info');
+            },
+
+            updateThemeIcon: (theme) => {
+                const icon = document.getElementById('theme-icon');
+                icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            },
+
+            showView: (viewName) => {
+                document.querySelectorAll('.view-container').forEach(el => el.classList.add('hidden'));
+                document.getElementById(`view-${viewName}`).classList.remove('hidden');
+                
+                document.querySelectorAll('.sidebar-menu button').forEach(btn => btn.classList.remove('active'));
+                const activeBtn = document.querySelector(`.sidebar-menu button[onclick="app.showView('${viewName}')"]`);
+                if (activeBtn) activeBtn.classList.add('active');
+
+                const titles = {
+                    'dashboard': 'Dashboard',
+                    'jobs': 'Job Inventory',
+                    'new-job': 'Create New Job',
+                    'reports': 'Reports',
+                    'admin-staff': 'Staff Management',
+                    'admin-approvals': 'Approvals & ID Cards',
+                    'admin-announcements': 'Announcements'
+                };
+                document.getElementById('page-title').innerText = titles[viewName] || 'Dashboard';
+
+                // Close mobile menu
+                document.getElementById('sidebar').classList.remove('active');
+
+                if (viewName === 'dashboard') app.loadDashboard();
+                if (viewName === 'jobs') app.renderJobs();
+                if (viewName === 'reports') app.loadReports();
+                if (viewName === 'admin-staff') app.renderStaffList();
+                if (viewName === 'admin-approvals') app.renderAdminApprovals();
+                if (viewName === 'admin-announcements') app.renderAllAnnouncements();
+            },
+
+            showNotification: (message, type = 'info') => {
+                const container = document.getElementById('notification-container');
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                container.appendChild(notification);
+                setTimeout(() => notification.remove(), 4500);
+            },
+
+            login: async () => {
+                const id = document.getElementById('login-id').value.trim();
+                const pass = document.getElementById('login-pass').value;
+                const msg = document.getElementById('login-msg');
+                const submitBtn = document.getElementById('submit-btn');
+
+                if (app.loginType === 'admin') {
+                    if (pass === '@admin123#') {
+                        const adminData = {
+                            role: 'admin',
+                            hub: 'Head Office',
+                            branch: 'HQ-1',
+                            name: 'Super Admin',
+                            staffId: 'ADMIN-001',
+                            portfolio: 'Super Admin | Head Office | Administrator',
+                            isAuthorizer: true,
+                            authorizerLevel: 'full',
+                            isAdmin: true
+                        };
+                        
+                        sessionStorage.setItem('ts_admin_session', JSON.stringify(adminData));
+                        app.userData = adminData;
+                        app.showNotification('Admin login successful!', 'success');
+                        app.initializeApp();
+                        return;
+                    } else {
+                        msg.className = 'login-msg error';
+                        msg.innerHTML = '<i class="fas fa-times-circle"></i> Invalid Admin Password';
+                        msg.style.display = 'block';
+                        return;
+                    }
+                }
+
+                if (!id || !pass) {
+                    msg.className = 'login-msg error';
+                    msg.innerHTML = '<i class="fas fa-times-circle"></i> Please enter credentials';
+                    msg.style.display = 'block';
+                    return;
+                }
+
+                msg.className = 'login-msg';
+                msg.innerHTML = '<span class="spinner"></span> Logging in...';
+                msg.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner"></span> <span>Signing In...</span>';
+
+                try {
+                    let user = null;
+                    let userDoc = null;
+
+                    if (id.includes('@')) {
+                        user = await auth.signInWithEmailAndPassword(id, pass);
+                        userDoc = await db.collection('users').doc(user.user.uid).get();
+                    } else if (id.startsWith('+') || id.startsWith('0')) {
+                        const phoneQuery = await db.collection('users').where('phone', '==', id).get();
+                        if (phoneQuery.empty) throw new Error('Phone number not found');
+                        const userData = phoneQuery.docs[0].data();
+                        user = await auth.signInWithEmailAndPassword(userData.email, pass);
+                        userDoc = phoneQuery.docs[0];
+                    } else {
+                        const staffQuery = await db.collection('users').where('staffId', '==', id).get();
+                        if (staffQuery.empty) throw new Error('Staff ID not found');
+                        const userData = staffQuery.docs[0].data();
+                        user = await auth.signInWithEmailAndPassword(userData.email, pass);
+                        userDoc = staffQuery.docs[0];
+                    }
+                    
+                    if (!userDoc || !userDoc.exists) throw new Error('User data not found');
+                    const userData = userDoc.data();
+                    if (!userData.approved) {
+                        await auth.signOut();
+                        throw new Error('Account pending Admin Approval');
+                    }
+
+                    app.userData = userData;
+                    app.currentUser = user.user;
+                    app.showNotification(`Welcome back, ${userData.name}!`, 'success');
+                    app.initializeApp();
+                } catch (error) {
+                    console.error('Login error:', error);
+                    msg.className = 'login-msg error';
+                    msg.innerHTML = `<i class="fas fa-times-circle"></i> ${error.message}`;
+                    msg.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span>Sign In</span>';
+                }
+            },
+
+            logout: () => {
+                if (app.currentUser) auth.signOut();
+                sessionStorage.removeItem('ts_admin_session');
+                app.currentUser = null;
+                app.userData = null;
+                app.showLogin();
+                app.showNotification('Logged out successfully', 'info');
+            },
+
+            loadDashboard: async () => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const weekAgo = new Date(today);
+                weekAgo.setDate(weekAgo.getDate() - 7);
+
+                try {
+                    const jobsSnap = await db.collection('jobs').get();
+                    let todayCount = 0, weekCount = 0, deliveredCount = 0, pendingCount = 0;
+                    
+                    jobsSnap.forEach(doc => {
+                        const job = doc.data();
+                        const jobDate = job.dateCreated?.toDate();
+                        if (jobDate && jobDate >= today) todayCount++;
+                        if (jobDate && jobDate >= weekAgo) weekCount++;
+                        if (job.status === 'delivered') deliveredCount++;
+                        if (job.status === 'pending') pendingCount++;
+                    });
+
+                    document.getElementById('stat-today').innerText = todayCount;
+                    document.getElementById('stat-week').innerText = weekCount;
+                    document.getElementById('stat-delivered').innerText = deliveredCount;
+                    document.getElementById('stat-pending').innerText = pendingCount;
+
+                    app.renderRecentJobs();
+                } catch (error) {
+                    console.error('Dashboard error:', error);
+                    document.getElementById('recent-jobs-list').innerHTML = `
+                        <div class="error-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error loading dashboard</p>
+                            <button class="btn btn-primary btn-sm" onclick="app.loadDashboard()" style="margin-top: 10px;">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>
+                        </div>
+                    `;
+                }
+            },
+
+            renderRecentJobs: async () => {
+                const container = document.getElementById('recent-jobs-list');
+
+                try {
+                    const snapshot = await db.collection('jobs').orderBy('dateCreated', 'desc').limit(5).get();
+                    
+                    if (snapshot.empty) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>No jobs yet</p>
+                                <button class="btn btn-primary btn-sm" onclick="app.showView('new-job')" style="margin-top: 10px;">
+                                    <i class="fas fa-plus"></i> Create First Job
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = '';
+                        snapshot.forEach(doc => container.innerHTML += app.createJobCard(doc.id, doc.data()));
+                    }
+                } catch (error) {
+                    console.error('Recent jobs error:', error);
+                    container.innerHTML = `
+                        <div class="error-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error loading jobs</p>
+                            <button class="btn btn-primary btn-sm" onclick="app.renderRecentJobs()" style="margin-top: 10px;">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>
+                        </div>
+                    `;
+                }
+            },
+
+            renderJobs: async () => {
+                const search = document.getElementById('job-search').value.toLowerCase();
+                const timeFilter = document.getElementById('job-time-filter').value;
+                const statusFilter = document.getElementById('job-status-filter').value;
+                const hubFilter = document.getElementById('job-hub-filter').value;
+                const container = document.getElementById('all-jobs-list');
+
+                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading jobs...</p></div>';
+
+                try {
+                    const snapshot = await db.collection('jobs').orderBy('dateCreated', 'desc').get();
+                    let jobs = [];
+                    snapshot.forEach(doc => jobs.push({ id: doc.id, ...doc.data() }));
+
+                    const now = new Date();
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    const weekAgo = new Date(today.getTime() - 7 * 86400000);
+                    const monthAgo = new Date(today.getTime() - 30 * 86400000);
+
+                    if (timeFilter === 'today') jobs = jobs.filter(j => j.dateCreated?.toDate() >= today);
+                    else if (timeFilter === 'week') jobs = jobs.filter(j => j.dateCreated?.toDate() >= weekAgo);
+                    else if (timeFilter === 'month') jobs = jobs.filter(j => j.dateCreated?.toDate() >= monthAgo);
+
+                    if (search) {
+                        jobs = jobs.filter(j => 
+                            j.clientId?.toLowerCase().includes(search) || 
+                            j.title?.toLowerCase().includes(search) ||
+                            j.hub?.toLowerCase().includes(search)
+                        );
+                    }
+
+                    if (statusFilter !== 'all') jobs = jobs.filter(j => j.status === statusFilter);
+                    if (hubFilter !== 'all') jobs = jobs.filter(j => j.hub === hubFilter);
+
+                    if (jobs.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>No jobs found</p>
+                                <button class="btn btn-primary btn-sm" onclick="app.showView('new-job')" style="margin-top: 10px;">
+                                    <i class="fas fa-plus"></i> Create Job
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = '';
+                        jobs.forEach(job => container.innerHTML += app.createJobCard(job.id, job, true));
+                    }
+                } catch (error) {
+                    console.error('Jobs error:', error);
+                    container.innerHTML = `
+                        <div class="error-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error loading jobs</p>
+                            <button class="btn btn-primary btn-sm" onclick="app.renderJobs()" style="margin-top: 10px;">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>
+                        </div>
+                    `;
+                }
+            },
+
+            createJob: async () => {
+                const client = document.getElementById('job-client').value.trim();
+                const clientContact = document.getElementById('job-client-contact').value.trim();
+                const clientEmail = document.getElementById('job-client-email').value.trim();
+                const title = document.getElementById('job-title').value.trim();
+                const details = document.getElementById('job-details').value.trim();
+                const hub = document.getElementById('job-hub').value;
+                const due = document.getElementById('job-due').value;
+                const priority = document.getElementById('job-priority').value;
+
+                if (!client || !clientContact || !title || !details || !hub || !due) {
+                    app.showNotification('Please fill all required fields', 'error');
+                    return;
+                }
+
+                try {
+                    await db.collection('jobs').add({
+                        clientId: client,
+                        clientContact,
+                        clientEmail,
+                        title,
+                        details,
+                        hub,
+                        assignedStaffId: app.userData.staffId,
+                        assignedStaffName: app.userData.name,
+                        assignedBranch: app.userData.branch,
+                        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+                        dueDate: due,
+                        status: 'pending',
+                        priority,
+                        rating: 0,
+                        loggedBy: app.userData.name
+                    });
+
+                    app.showNotification('Job created successfully!', 'success');
+                    
+                    // Clear form
+                    document.getElementById('job-client').value = '';
+                    document.getElementById('job-client-contact').value = '';
+                    document.getElementById('job-client-email').value = '';
+                    document.getElementById('job-title').value = '';
+                    document.getElementById('job-details').value = '';
+                    document.getElementById('job-due').value = '';
+                    
+                    app.showView('jobs');
+                } catch (error) {
+                    console.error('Create job error:', error);
+                    app.showNotification('Error creating job: ' + error.message, 'error');
+                }
+            },
+
+            createJobCard: (jobId, job, showActions = false) => {
+                const statusClass = `status-${job.status}` || 'status-pending';
+                const hubClass = `hub-${job.hub?.toLowerCase().replace(/\s+/g, '-')}` || '';
+                const progressPercent = { 'pending': 25, 'in-progress': 50, 'review': 75, 'delivered': 100, 'cancelled': 0 }[job.status] || 0;
+
+                return `
+                <div class="job-card ${hubClass}">
+                    <div class="job-header">
+                        <strong><i class="fas fa-briefcase"></i> ${job.title || 'Untitled Job'}</strong>
+                        <span class="job-status ${statusClass}">${job.status}</span>
+                    </div>
+                    <div class="job-meta">
+                        <span class="hub-badge">${job.hub}</span>
+                        <span><i class="fas fa-user"></i> ${job.clientId || 'N/A'}</span>
+                        <span><i class="fas fa-phone"></i> ${job.clientContact || 'N/A'}</span>
+                    </div>
+                    <div class="job-meta">
+                        <span><i class="fas fa-calendar"></i> Due: ${job.dueDate || 'N/A'}</span>
+                        <span><i class="fas fa-clock"></i> ${job.priority || 'Normal'}</span>
+                    </div>
+                    <div style="background: var(--gray-light); border-radius: 8px; padding: 3px; margin-top: 10px;">
+                        <div style="background: linear-gradient(90deg, var(--primary), var(--secondary)); height: 6px; border-radius: 6px; width: ${progressPercent}%"></div>
+                    </div>
+                </div>`;
+            },
+
+            loadReports: async () => {
+                const container = document.getElementById('my-reports-list');
+                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading reports...</p></div>';
+                
+                try {
+                    const snapshot = await db.collection('reports').where('staffId', '==', app.userData.staffId).orderBy('submittedAt', 'desc').limit(10).get();
+                    if (snapshot.empty) {
+                        container.innerHTML = '<div class="empty-state"><i class="fas fa-file-alt"></i><p>No reports yet</p></div>';
+                    } else {
+                        container.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            const r = doc.data();
+                            container.innerHTML += `
+                                <div style="padding: 12px; background: var(--gray-light); margin: 8px 0; border-radius: 10px; border-left: 4px solid var(--primary);">
+                                    <strong><i class="fas fa-calendar"></i> ${r.date}</strong><br>
+                                    <small style="color: var(--gray);">${r.activities?.substring(0, 120) || 'No details'}...</small>
+                                </div>
+                            `;
+                        });
+                    }
+                } catch (error) {
+                    console.error('Reports error:', error);
+                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading reports</p><button class="btn btn-primary btn-sm" onclick="app.loadReports()" style="margin-top: 10px;"><i class="fas fa-redo"></i> Retry</button></div>';
+                }
+            },
+
+            renderStaffList: async () => {
+                const container = document.getElementById('staff-list');
+                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading staff...</p></div>';
+                
+                try {
+                    const snapshot = await db.collection('users').where('approved', '==', true).get();
+                    if (snapshot.empty) {
+                        container.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No staff found</p></div>';
+                    } else {
+                        container.innerHTML = '<div class="table-responsive"><table class="data-table"><thead><tr><th>Name</th><th>Staff ID</th><th>Role</th><th>Hub</th><th>Branch</th><th>Contact</th></tr></thead><tbody>';
+                        snapshot.forEach(doc => {
+                            const u = doc.data();
+                            container.innerHTML += `
+                                <tr>
+                                    <td>${u.name}</td>
+                                    <td>${u.staffId}</td>
+                                    <td>${u.role}</td>
+                                    <td>${u.hub}</td>
+                                    <td>${u.branch}</td>
+                                    <td>${u.email}<br>${u.phone}</td>
+                                </tr>
+                            `;
+                        });
+                        container.innerHTML += '</tbody></table></div>';
+                    }
+                } catch (error) {
+                    console.error('Staff error:', error);
+                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading staff</p><button class="btn btn-primary btn-sm" onclick="app.renderStaffList()" style="margin-top: 10px;"><i class="fas fa-redo"></i> Retry</button></div>';
+                }
+            },
+
+            renderAdminApprovals: async () => {
+                const container = document.getElementById('pending-staff-list');
+                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading approvals...</p></div>';
+                
+                try {
+                    const snapshot = await db.collection('users').where('approved', '==', false).get();
+                    document.getElementById('pending-approvals-count').innerText = snapshot.size;
+                    
+                    if (snapshot.empty) {
+                        container.innerHTML = '<div class="empty-state"><i class="fas fa-check-circle"></i><p>No pending approvals</p></div>';
+                    } else {
+                        container.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            const u = doc.data();
+                            container.innerHTML += `
+                                <div class="card" style="padding: 18px; border-left-color: #ffc107; margin-bottom: 12px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                                        <div>
+                                            <p style="font-size: 1rem; font-weight: 700;"><i class="fas fa-user"></i> ${u.name}</p>
+                                            <p style="color: var(--gray); font-size: 0.85rem;">${u.staffId} | ${u.role}</p>
+                                            <p style="color: var(--gray); font-size: 0.85rem;"><i class="fas fa-building"></i> ${u.hub} | <i class="fas fa-map-marker-alt"></i> ${u.branch}</p>
+                                            <p style="color: var(--gray); font-size: 0.85rem;"><i class="fas fa-envelope"></i> ${u.email} | <i class="fas fa-phone"></i> ${u.phone}</p>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="btn btn-success btn-sm" onclick="app.approveStaff('${doc.id}')"><i class="fas fa-check"></i> Approve</button>
+                                            <button class="btn btn-danger btn-sm" onclick="app.rejectStaff('${doc.id}')"><i class="fas fa-times"></i> Reject</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+
+                    const select = document.getElementById('idcard-staff-select');
+                    select.innerHTML = '<option value="">Choose staff member...</option>';
+                    const staffSnapshot = await db.collection('users').where('approved', '==', true).get();
+                    staffSnapshot.forEach(doc => {
+                        const u = doc.data();
+                        select.innerHTML += `<option value="${doc.id}">${u.name} (${u.staffId})</option>`;
+                    });
+                } catch (error) {
+                    console.error('Approvals error:', error);
+                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading approvals</p><button class="btn btn-primary btn-sm" onclick="app.renderAdminApprovals()" style="margin-top: 10px;"><i class="fas fa-redo"></i> Retry</button></div>';
+                }
+            },
+
+            approveStaff: async (docId) => {
+                try {
+                    await db.collection('users').doc(docId).update({ approved: true });
+                    app.showNotification('Staff approved!', 'success');
+                    app.renderAdminApprovals();
+                } catch (error) {
+                    app.showNotification('Error: ' + error.message, 'error');
+                }
+            },
+
+            rejectStaff: async (docId) => {
+                if (!confirm('Delete this registration?')) return;
+                try {
+                    await db.collection('users').doc(docId).delete();
+                    app.showNotification('Registration rejected', 'info');
+                    app.renderAdminApprovals();
+                } catch (error) {
+                    app.showNotification('Error: ' + error.message, 'error');
+                }
+            },
+
+            previewIDCard: () => {
+                const staffId = document.getElementById('idcard-staff-select').value;
+                if (!staffId) return;
+
+                db.collection('users').doc(staffId).get().then(doc => {
+                    if (doc.exists) {
+                        const u = doc.data();
+                        const preview = document.getElementById('id-card-preview');
+                        preview.innerHTML = `
+                            <div class="id-card-preview">
+                                <div style="text-align: center; margin-bottom: 18px;">
+                                    <div style="width: 55px; height: 55px; background: white; border-radius: 14px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+                                        <img src="logo-192.png" alt="Logo" style="width: 70%; height: 70%; object-fit: contain;" onerror="this.style.display='none'; this.parentElement.innerHTML='🎯'">
+                                    </div>
+                                    <h3 style="margin-bottom: 4px; font-weight: 700; font-size: 1rem;">TOMSTUDIO BIZ HUB</h3>
+                                    <small style="opacity: 0.9; font-size: 0.75rem;">Staff Identification Card</small>
+                                </div>
+                                <div class="id-card-photo">
+                                    ${u.passportPhoto ? `<img src="${u.passportPhoto}" alt="Passport">` : '<i class="fas fa-user" style="font-size: 2.5rem; color: var(--primary);"></i>'}
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 5px;">${u.name}</div>
+                                    <div style="opacity: 0.95; margin-bottom: 10px; font-size: 0.85rem;">${u.role} | ${u.hub}</div>
+                                    <div style="background: rgba(255,255,255,0.25); padding: 5px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: inline-block;">${u.staffId}</div>
+                                    <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.95;"><i class="fas fa-map-marker-alt"></i> Branch: ${u.branch}</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+            },
+
+            downloadIDCard: () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ format: [85.6, 54], unit: 'mm' });
+                
+                doc.setFillColor(0, 214, 143);
+                doc.rect(0, 0, 85.6, 54, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(10);
+                doc.text('TOMSTUDIO BIZ HUB', 42.8, 10, { align: 'center' });
+                doc.setFontSize(7);
+                doc.text('Staff ID Card', 42.8, 14, { align: 'center' });
+                
+                doc.save(`id-card-${new Date().getTime()}.pdf`);
+                app.showNotification('ID Card downloaded!', 'success');
+            },
+
+            postAnnouncement: async () => {
+                const message = document.getElementById('announce-message').value.trim();
+                const type = document.getElementById('announce-type').value;
+                const target = document.getElementById('announce-target').value;
+
+                if (!message) {
+                    app.showNotification('Please enter a message', 'error');
+                    return;
+                }
+
+                try {
+                    await db.collection('announcements').add({
+                        message,
+                        type,
+                        target,
+                        postedBy: app.userData.staffId,
+                        postedByName: app.userData.name,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    app.showNotification('Announcement posted!', 'success');
+                    document.getElementById('announce-message').value = '';
+                    app.renderAllAnnouncements();
+                } catch (error) {
+                    app.showNotification('Error: ' + error.message, 'error');
+                }
+            },
+
+            renderAllAnnouncements: async () => {
+                const container = document.getElementById('all-announcements-list');
+                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading announcements...</p></div>';
+                
+                try {
+                    const snapshot = await db.collection('announcements').orderBy('createdAt', 'desc').limit(20).get();
+                    if (snapshot.empty) {
+                        container.innerHTML = '<div class="empty-state"><i class="fas fa-bullhorn"></i><p>No announcements</p></div>';
+                    } else {
+                        container.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            const a = doc.data();
+                            const typeClass = a.type === 'warning' ? 'warning' : a.type === 'success' ? 'success' : a.type === 'alert' ? 'alert' : '';
+                            container.innerHTML += `
+                                <div class="announcement-card ${typeClass}">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <span style="background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 700;">${a.type.toUpperCase()}</span>
+                                        <small>${new Date(a.createdAt?.toDate()).toLocaleDateString()}</small>
+                                    </div>
+                                    <p style="font-size: 0.9rem;">${a.message}</p>
+                                    <small style="opacity: 0.9; margin-top: 6px; display: block; font-size: 0.75rem;">By: ${a.postedByName} | Target: ${a.target}</small>
+                                </div>
+                            `;
+                        });
+                    }
+                } catch (error) {
+                    console.error('Announcements error:', error);
+                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading announcements</p><button class="btn btn-primary btn-sm" onclick="app.renderAllAnnouncements()" style="margin-top: 10px;"><i class="fas fa-redo"></i> Retry</button></div>';
+                }
+            },
+
+            showAnnouncements: () => {
+                app.showNotification('Announcements feature active!', 'info');
             }
-          }
-        }
-      });
-    });
-
-    return Array.from(staffIds);
-  }
-
-  function saveData(key, data) {
-    if (!currentStaffId) {
-      showToast("No staff ID. Cannot save data.");
-      return;
-    }
-    try {
-      const keyName = getTodayKey(key);
-      if (!keyName) return;
-      localStorage.setItem(keyName, JSON.stringify(data));
-      unsavedChanges = true;
-      showToast(`${key} saved!`);
-    } catch (e) {
-      console.error("Storage error:", e);
-      showToast("Could not save data. Storage full?");
-    }
-  }
-
-  function loadData(key) {
-    try {
-      const keyName = getTodayKey(key);
-      if (!keyName) return [];
-      const saved = localStorage.getItem(keyName);
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error("Load error:", e);
-      return [];
-    }
-  }
-
-  function loadDataForStaff(key, staffId) {
-    try {
-      const saved = localStorage.getItem(`${key}_${staffId}_${getTodayString()}`);
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error("Load error:", e);
-      return [];
-    }
-  }
-
-  function clearForm(fieldIds) {
-    fieldIds.forEach(id => {
-      const element = document.getElementById(id);
-      if (element && element.type === 'file') {
-        element.value = '';
-        if (id === 'staffPhotos') document.getElementById('staffPhotoPreview').innerHTML = '';
-        if (id === 'learningPhotos') document.getElementById('learningPhotoPreview').innerHTML = '';
-      } else if (element) {
-        element.value = '';
-      }
-    });
-  }
-
-  // ========================
-  // 3. LOGIN & LOGOUT
-  // ========================
-  function login() {
-    const id = staffIdInput.value.trim();
-    if (!id) {
-      alert("Please enter your Staff ID");
-      return;
-    }
-    currentStaffId = id;
-    staffDisplay.textContent = id;
-    loginScreen.style.display = "none";
-    mainApp.style.display = "block";
-    loadAllData();
-    showToast(`Welcome, ${id}!`);
-  }
-
-  function logout() {
-    if (confirm("Log out?")) {
-      currentStaffId = null;
-      loginScreen.style.display = "block";
-      mainApp.style.display = "none";
-      staffIdInput.value = "";
-      showToast("Logged out.");
-    }
-  }
-
-  // ========================
-  // 4. GPS & SIGN IN
-  // ========================
-  function recordSignIn() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString();
-    const dateStr = now.toLocaleDateString();
-    signInData = {
-      time: timeStr,
-      date: dateStr,
-      timestamp: now.toISOString()
-    };
-    if (navigator.geolocation) {
-      locationInfoElement.innerHTML = '<div class="loader"></div>';
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          signInData.location = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            accuracy: position.coords.accuracy
-          };
-          locationInfoElement.innerHTML = `
-            📍 <strong>Latitude:</strong> ${position.coords.latitude.toFixed(6)}<br>
-            📍 <strong>Longitude:</strong> ${position.coords.longitude.toFixed(6)}<br>
-            📏 <strong>Accuracy:</strong> ${position.coords.accuracy}m
-          `;
-          saveSignInData(signInData);
-          showToast("GPS location recorded!");
-        },
-        (error) => {
-          console.log("Location error:", error);
-          locationInfoElement.textContent = "📍 Location: Permission denied or unavailable";
-          saveSignInData(signInData);
-          showToast("Could not get GPS.");
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
-      );
-    } else {
-      locationInfoElement.textContent = "📍 Location: Not supported by browser";
-      saveSignInData(signInData);
-    }
-    signInTimeElement.textContent = `Signed in at ${timeStr} on ${dateStr}`;
-  }
-
-  function saveSignInData(data) {
-    if (!currentStaffId) return;
-    try {
-      localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
-    } catch (e) {
-      console.error("Storage error:", e);
-    }
-  }
-
-  function displaySignInData() {
-    if (!currentStaffId) return;
-    const saved = localStorage.getItem(`signin_${currentStaffId}`);
-    if (saved) {
-      const data = JSON.parse(saved);
-      signInData = data;
-      signInTimeElement.textContent = `Signed in at ${data.time} on ${data.date}`;
-      if (data.location) {
-        locationInfoElement.innerHTML = `
-          📍 <strong>Latitude:</strong> ${data.location.lat.toFixed(6)}<br>
-          📍 <strong>Longitude:</strong> ${data.location.lng.toFixed(6)}<br>
-          📏 <strong>Accuracy:</strong> ${data.location.accuracy}m
-        `;
-      }
-    }
-  }
-
-  // ========================
-  // 5. TAB NAVIGATION
-  // ========================
-  document.querySelectorAll('.tab-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const tabId = link.getAttribute('data-tab');
-      if (tabId === 'admin' && !isAdminAuthenticated) {
-        openAdminModal();
-        return;
-      }
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      link.classList.add('active');
-      if (tabId === 'clients') renderClients();
-      if (tabId === 'staff') renderStaff();
-      if (tabId === 'learning') renderLearning();
-      if (tabId === 'sales') renderSales();
-      if (tabId === 'registration') renderRegistrations();
-      if (tabId === 'finance') renderFinance();
-      if (tabId === 'gallery') renderGallery();
-      if (tabId === 'reports') updateReportStats();
-      if (tabId === 'admin') showAdminDashboard();
-    });
-  });
-
-  // ========================
-  // 6. DATA RENDERING
-  // ========================
-  function renderClients() {
-    const list = document.getElementById("clientList");
-    list.innerHTML = "";
-    if (clients.length === 0) {
-      list.innerHTML = "<p style='text-align:center; padding:20px;'>No clients recorded today.</p>";
-      return;
-    }
-    clients.forEach(client => {
-      const div = document.createElement("div");
-      div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #00b894;";
-      div.innerHTML = `
-        <strong>${client.name}</strong>
-        ${client.phone ? `<div>📞 ${client.phone}</div>` : ""}
-        ${client.email ? `<div>✉️ ${client.email}</div>` : ""}
-        ${client.comment ? `<div style="color:#636e72; margin:8px 0;">💬 ${client.comment}</div>` : ""}
-        <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
-          📅 ${client.date} | ⏰ ${client.time}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function renderStaff() {
-    const list = document.getElementById("staffList");
-    list.innerHTML = "";
-    if (staffActivities.length === 0) {
-      list.innerHTML = "<p style='text-align:center; padding:20px;'>No staff activities recorded today.</p>";
-      return;
-    }
-    staffActivities.forEach(staff => {
-      const div = document.createElement("div");
-      div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #0984e3;";
-      div.innerHTML = `
-        <strong>${staff.name} (${staff.role})</strong>
-        <div style="color:#636e72; margin:8px 0;">${staff.activity}</div>
-        ${staff.photos.length > 0 ? `<div style="margin:10px 0;"><strong>Photos:</strong></div>` : ""}
-        <div style="display:flex; gap:5px; overflow-x:auto; padding:5px 0;">
-          ${staff.photos.map(photo => `
-            <div style="width:80px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
-              <img src="${photo}" style="width:100%; height:100%; object-fit:cover;">
-            </div>
-          `).join('')}
-        </div>
-        <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
-          📅 ${staff.date} | ⏰ ${staff.time}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function renderLearning() {
-    const list = document.getElementById("learningList");
-    list.innerHTML = "";
-    if (learningLogs.length === 0) {
-      list.innerHTML = "<p style='text-align:center; padding:20px;'>No learning logs recorded today.</p>";
-      return;
-    }
-    learningLogs.forEach(log => {
-      const div = document.createElement("div");
-      div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #fdcb6e;";
-      div.innerHTML = `
-        <strong>${log.className}</strong>
-        <div style="color:#636e72; margin:8px 0;"><strong>Topics:</strong> ${log.topics}</div>
-        ${log.progress ? `<div style="color:#636e72; margin:8px 0;"><strong>Progress:</strong> ${log.progress}</div>` : ""}
-        ${log.photos.length > 0 ? `<div style="margin:10px 0;"><strong>Class Photos:</strong></div>` : ""}
-        <div style="display:flex; gap:5px; overflow-x:auto; padding:5px 0;">
-          ${log.photos.map(photo => `
-            <div style="width:80px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
-              <img src="${photo}" style="width:100%; height:100%; object-fit:cover;">
-            </div>
-          `).join('')}
-        </div>
-        <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
-          📅 ${log.date} | ⏰ ${log.time}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function renderSales() {
-    const list = document.getElementById("salesList");
-    list.innerHTML = "";
-    if (sales.length === 0) {
-      list.innerHTML = "<p style='text-align:center; padding:20px;'>No sales recorded today.</p>";
-      return;
-    }
-    let total = 0;
-    sales.forEach(sale => {
-      total += sale.amount;
-      const div = document.createElement("div");
-      div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #fdcb6e;";
-      div.innerHTML = `
-        <strong>${sale.item}</strong>
-        <div style="color:#636e72; margin:8px 0;">Amount: ₦${sale.amount.toLocaleString()}</div>
-        ${sale.notes ? `<div style="color:#636e72; margin:8px 0;">📝 ${sale.notes}</div>` : ""}
-        <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
-          📅 ${sale.date} | ⏰ ${sale.time}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-    document.getElementById("dailySalesTotal").textContent = `₦${total.toLocaleString()}`;
-  }
-
-  function renderRegistrations() {
-    const list = document.getElementById("registrationList");
-    list.innerHTML = "";
-    if (students.length === 0) {
-      list.innerHTML = "<p style='text-align:center; padding:20px;'>No new students registered today.</p>";
-      return;
-    }
-    students.forEach(student => {
-      const div = document.createElement("div");
-      div.style.cssText = "background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid #a55eea;";
-      div.innerHTML = `
-        <strong>${student.name}</strong>
-        <div style="color:#636e72; margin:8px 0;">Age: ${student.age} | Class: ${student.className}</div>
-        <div style="color:#636e72; margin:8px 0;">Parent: ${student.parent} | Phone: ${student.phone}</div>
-        ${student.notes ? `<div style="color:#636e72; margin:8px 0;">📝 ${student.notes}</div>` : ""}
-        <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
-          📅 ${student.date} | ⏰ ${student.time}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  function renderFinance() {
-    const list = document.getElementById("financeList");
-    list.innerHTML = "";
-    if (finances.length === 0) {
-      list.innerHTML = "<p style='text-align:center; padding:20px;'>No financial transactions recorded today.</p>";
-      return;
-    }
-    let income = 0;
-    let expenses = 0;
-    finances.forEach(trans => {
-      if (trans.type === 'income') income += trans.amount;
-      else if (trans.type === 'expense') expenses += trans.amount;
-      const div = document.createElement("div");
-      div.style.cssText = `background:white; padding:15px; border-radius:10px; margin:10px 0; border-left:4px solid ${trans.type === 'income' ? '#00b894' : '#e17055'};`;
-      div.innerHTML = `
-        <strong>${trans.type === 'income' ? '💰' : '💸'} ${trans.item}</strong>
-        <div style="color:#636e72; margin:8px 0;">Amount: ₦${trans.amount.toLocaleString()}</div>
-        ${trans.notes ? `<div style="color:#636e72; margin:8px 0;">📝 ${trans.notes}</div>` : ""}
-        <div style="color:#636e72; font-size:0.8rem; margin-top:8px;">
-          📅 ${trans.date} | ⏰ ${trans.time}
-        </div>
-      `;
-      list.appendChild(div);
-    });
-    const net = income - expenses;
-    document.getElementById("totalIncome").textContent = `₦${income.toLocaleString()}`;
-    document.getElementById("totalExpenses").textContent = `₦${expenses.toLocaleString()}`;
-    document.getElementById("netBalance").textContent = `₦${net.toLocaleString()}`;
-  }
-
-  function renderGallery() {
-    const container = document.getElementById("galleryImages");
-    container.innerHTML = "";
-    if (galleryImages.length === 0) {
-      container.innerHTML = "<p style='text-align:center; padding:20px;'>No images in gallery.</p>";
-      return;
-    }
-    galleryImages.forEach(img => {
-      const item = document.createElement("div");
-      item.className = "gallery-item";
-      item.innerHTML = `
-        <img src="${img.src}" alt="Class photo">
-        <button class="delete-img" onclick="deleteGalleryImage(${img.id})">×</button>
-      `;
-      container.appendChild(item);
-    });
-  }
-
-  // ========================
-  // 7. IMAGE HANDLING
-  // ========================
-  function previewImages(inputId, previewId) {
-    const input = document.getElementById(inputId);
-    const preview = document.getElementById(previewId);
-    preview.innerHTML = '';
-    if (input.files) {
-      Array.from(input.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const item = document.createElement("div");
-          item.className = "image-item";
-          item.innerHTML = `
-            <img src="${e.target.result}" alt="Preview">
-            <button class="delete-img" onclick="this.parentElement.remove()">×</button>
-          `;
-          preview.appendChild(item);
         };
-        reader.readAsDataURL(file);
-      });
-    }
-  }
-  document.getElementById("staffPhotos").addEventListener("change", () => previewImages("staffPhotos", "staffPhotoPreview"));
-  document.getElementById("learningPhotos").addEventListener("change", () => previewImages("learningPhotos", "learningPhotoPreview"));
 
-  // ========================
-  // 8. DATA ENTRY FUNCTIONS
-  // ========================
-  function addClient() {
-    const name = document.getElementById("clientName").value.trim();
-    const phone = document.getElementById("clientPhone").value.trim();
-    const email = document.getElementById("clientEmail").value.trim();
-    const comment = document.getElementById("clientComment").value.trim();
-    if (!name) {
-      alert("Please enter client name");
-      return;
-    }
-    const now = new Date();
-    const client = {
-      id: Date.now(),
-      name,
-      phone,
-      email,
-      comment,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString()
-    };
-    clients.push(client);
-    saveData('clients', clients);
-    renderClients();
-    clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
-    showToast("Client added!");
-  }
-
-  function addStaffActivity() {
-    const name = document.getElementById("staffName").value.trim();
-    const role = document.getElementById("staffRole").value;
-    const activity = document.getElementById("staffActivity").value.trim();
-    const photos = document.getElementById("staffPhotos").files;
-    if (!name || !role || !activity) {
-      alert("Please fill all fields");
-      return;
-    }
-    const now = new Date();
-    const staff = {
-      id: Date.now(),
-      name,
-      role,
-      activity,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString(),
-      photos: []
-    };
-    if (photos.length > 0) {
-      let loaded = 0;
-      for (let i = 0; i < photos.length; i++) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          staff.photos.push(e.target.result);
-          galleryImages.push({
-            id: Date.now() + i,
-            src: e.target.result,
-            caption: `${name} - ${now.toLocaleDateString()}`,
-            timestamp: now.toISOString()
-          });
-          loaded++;
-          if (loaded === photos.length) {
-            staffActivities.push(staff);
-            saveData('staff', staffActivities);
-            saveData('gallery', galleryImages);
-            renderStaff();
-            renderGallery();
-            clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
-            showToast("Staff activity recorded!");
-          }
-        };
-        reader.readAsDataURL(photos[i]);
-      }
-    } else {
-      staffActivities.push(staff);
-      saveData('staff', staffActivities);
-      renderStaff();
-      clearForm(['staffName', 'staffRole', 'staffActivity', 'staffPhotos']);
-      showToast("Staff activity recorded!");
-    }
-  }
-
-  function addLearningLog() {
-    const className = document.getElementById("className").value.trim();
-    const topics = document.getElementById("topicsCovered").value.trim();
-    const progress = document.getElementById("studentProgress").value.trim();
-    const photos = document.getElementById("learningPhotos").files;
-    if (!className || !topics) {
-      alert("Please fill required fields");
-      return;
-    }
-    const now = new Date();
-    const log = {
-      id: Date.now(),
-      className,
-      topics,
-      progress,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString(),
-      photos: []
-    };
-    if (photos.length > 0) {
-      let loaded = 0;
-      for (let i = 0; i < photos.length; i++) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          log.photos.push(e.target.result);
-          galleryImages.push({
-            id: Date.now() + i,
-            src: e.target.result,
-            caption: `${className} - ${now.toLocaleDateString()}`,
-            timestamp: now.toISOString()
-          });
-          loaded++;
-          if (loaded === photos.length) {
-            learningLogs.push(log);
-            saveData('learning', learningLogs);
-            saveData('gallery', galleryImages);
-            renderLearning();
-            renderGallery();
-            clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
-            showToast("Learning log saved!");
-          }
-        };
-        reader.readAsDataURL(photos[i]);
-      }
-    } else {
-      learningLogs.push(log);
-      saveData('learning', learningLogs);
-      renderLearning();
-      clearForm(['className', 'topicsCovered', 'studentProgress', 'learningPhotos']);
-      showToast("Learning log saved!");
-    }
-  }
-
-  function addSale() {
-    const item = document.getElementById("saleItem").value.trim();
-    const amount = parseFloat(document.getElementById("saleAmount").value);
-    const notes = document.getElementById("saleNotes").value.trim();
-    if (!item || isNaN(amount)) {
-      alert("Please fill all fields correctly");
-      return;
-    }
-    const now = new Date();
-    const sale = {
-      id: Date.now(),
-      item,
-      amount,
-      notes,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString()
-    };
-    sales.push(sale);
-    saveData('sales', sales);
-    renderSales();
-    clearForm(['saleItem', 'saleAmount', 'saleNotes']);
-    showToast("Sale recorded!");
-  }
-
-  function registerStudent() {
-    const name = document.getElementById("studentName").value.trim();
-    const age = document.getElementById("studentAge").value.trim();
-    const className = document.getElementById("studentClass").value.trim();
-    const parent = document.getElementById("parentName").value.trim();
-    const phone = document.getElementById("parentPhone").value.trim();
-    const notes = document.getElementById("studentNotes").value.trim();
-    if (!name || !age || !className || !parent || !phone) {
-      alert("Please fill all required fields");
-      return;
-    }
-    const now = new Date();
-    const student = {
-      id: Date.now(),
-      name,
-      age,
-      className,
-      parent,
-      phone,
-      notes,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString()
-    };
-    students.push(student);
-    saveData('students', students);
-    renderRegistrations();
-    clearForm(['studentName', 'studentAge', 'studentClass', 'parentName', 'parentPhone', 'studentNotes']);
-    showToast("Student registered!");
-  }
-
-  function addFinance() {
-    const type = document.getElementById("financeType").value;
-    const item = document.getElementById("financeItem").value.trim();
-    const amount = parseFloat(document.getElementById("financeAmount").value);
-    const notes = document.getElementById("financeNotes").value.trim();
-    if (!type || !item || isNaN(amount)) {
-      alert("Please fill all fields correctly");
-      return;
-    }
-    const now = new Date();
-    const transaction = {
-      id: Date.now(),
-      type,
-      item,
-      amount,
-      notes,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString()
-    };
-    finances.push(transaction);
-    saveData('finances', finances);
-    renderFinance();
-    clearForm(['financeType', 'financeItem', 'financeAmount', 'financeNotes']);
-    showToast("Transaction recorded!");
-  }
-
-  // ========================
-  // 9. CLEAR FUNCTIONS
-  // ========================
-  function clearClients() {
-    if (confirm("Clear all client records?")) {
-      clients = [];
-      saveData('clients', clients);
-      renderClients();
-      showToast("Clients cleared!");
-    }
-  }
-  function clearStaff() {
-    if (confirm("Clear all staff records?")) {
-      staffActivities = [];
-      saveData('staff', staffActivities);
-      renderStaff();
-      showToast("Staff records cleared!");
-    }
-  }
-  function clearLearning() {
-    if (confirm("Clear all learning records?")) {
-      learningLogs = [];
-      saveData('learning', learningLogs);
-      renderLearning();
-      showToast("Learning logs cleared!");
-    }
-  }
-  function clearSales() {
-    if (confirm("Clear all sales records?")) {
-      sales = [];
-      saveData('sales', sales);
-      renderSales();
-      showToast("Sales cleared!");
-    }
-  }
-  function clearRegistrations() {
-    if (confirm("Clear all student registrations?")) {
-      students = [];
-      saveData('students', students);
-      renderRegistrations();
-      showToast("Student registrations cleared!");
-    }
-  }
-  function clearFinance() {
-    if (confirm("Clear all financial records?")) {
-      finances = [];
-      saveData('finances', finances);
-      renderFinance();
-      showToast("Finances cleared!");
-    }
-  }
-  function clearGallery() {
-    if (confirm("Clear all gallery images?")) {
-      galleryImages = [];
-      saveData('gallery', galleryImages);
-      renderGallery();
-      showToast("Gallery cleared!");
-    }
-  }
-  function deleteGalleryImage(id) {
-    if (confirm("Delete this image?")) {
-      galleryImages = galleryImages.filter(img => img.id !== id);
-      saveData('gallery', galleryImages);
-      renderGallery();
-      showToast("Image deleted!");
-    }
-  }
-
-  // ========================
-  // 10. REPORTS & EXPORT
-  // ========================
-  function updateReportStats() {
-    document.getElementById("clientCount").textContent = clients.length;
-    document.getElementById("staffCount").textContent = staffActivities.length;
-    document.getElementById("learningCount").textContent = learningLogs.length;
-    document.getElementById("salesCount").textContent = sales.length;
-    document.getElementById("studentCount").textContent = students.length;
-    document.getElementById("financeCount").textContent = finances.length;
-  }
-
-  function exportToCSV() {
-    try {
-      let csv = "Category,Details,Amount,Date,Time\n";
-      clients.forEach(c => {
-        csv += `Client,"${c.name}; ${c.phone || ''}; ${c.email || ''}",,"${c.date}","${c.time}"\n`;
-      });
-      staffActivities.forEach(s => {
-        csv += `Staff,"${s.name} (${s.role}); ${s.activity}",,"${s.date}","${s.time}"\n`;
-      });
-      learningLogs.forEach(l => {
-        csv += `Learning,"${l.className}; Topics: ${l.topics}; Progress: ${l.progress}",,"${l.date}","${l.time}"\n`;
-      });
-      sales.forEach(s => {
-        csv += `Sale,"${s.item}; ${s.notes}",₦${s.amount},"${s.date}","${s.time}"\n`;
-      });
-      students.forEach(st => {
-        csv += `Student,"${st.name}; Age: ${st.age}; Class: ${st.className}; Parent: ${st.parent}; Phone: ${st.phone}; ${st.notes}",,"${st.date}","${st.time}"\n`;
-      });
-      finances.forEach(f => {
-        csv += `${f.type.toUpperCase()},"${f.item}; ${f.notes}",₦${f.amount},"${f.date}","${f.time}"\n`;
-      });
-      downloadFile(csv, `performance_report_${currentStaffId}_${getTodayString()}.csv`, "text/csv");
-      showToast("CSV exported!");
-    } catch (e) {
-      console.error("CSV export error:", e);
-      alert("Export failed.");
-    }
-  }
-
-  function backupData() {
-    const backup = {
-      clients,
-      staffActivities,
-      learningLogs,
-      sales,
-      students,
-      finances,
-      galleryImages,
-      signInData,
-      timestamp: new Date().toISOString(),
-      staffId: currentStaffId
-    };
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `tomstudio_backup_${currentStaffId}_${getTodayString()}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 100);
-    showToast("Backup created!");
-  }
-
-  // ========================
-  // 11. PDF GENERATION
-  // ========================
-  function generatePDF() {
-    try {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const today = new Date().toLocaleDateString();
-      const primaryColor = [108, 92, 231];
-      const textColor = [66, 66, 66];
-      const leftMargin = 20;
-      let yPos = 50;
-
-      doc.setFillColor(...primaryColor);
-      doc.rect(0, 0, 210, 40, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20);
-      doc.text("TOMSTUDIO DAILY PERFORMANCE TRACKER", 105, 20, null, null, "center");
-      doc.setFontSize(14);
-      doc.text("Daily Report with Images", 105, 30, null, null, "center");
-      doc.setTextColor(...textColor);
-
-      function addText(text, x, y, bold = false, size = 10) {
-        doc.setFontSize(size);
-        doc.setFont("helvetica", bold ? "bold" : "normal");
-        doc.text(text, x, y);
-        return y + 6;
-      }
-
-      function addWrapped(text, x, y, maxWidth, size = 10) {
-        doc.setFontSize(size);
-        const lines = doc.splitTextToSize(text, maxWidth);
-        lines.forEach(line => {
-          if (yPos > 280) {
-            doc.addPage();
-            y = 20;
-          }
-          doc.text(line, x, y);
-          y += 5;
-        });
-        return y;
-      }
-
-      function addImage(imgData, caption = "") {
-        if (yPos > 250) {
-          doc.addPage();
-          yPos = 20;
-        }
-        const imgProps = doc.getImageProperties(imgData);
-        const imgWidth = 50;
-        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        doc.addImage(imgData, 'JPEG', leftMargin, yPos, imgWidth, imgHeight);
-        yPos += imgHeight + 2;
-        if (caption) yPos = addText(caption, leftMargin, yPos, false, 9);
-        yPos += 4;
-      }
-
-      yPos = addText("STAFF INFORMATION", leftMargin, yPos, true, 12);
-      yPos = addText(`Staff ID: ${currentStaffId}`, leftMargin, yPos);
-      yPos = addText(`Date: ${today}`, leftMargin, yPos);
-
-      if (signInData.location) {
-        yPos = addText("GPS LOCATION", leftMargin, yPos, true, 12);
-        yPos = addText(`Latitude: ${signInData.location.lat.toFixed(6)}`, leftMargin, yPos);
-        yPos = addText(`Longitude: ${signInData.location.lng.toFixed(6)}`, leftMargin, yPos);
-        yPos = addText(`Accuracy: ${signInData.location.accuracy}m`, leftMargin, yPos);
-      }
-
-      yPos += 6;
-
-      if (clients.length > 0) {
-        yPos = addText("CLIENTS/VISITORS", leftMargin, yPos, true, 12);
-        clients.forEach(c => {
-          if (yPos > 260) { doc.addPage(); yPos = 20; }
-          yPos = addText(c.name, leftMargin, yPos, true);
-          if (c.phone) yPos = addText(`📞 ${c.phone}`, leftMargin, yPos);
-          if (c.email) yPos = addText(`✉️ ${c.email}`, leftMargin, yPos);
-          if (c.comment) yPos = addWrapped(`💬 ${c.comment}`, leftMargin, yPos, 170);
-          yPos = addText(`${c.date} ${c.time}`, leftMargin, yPos);
-          yPos += 2;
-        });
-        yPos += 4;
-      }
-
-      if (learningLogs.length > 0) {
-        yPos = addText("STUDENT LEARNING LOGS", leftMargin, yPos, true, 12);
-        learningLogs.forEach(log => {
-          if (yPos > 260) { doc.addPage(); yPos = 20; }
-          yPos = addText(log.className, leftMargin, yPos, true);
-          yPos = addWrapped(`Topics: ${log.topics}`, leftMargin, yPos, 170);
-          if (log.progress) yPos = addWrapped(`Progress: ${log.progress}`, leftMargin, yPos, 170);
-          log.photos.forEach(photo => addImage(photo, `Class: ${log.className}`));
-          yPos = addText(`${log.date} ${log.time}`, leftMargin, yPos);
-          yPos += 2;
-        });
-        yPos += 4;
-      }
-
-      if (staffActivities.length > 0) {
-        yPos = addText("ONSITE STAFF ACTIVITIES", leftMargin, yPos, true, 12);
-        staffActivities.forEach(staff => {
-          if (yPos > 260) { doc.addPage(); yPos = 20; }
-          yPos = addText(`${staff.name} (${staff.role})`, leftMargin, yPos, true);
-          yPos = addWrapped(staff.activity, leftMargin, yPos, 170);
-          staff.photos.forEach(photo => addImage(photo, `Staff: ${staff.name}`));
-          yPos = addText(`${staff.date} ${staff.time}`, leftMargin, yPos);
-          yPos += 2;
-        });
-        yPos += 4;
-      }
-
-      if (galleryImages.length > 0) {
-        yPos = addText("CLASS GALLERY", leftMargin, yPos, true, 12);
-        galleryImages.forEach(img => addImage(img.src, img.caption || "Class Photo"));
-      }
-
-      doc.setDrawColor(...primaryColor);
-      doc.line(20, 285, 190, 285);
-      doc.setFontSize(9);
-      doc.setTextColor(255, 255, 255);
-      doc.text("App Design and Developed by Tomstudio Tech Academy", 105, 290, null, null, "center");
-      doc.text("+2348030827417", 105, 295, null, null, "center");
-      doc.save(`Report_${currentStaffId}_${today.replace(/\//g, '-')}.pdf`);
-      showToast("PDF generated!");
-    } catch (e) {
-      alert("PDF generation failed. Some images may be too large.");
-      console.error(e);
-    }
-  }
-
-  // ========================
-  // 12. ADMIN DASHBOARD
-  // ========================
-  function openAdminModal() {
-    adminModal.style.display = "flex";
-    adminPasswordInput.value = "";
-  }
-
-  function closeAdminModal() {
-    adminModal.style.display = "none";
-  }
-
-  function checkAdminPassword() {
-    const password = adminPasswordInput.value;
-    if (password === ADMIN_PASSWORD) {
-      isAdminAuthenticated = true;
-      closeAdminModal();
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-link').forEach(tab => tab.classList.remove('active'));
-      document.getElementById('admin').classList.add('active');
-      document.querySelector('[data-tab="admin"]').classList.add('active');
-      showAdminDashboard();
-      showToast("Admin access granted!");
-    } else {
-      showToast("Incorrect password!");
-    }
-  }
-
-  function showAdminDashboard() {
-    staffList = getAllStaffIds();
-    loadAdminMessages();
-    renderStaffList();
-  }
-
-  function renderStaffList() {
-    staffListElement.innerHTML = '';
-    if (staffList.length === 0) {
-      staffListElement.innerHTML = '<p>No staff data available</p>';
-      return;
-    }
-    staffList.forEach(staffId => {
-      const item = document.createElement('div');
-      item.className = 'staff-item';
-      item.textContent = staffId;
-      const dataCount = getDataCountForStaff(staffId);
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = dataCount;
-      item.appendChild(badge);
-      item.addEventListener('click', () => loadStaffData(staffId));
-      staffListElement.appendChild(item);
-    });
-    if (staffList.length > 0) {
-      loadStaffData(staffList[0]);
-    }
-  }
-
-  function searchStaff() {
-    const searchTerm = document.getElementById('staffSearch').value.toLowerCase();
-    const items = staffListElement.getElementsByClassName('staff-item');
-    for (let item of items) {
-      const text = item.textContent.toLowerCase();
-      item.style.display = text.includes(searchTerm) ? '' : 'none';
-    }
-  }
-
-  function getDataCountForStaff(staffId) {
-    let count = 0;
-    const prefixes = ['clients', 'staff', 'learning', 'sales', 'students', 'finances'];
-    prefixes.forEach(prefix => {
-      try {
-        const data = localStorage.getItem(`${prefix}_${staffId}_${getTodayString()}`);
-        if (data) count += JSON.parse(data).length;
-      } catch (e) {
-        console.error(`Error reading data for ${prefix} and ${staffId}`, e);
-      }
-    });
-    return count;
-  }
-
-  function loadStaffData(staffId) {
-    document.querySelectorAll('.staff-item').forEach(item => item.classList.remove('active'));
-    
-    // Fix: Use textContent instead of :contains
-    let selected = null;
-    document.querySelectorAll('.staff-item').forEach(item => {
-      if (item.textContent.trim() === staffId) {
-        selected = item;
-      }
-    });
-    if (selected) selected.classList.add('active');
-
-    const clientsData = loadDataForStaff('clients', staffId);
-    const staffData = loadDataForStaff('staff', staffId);
-    const learningData = loadDataForStaff('learning', staffId);
-    const salesData = loadDataForStaff('sales', staffId);
-    const studentsData = loadDataForStaff('students', staffId);
-    const financesData = loadDataForStaff('finances', staffId);
-    const signInData = loadSignInDataForStaff(staffId);
-
-    let html = '';
-    if (signInData) {
-      html += `<div class="data-section"><h4>📍 Sign In Data</h4>
-        <p><strong>Date:</strong> ${signInData.date}</p>
-        <p><strong>Time:</strong> ${signInData.time}</p>`;
-      if (signInData.location) {
-        html += `<p><strong>Latitude:</strong> ${signInData.location.lat.toFixed(6)}</p>
-                 <p><strong>Longitude:</strong> ${signInData.location.lng.toFixed(6)}</p>
-                 <p><strong>Accuracy:</strong> ${signInData.location.accuracy}m</p>`;
-      }
-      html += '</div>';
-    }
-
-    // [Rest of the HTML rendering remains the same...]
-
-    staffDataContainer.innerHTML = html;
-  }
-
-  function loadSignInDataForStaff(staffId) {
-    try {
-      const data = localStorage.getItem(`signin_${staffId}`);
-      return data ? JSON.parse(data) : null;
-    } catch (e) {
-      console.error(`Error loading sign-in data for ${staffId}:`, e);
-      return null;
-    }
-  }
-
-  function loadAdminMessages() {
-    try {
-      const saved = localStorage.getItem('admin_messages');
-      adminMessages = saved ? JSON.parse(saved) : {};
-    } catch (e) {
-      console.error("Error loading admin messages:", e);
-      adminMessages = {};
-    }
-  }
-
-  function saveAdminMessages() {
-    try {
-      localStorage.setItem('admin_messages', JSON.stringify(adminMessages));
-    } catch (e) {
-      console.error("Error saving admin messages:", e);
-    }
-  }
-
-  function sendMessage(staffId) {
-    const input = document.getElementById(`messageInput_${staffId}`);
-    const message = input.value.trim();
-    if (!message) return;
-    const now = new Date();
-    const messageObj = {
-      id: Date.now(),
-      sender: 'admin',
-      message,
-      timestamp: now.toISOString(),
-      date: now.toLocaleDateString(),
-      time: now.toLocaleTimeString()
-    };
-    if (!adminMessages[staffId]) adminMessages[staffId] = [];
-    adminMessages[staffId].push(messageObj);
-    saveAdminMessages();
-    input.value = '';
-    document.getElementById(`chatMessages_${staffId}`).innerHTML = renderMessages(staffId);
-    showToast(`Message sent to ${staffId}`);
-  }
-
-  function renderMessages(staffId) {
-    if (!adminMessages[staffId] || adminMessages[staffId].length === 0) {
-      return '<div class="message">No messages yet. Start a conversation with this staff member.</div>';
-    }
-    return adminMessages[staffId].map(msg => {
-      const date = new Date(msg.timestamp);
-      const formattedTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      return `<div class="message ${msg.sender}">${msg.message}<div style="font-size:0.7em; opacity:0.7; margin-top:3px;">${formattedTime}</div></div>`;
-    }).join('');
-  }
-
-  // ========================
-  // 13. UTILITIES
-  // ========================
-  function downloadFile(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 100);
-  }
-
-  function loadAllData() {
-    if (!currentStaffId) return;
-    clients = loadData('clients');
-    staffActivities = loadData('staff');
-    learningLogs = loadData('learning');
-    sales = loadData('sales');
-    students = loadData('students');
-    finances = loadData('finances');
-    galleryImages = loadData('gallery') || [];
-    renderClients(); renderStaff(); renderLearning(); renderSales();
-    renderRegistrations(); renderFinance(); renderGallery(); updateReportStats();
-    displaySignInData();
-  }
-
-  // ========================
-  // 14. INIT
-  // ========================
-  window.onload = function() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(e => console.log('SW failed:', e));
-    }
-    window.addEventListener('online', () => { isOnline = true; showToast("Back online!"); });
-    window.addEventListener('offline', () => { isOnline = false; showToast("You are offline."); });
-  };
-</script>
+        document.addEventListener('DOMContentLoaded', app.init);
+    </script>
 </body>
 </html>

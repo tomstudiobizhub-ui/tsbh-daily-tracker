@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Access | TOMSTUDIO BIZ HUB v4.0</title>
+    <link rel="icon" type="image/png" href="logo-192.png">
+    <meta name="theme-color" content="#00D68F">
+    <meta name="description" content="TOMSTUDIO BIZ HUB - Professional Operations Manager Admin Access">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00D68F;
+            --primary-dark: #00b87a;
+            --primary-light: #33e0a5;
+            --secondary: #0047AB;
+            --secondary-dark: #003680;
+            --white: #ffffff;
+            --black: #0a0a0a;
+            --gray: #666666;
+            --gray-light: #f5f5f5;
+            --border: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            z-index: 0;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 45px 40px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 3rem;
+            box-shadow: 0 8px 30px rgba(0, 214, 143, 0.4);
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0, 214, 143, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 40px rgba(0, 214, 143, 0.5); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            color: var(--white);
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .app-version {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--black);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: var(--primary);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--gray-light);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 214, 143, 0.15);
+            background: var(--white);
+        }
+
+        .form-group input:focus + i {
+            color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 32px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 6px 20px rgba(0, 214, 143, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 214, 143, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--gray);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+            color: var(--black);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(0, 214, 143, 0.1);
+            color: var(--primary-dark);
+            border: 1px solid rgba(0, 214, 143, 0.3);
+            display: block;
+        }
+
+        .divider {
+            margin: 25px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider span {
+            background: var(--white);
+            padding: 0 15px;
+            color: var(--gray);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 71, 171, 0.1);
+            color: var(--secondary-dark);
+        }
+
+        .footer {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        .footer-text strong {
+            color: var(--black);
+        }
+
+        .footer-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 214, 143, 0.1);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 35px 25px;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+
+            .app-name {
+                font-size: 1.3rem;
+            }
+
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="logo-192.png" alt="TOMSTUDIO Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <i class="fas fa-bullseye logo-icon" style="display: none;"></i>
+                </div>
+                <h1 class="app-name">TOMSTUDIO BIZ HUB</h1>
+                <p class="app-version">Professional Operations Manager v4.0</p>
+            </div>
+
+            <form id="admin-form" onsubmit="event.preventDefault(); checkAdmin();">
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-lock"></i>
+                        Admin Password
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="password" 
+                            id="admin-pass" 
+                            placeholder="Enter admin password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submit-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Access Dashboard</span>
+                </button>
+            </form>
+
+            <div id="message" class="message"></div>
+
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure Admin Access</span>
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Main App</span>
+            </a>
+
+            <div class="footer">
+                <p class="footer-text">
+                    <strong><i class="fas fa-code"></i> Built by TOMSTUDIO TECH ACADEMY</strong><br>
+                    Version 4.0 | Professional Operations Manager<br>
+                    <i class="fas fa-phone-alt"></i> 
+                    <a href="tel:+2348030827417">+234 803 082 7417</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = '@admin123#';
+
+        function checkAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            const message = document.getElementById('message');
+            const submitBtn = document.getElementById('submit-btn');
+
+            message.className = 'message';
+            message.style.display = 'none';
+
+            if (pass === ADMIN_PASSWORD) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner"></span> <span>Accessing...</span>';
+
+                sessionStorage.setItem('ts_admin_session', JSON.stringify({
+                    role: 'admin',
+                    hub: 'Head Office',
+                    branch: 'HQ-1',
+                    name: 'Super Admin',
+                    staffId: 'ADMIN-001',
+                    portfolio: 'Super Admin | Head Office | Administrator',
+                    isAuthorizer: true,
+                    authorizerLevel: 'full',
+                    isAdmin: true,
+                    loginTime: new Date().toISOString()
+                }));
+
+                message.className = 'message success';
+                message.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting...';
+                message.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                message.className = 'message error';
+                message.innerHTML = '<i class="fas fa-times-circle"></i> Invalid admin password. Please try again.';
+                message.style.display = 'block';
+
+                const input = document.getElementById('admin-pass');
+                input.style.animation = 'shake 0.5s ease';
+                setTimeout(() => {
+                    input.style.animation = '';
+                    input.value = '';
+                    input.focus();
+                }, 500);
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('admin-pass').focus();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            const session = sessionStorage.getItem('ts_admin_session');
+            if (session) {
+                const data = JSON.parse(session);
+                const loginTime = new Date(data.loginTime);
+                const now = new Date();
+                const diff = now - loginTime;
+                
+                if (diff > 30 * 60 * 1000) {
+                    sessionStorage.removeItem('ts_admin_session');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
