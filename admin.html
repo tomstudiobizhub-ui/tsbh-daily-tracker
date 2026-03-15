@@ -2,39 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Access | TOMSTUDIO BIZ HUB v4.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access | TBOS v2.0</title>
     <link rel="icon" type="image/png" href="logo-192.png">
     <meta name="theme-color" content="#00D68F">
-    <meta name="description" content="TOMSTUDIO BIZ HUB - Professional Operations Manager Admin Access">
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary: #00D68F;
             --primary-dark: #00b87a;
-            --primary-light: #33e0a5;
             --secondary: #0047AB;
-            --secondary-dark: #003680;
             --white: #ffffff;
             --black: #0a0a0a;
             --gray: #666666;
             --gray-light: #f5f5f5;
             --border: #e0e0e0;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
             --radius: 16px;
-            --radius-sm: 12px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
@@ -44,32 +33,9 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            z-index: 0;
-            animation: rotate 30s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .login-container {
-            position: relative;
-            z-index: 10;
             width: 100%;
             max-width: 420px;
             animation: slideUp 0.6s ease;
@@ -88,10 +54,6 @@
             text-align: center;
         }
 
-        .logo-container {
-            margin-bottom: 30px;
-        }
-
         .logo {
             width: 100px;
             height: 100px;
@@ -102,46 +64,8 @@
             justify-content: center;
             margin: 0 auto 20px;
             font-size: 3rem;
-            box-shadow: 0 8px 30px rgba(0, 214, 143, 0.4);
-            animation: pulse 2s infinite;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0, 214, 143, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 12px 40px rgba(0, 214, 143, 0.5); }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        .logo img {
-            width: 70%;
-            height: 70%;
-            object-fit: contain;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo-icon {
-            font-size: 3rem;
             color: var(--white);
-            position: relative;
-            z-index: 1;
+            box-shadow: 0 8px 30px rgba(0, 214, 143, 0.4);
         }
 
         .app-name {
@@ -149,13 +73,11 @@
             font-weight: 700;
             color: var(--black);
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
 
         .app-version {
             font-size: 0.9rem;
             color: var(--gray);
-            font-weight: 500;
             margin-bottom: 30px;
         }
 
@@ -175,13 +97,9 @@
             gap: 8px;
         }
 
-        .form-group label i {
-            color: var(--primary);
-        }
+        .form-group label i { color: var(--primary); }
 
-        .input-wrapper {
-            position: relative;
-        }
+        .input-wrapper { position: relative; }
 
         .input-wrapper i {
             position: absolute;
@@ -190,14 +108,13 @@
             transform: translateY(-50%);
             color: var(--gray);
             font-size: 1.1rem;
-            transition: 0.3s;
         }
 
         .form-group input {
             width: 100%;
             padding: 16px 16px 16px 48px;
             border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s;
             background: var(--gray-light);
@@ -210,15 +127,11 @@
             background: var(--white);
         }
 
-        .form-group input:focus + i {
-            color: var(--primary);
-        }
-
         .btn {
             width: 100%;
             padding: 16px 32px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 700;
             font-size: 1rem;
@@ -227,54 +140,19 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 10px;
-        }
-
-        .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: var(--white);
             box-shadow: 0 6px 20px rgba(0, 214, 143, 0.4);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 214, 143, 0.5);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: var(--gray-light);
-            color: var(--gray);
-            border: 2px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-            color: var(--black);
-        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 214, 143, 0.5); }
 
         .message {
             margin-top: 20px;
             padding: 14px 18px;
-            border-radius: var(--radius-sm);
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 0.95rem;
             display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.error {
@@ -284,11 +162,17 @@
             display: block;
         }
 
-        .message.success {
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: rgba(0, 214, 143, 0.1);
             color: var(--primary-dark);
-            border: 1px solid rgba(0, 214, 143, 0.3);
-            display: block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 15px;
         }
 
         .divider {
@@ -325,101 +209,33 @@
             font-weight: 600;
             font-size: 0.95rem;
             padding: 12px 20px;
-            border-radius: var(--radius-sm);
+            border-radius: 12px;
             transition: all 0.3s;
             margin-top: 15px;
         }
 
-        .back-link:hover {
-            background: rgba(0, 71, 171, 0.1);
-            color: var(--secondary-dark);
-        }
+        .back-link:hover { background: rgba(0, 71, 171, 0.1); }
 
         .footer {
             margin-top: 35px;
             padding-top: 25px;
             border-top: 1px solid var(--border);
-        }
-
-        .footer-text {
             font-size: 0.85rem;
             color: var(--gray);
             line-height: 1.6;
         }
 
-        .footer-text strong {
-            color: var(--black);
-        }
-
-        .footer-text a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer-text a:hover {
-            text-decoration: underline;
-        }
-
-        .security-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 214, 143, 0.1);
-            color: var(--primary-dark);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: var(--white);
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 35px 25px;
-            }
-
-            .logo {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
-            }
-
-            .app-name {
-                font-size: 1.3rem;
-            }
-
-            body {
-                padding: 15px;
-            }
-        }
+        .footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-card">
-            <div class="logo-container">
-                <div class="logo">
-                    <img src="logo-192.png" alt="TOMSTUDIO Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                    <i class="fas fa-bullseye logo-icon" style="display: none;"></i>
-                </div>
-                <h1 class="app-name">TOMSTUDIO BIZ HUB</h1>
-                <p class="app-version">Professional Operations Manager v4.0</p>
+            <div class="logo">
+                <i class="fas fa-cube"></i>
             </div>
+            <h1 class="app-name">TBOS v2.0</h1>
+            <p class="app-version">Admin Access Portal</p>
 
             <form id="admin-form" onsubmit="event.preventDefault(); checkAdmin();">
                 <div class="form-group">
@@ -428,18 +244,12 @@
                         Admin Password
                     </label>
                     <div class="input-wrapper">
-                        <input 
-                            type="password" 
-                            id="admin-pass" 
-                            placeholder="Enter admin password"
-                            autocomplete="current-password"
-                            required
-                        >
+                        <input type="password" id="admin-pass" placeholder="Enter admin password" required>
                         <i class="fas fa-lock"></i>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="submit-btn">
+                <button type="submit" class="btn" id="submit-btn">
                     <i class="fas fa-sign-in-alt"></i>
                     <span>Access Dashboard</span>
                 </button>
@@ -462,19 +272,15 @@
             </a>
 
             <div class="footer">
-                <p class="footer-text">
-                    <strong><i class="fas fa-code"></i> Built by TOMSTUDIO TECH ACADEMY</strong><br>
-                    Version 4.0 | Professional Operations Manager<br>
-                    <i class="fas fa-phone-alt"></i> 
-                    <a href="tel:+2348030827417">+234 803 082 7417</a>
-                </p>
+                <strong><i class="fas fa-code"></i> Built by Tomstudio Tech Academy</strong><br>
+                TBOS v2.0 | Professional Operations Manager<br>
+                <i class="fas fa-phone-alt"></i> 
+                <a href="tel:+2348030827417">+234 803 082 7417</a>
             </div>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = '@admin123#';
-
         function checkAdmin() {
             const pass = document.getElementById('admin-pass').value;
             const message = document.getElementById('message');
@@ -483,24 +289,23 @@
             message.className = 'message';
             message.style.display = 'none';
 
-            if (pass === ADMIN_PASSWORD) {
+            if (pass === '@admin123#') {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="spinner"></span> <span>Accessing...</span>';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Accessing...</span>';
 
                 sessionStorage.setItem('ts_admin_session', JSON.stringify({
                     role: 'admin',
                     hub: 'Head Office',
-                    branch: 'HQ-1',
                     name: 'Super Admin',
                     staffId: 'ADMIN-001',
-                    portfolio: 'Super Admin | Head Office | Administrator',
-                    isAuthorizer: true,
-                    authorizerLevel: 'full',
-                    isAdmin: true,
-                    loginTime: new Date().toISOString()
+                    portfolio: 'Super Admin | Head Office',
+                    isAdmin: true
                 }));
 
-                message.className = 'message success';
+                message.className = 'message';
+                message.style.background = 'rgba(0, 214, 143, 0.1)';
+                message.style.color = '#00b87a';
+                message.style.border = '1px solid rgba(0, 214, 143, 0.3)';
                 message.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting...';
                 message.style.display = 'block';
 
@@ -509,7 +314,7 @@
                 }, 1500);
             } else {
                 message.className = 'message error';
-                message.innerHTML = '<i class="fas fa-times-circle"></i> Invalid admin password. Please try again.';
+                message.innerHTML = '<i class="fas fa-times-circle"></i> Invalid admin password.';
                 message.style.display = 'block';
 
                 const input = document.getElementById('admin-pass');
@@ -534,20 +339,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('admin-pass').focus();
-        });
-
-        window.addEventListener('beforeunload', () => {
-            const session = sessionStorage.getItem('ts_admin_session');
-            if (session) {
-                const data = JSON.parse(session);
-                const loginTime = new Date(data.loginTime);
-                const now = new Date();
-                const diff = now - loginTime;
-                
-                if (diff > 30 * 60 * 1000) {
-                    sessionStorage.removeItem('ts_admin_session');
-                }
-            }
         });
     </script>
 </body>
