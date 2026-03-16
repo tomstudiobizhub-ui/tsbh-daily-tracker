@@ -1,38 +1,14 @@
 {
-    "name": "TOMSTUDIO BIZ HUB",
-    "short_name": "TOMSTUDIO Tasks",
-    "description": "Professional Job Tracking & Operations Manager v4.0",
-    "start_url": "./index.html",
-    "display": "standalone",
-    "background_color": "#007BFF",
-    "theme_color": "#007BFF",
-    "orientation": "portrait",
-    "scope": "./",
-    "icons": [
-        {
-            "src": "logo-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "logo-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "logo-maskable-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "logo-maskable-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
-        }
+  "name": "TBOS v2.0",
+  "short_name": "TBOS",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/800080/FFFFFF?text=TBOS",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
     ],
     "lang": "en-US",
     "dir": "ltr",
