@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TBOS v2.0 | Tomstudio BizHub Operations System</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#00D68F">
-    <meta name="description" content="TBOS v2.0 - Track, Record, Route, Report, Improve">
+    <meta name="theme-color" content="#800080">
     <link rel="icon" type="image/png" href="logo-192.png">
     
-    <!-- Firebase SDK -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -18,7 +17,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Chart.js for Analytics -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- QR Code & PDF -->
@@ -27,154 +26,145 @@
     
     <style>
         :root {
-            /* Default Theme (Tech Academy - Purple) */
             --primary: #800080;
             --primary-dark: #660066;
-            --primary-light: #993299;
             --secondary: #0047AB;
             --white: #ffffff;
             --black: #0a0a0a;
             --gray: #666666;
             --gray-light: #f5f5f5;
-            --gray-dark: #2d2d2d;
             --border: #e0e0e0;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
-            --radius: 16px;
-            --radius-sm: 12px;
-            --sidebar-width: 260px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --sidebar-width: 250px;
         }
 
-        /* Hub Specific Themes */
-        [data-hub="Online Shop"] { --primary: #008080; --primary-dark: #006666; --primary-light: #339999; }
-        [data-hub="Graphics Design"] { --primary: #0000FF; --primary-dark: #0000CC; --primary-light: #3333FF; }
-        [data-hub="Printing"] { --primary: #FF0000; --primary-dark: #CC0000; --primary-light: #FF3333; }
-        [data-hub="Photography"] { --primary: #FFD700; --primary-dark: #CCAC00; --primary-light: #FFE033; --black: #222; }
-        [data-hub="CBT Center"] { --primary: #4B0082; --primary-dark: #3A0066; --primary-light: #660099; }
-        [data-hub="Tech Lab"] { --primary: #00FFFF; --primary-dark: #00CCCC; --primary-light: #33FFFF; --black: #222; }
-        [data-hub="Gadgets"] { --primary: #FFA500; --primary-dark: #CC8400; --primary-light: #FFB833; }
-        [data-hub="Other Services"] { --primary: #808080; --primary-dark: #666666; --primary-light: #999999; }
+        /* Hub Themes */
+        [data-hub="Online Shop"] { --primary: #008080; --primary-dark: #006666; }
+        [data-hub="Graphics Design"] { --primary: #0000FF; --primary-dark: #0000CC; }
+        [data-hub="Printing"] { --primary: #FF0000; --primary-dark: #CC0000; }
+        [data-hub="Photography"] { --primary: #FFD700; --primary-dark: #CCAC00; }
+        [data-hub="CBT Center"] { --primary: #4B0082; --primary-dark: #3A0066; }
+        [data-hub="Tech Lab"] { --primary: #00FFFF; --primary-dark: #00CCCC; }
+        [data-hub="Tech Academy"] { --primary: #800080; --primary-dark: #660066; }
+        [data-hub="Gadgets"] { --primary: #FFA500; --primary-dark: #CC8400; }
 
         [data-theme="dark"] {
             --white: #1a1a1a;
             --black: #f5f5f5;
             --gray-light: #2d2d2d;
             --border: #404040;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: var(--gray-light);
             color: var(--black);
             min-height: 100vh;
-            transition: all 0.3s ease;
             overflow-x: hidden;
         }
 
-        /* LOGIN PAGE */
+        /* LOGIN - COMPACT & PROFESSIONAL */
         .login-page {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             padding: 20px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            position: relative;
-        }
-
-        .login-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 450px;
-            animation: slideUp 0.6s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-card {
             background: var(--white);
-            border-radius: 24px;
-            padding: 45px 35px;
-            box-shadow: var(--shadow-lg);
+            border-radius: var(--radius);
+            padding: 35px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
         .login-logo {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 24px;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 3rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            margin: 0 auto 15px;
+            font-size: 2.5rem;
+            color: var(--white);
         }
 
         .login-header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: 700;
             color: var(--black);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .login-header p {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+        }
+
+        .login-toggle {
+            display: flex;
+            background: var(--gray-light);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .login-toggle button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-toggle button.active {
+            background: var(--primary);
+            color: var(--white);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: var(--black);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-group label i {
-            color: var(--primary);
+            font-size: 0.85rem;
         }
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 14px 16px 14px 45px;
+            padding: 12px 12px 12px 40px;
             border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s;
+            border-radius: 8px;
+            font-size: 0.95rem;
             background: var(--gray-light);
             color: var(--black);
         }
 
         .form-group textarea {
-            padding: 14px 16px;
+            padding: 12px;
             min-height: 100px;
             resize: vertical;
         }
@@ -182,84 +172,71 @@
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
-            background: var(--white);
         }
 
         .form-group .input-icon {
             position: absolute;
-            left: 16px;
-            top: 40px;
+            left: 14px;
+            top: 38px;
             color: var(--gray);
-            font-size: 1.1rem;
         }
 
         .btn {
-            padding: 14px 28px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            width: 100%;
+            gap: 8px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, #00D68F, #00b87a);
-            color: var(--white);
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-            color: var(--white);
-        }
-
-        .btn-sm { padding: 10px 16px; font-size: 0.85rem; width: auto; }
-        .btn-block { width: 100%; }
 
         .login-footer {
             text-align: center;
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 2px solid var(--border);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--gray);
         }
 
         .login-footer a {
             color: var(--primary);
             text-decoration: none;
-            font-weight: 600;
         }
 
         .login-msg {
-            margin-top: 18px;
-            text-align: center;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
             display: none;
+            text-align: center;
         }
 
         .login-msg.error {
-            background: rgba(220, 53, 69, 0.1);
+            background: rgba(220,53,69,0.1);
             color: #dc3545;
-            border: 1px solid rgba(220, 53, 69, 0.3);
+            display: block;
+        }
+
+        .login-msg.success {
+            background: rgba(0,214,143,0.1);
+            color: #00b87a;
             display: block;
         }
 
@@ -271,458 +248,299 @@
 
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            background: linear-gradient(180deg, #0a0a0a, #1a1a1a);
             color: var(--white);
-            padding: 25px 20px;
+            padding: 20px;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            z-index: 100;
             border-right: 3px solid var(--primary);
-            transition: transform 0.3s ease;
+            z-index: 1000;
         }
 
         .sidebar-header {
             text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .sidebar-close {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 0;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 5px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 15px;
         }
 
         .sidebar-logo {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 18px;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 2rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 10px;
+            font-size: 1.8rem;
+            color: var(--white);
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .sidebar-header p {
+            font-size: 0.7rem;
+            opacity: 0.7;
         }
 
         .sidebar-menu {
             list-style: none;
-            margin-bottom: 20px;
         }
 
         .sidebar-menu li {
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .sidebar-menu button {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             background: transparent;
             border: none;
             color: rgba(255,255,255,0.8);
             text-align: left;
             cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s;
+            border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            gap: 10px;
+            font-size: 0.85rem;
         }
 
         .sidebar-menu button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-            transform: translateX(5px);
+            background: rgba(255,255,255,0.1);
         }
 
         .sidebar-menu button.active {
             background: var(--primary);
             color: var(--white);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .sidebar-menu button i {
-            width: 20px;
-            text-align: center;
         }
 
         .sidebar-menu .menu-category {
             font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
             color: rgba(255,255,255,0.5);
-            padding: 12px 16px 6px;
+            padding: 10px 14px 5px;
             font-weight: 700;
-        }
-
-        .sidebar-footer {
-            padding-top: 20px;
-            border-top: 2px solid rgba(255,255,255,0.1);
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-            padding: 12px;
+            gap: 10px;
+            padding: 10px;
             background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 10px;
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
         }
 
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
-            padding: 25px;
-            background: var(--gray-light);
+            padding: 20px;
             min-height: 100vh;
-            transition: margin-left 0.3s ease;
         }
 
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 1px solid var(--border);
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
 
         .top-bar h1 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--black);
         }
 
         .top-actions {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            gap: 8px;
         }
 
         .theme-toggle, .notification-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
             border: none;
             background: var(--white);
-            color: var(--black);
             cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.3s;
+            font-size: 1rem;
             box-shadow: var(--shadow);
         }
 
         .card {
             background: var(--white);
             border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
             box-shadow: var(--shadow);
-            padding: 22px;
-            margin-bottom: 22px;
-            border-left: 5px solid var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
         }
 
         .card h3 {
             color: var(--primary);
-            margin-bottom: 18px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.15rem;
-            font-weight: 700;
+            gap: 8px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 18px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
             background: var(--white);
             border-radius: var(--radius);
-            padding: 22px;
-            box-shadow: var(--shadow);
+            padding: 18px;
             text-align: center;
-            transition: all 0.3s;
-            border-bottom: 5px solid var(--primary);
+            border-bottom: 4px solid var(--primary);
+            box-shadow: var(--shadow);
         }
 
         .stat-card .icon {
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 1.5rem;
+            margin: 0 auto 10px;
+            font-size: 1.3rem;
             color: var(--white);
         }
 
         .stat-card .number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--black);
+            font-size: 1.8rem;
+            font-weight: 700;
         }
 
         .stat-card .label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--gray);
-            margin-top: 6px;
-            font-weight: 500;
-        }
-
-        .filter-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-            padding: 15px;
-            background: var(--gray-light);
-            border-radius: var(--radius-sm);
-        }
-
-        .filter-bar select, .filter-bar input {
-            padding: 10px 14px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.85rem;
-            background: var(--white);
-            color: var(--black);
-            min-width: 130px;
-            flex: 1;
+            margin-top: 5px;
         }
 
         .job-card {
             background: var(--white);
-            border-radius: var(--radius-sm);
-            padding: 16px;
+            border-radius: 8px;
+            padding: 14px;
             margin-bottom: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-            border-left: 5px solid var(--primary);
-            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
         }
 
         .job-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 8px;
         }
 
         .job-status {
-            padding: 5px 12px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 15px;
             font-size: 0.7rem;
             font-weight: 700;
             color: var(--white);
-            text-transform: uppercase;
         }
 
-        .status-pending { background: linear-gradient(135deg, #ffc107, #e0a800); color: var(--black); }
-        .status-in-progress { background: linear-gradient(135deg, var(--secondary), var(--primary-dark)); }
-        .status-review { background: linear-gradient(135deg, #6f42c1, #5a32a3); }
-        .status-delivered { background: linear-gradient(135deg, #00D68F, #00b87a); }
-        .status-cancelled { background: linear-gradient(135deg, #dc3545, #c82333); }
-        .status-delayed { background: linear-gradient(135deg, #dc3545, #c82333); animation: pulse-red 2s infinite; }
-
-        @keyframes pulse-red {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
+        .status-pending { background: #ffc107; color: var(--black); }
+        .status-in-progress { background: var(--secondary); }
+        .status-delivered { background: #00D68F; }
+        .status-delayed { background: #dc3545; }
 
         .job-meta {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--gray);
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+            margin: 4px 0;
         }
 
         .hub-badge {
-            padding: 3px 8px;
-            border-radius: 5px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--white);
-            background: var(--primary);
-        }
-
-        .tracking-id {
-            font-family: monospace;
-            background: var(--gray-light);
-            padding: 2px 6px;
+            padding: 2px 8px;
             border-radius: 4px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .mobile-menu-toggle {
-            display: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            border: none;
-            background: var(--white);
-            color: var(--black);
-            cursor: pointer;
-            font-size: 1.2rem;
-            box-shadow: var(--shadow);
-        }
-
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
+            font-size: 0.7rem;
+            background: var(--primary);
             color: var(--white);
         }
 
-        .hidden { display: none !important; }
-
-        .view-container {
-            animation: fadeIn 0.4s ease;
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        .filter-bar select, .filter-bar input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            background: var(--white);
+            flex: 1;
+            min-width: 120px;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: var(--white);
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Modal */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            backdrop-filter: blur(6px);
         }
 
         .modal-content {
             background: var(--white);
-            padding: 30px;
+            padding: 25px;
             border-radius: var(--radius);
-            max-width: 600px;
+            max-width: 500px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            color: var(--black);
-            box-shadow: var(--shadow-lg);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
         }
 
         .modal-close {
             background: none;
             border: none;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            color: var(--black);
-        }
-
-        /* ID Card */
-        .id-card-preview {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-            border-radius: 18px;
-            padding: 22px;
-            max-width: 400px;
-            margin: 22px auto;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .id-card-photo {
-            width: 100px;
-            height: 100px;
-            background: var(--white);
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 4px solid var(--white);
-        }
-
-        .id-card-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .notification {
@@ -730,134 +548,160 @@
             top: 20px;
             right: 20px;
             background: var(--white);
-            padding: 14px 18px;
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
             z-index: 9999;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.4s ease;
-            max-width: 350px;
-            color: var(--black);
-            border-left: 5px solid var(--primary);
+            font-size: 0.85rem;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        .hidden { display: none !important; }
 
-        .notification.success { border-left-color: #00D68F; }
-        .notification.error { border-left-color: #dc3545; }
-        .notification.warning { border-left-color: #ffc107; }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.active { transform: translateX(0); }
-            .sidebar-close { display: block; }
-            .main-content { margin-left: 0; }
-            .mobile-menu-toggle { display: block; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .filter-bar { flex-direction: column; }
-            .filter-bar select, .filter-bar input { width: 100%; }
-        }
-
-        @media (max-width: 480px) {
-            .login-card { padding: 35px 25px; }
-            .stats-grid { grid-template-columns: 1fr; }
-        }
-
-        /* Loading/Error States */
-        .loading-state, .error-state, .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--gray);
-        }
-        .loading-state i, .error-state i, .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        .error-state i { color: #dc3545; }
-
-        /* Footer */
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 15px;
+            margin-top: 30px;
             border-top: 1px solid var(--border);
+            font-size: 0.8rem;
             color: var(--gray);
+        }
+
+        /* Knowledge Center Cards */
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .knowledge-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .knowledge-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .knowledge-card p {
             font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(128,0,128,0.05);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            border: none;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { 
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.active { 
+                transform: translateX(0);
+            }
+            .main-content { 
+                margin-left: 0;
+                padding-top: 70px;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .stats-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
-        <div class="login-logo">
-            <img src="logo-192.png" alt="TBOS Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <i class="fas fa-cube" style="display: none; color: white;"></i>
-        </div>
-        <h2 style="font-size: 1.3rem; margin-bottom: 8px; font-weight: 700;">TBOS v2.0</h2>
-        <p style="opacity: 0.9; font-size: 0.85rem;">Tomstudio BizHub Operations System</p>
-        <p style="opacity: 0.7; font-size: 0.75rem; margin-top: 5px;">Track • Record • Route • Report • Improve</p>
-    </div>
-
-    <!-- Notification Container -->
-    <div id="notification-container"></div>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="document.getElementById('sidebar').classList.toggle('active')">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <!-- LOGIN PAGE -->
     <div id="login-page" class="login-page">
-        <div class="login-container">
-            <div class="login-card">
-                <div class="login-header">
-                    <div class="login-logo">
-                        <img src="logo-192.png" alt="TBOS Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                        <i class="fas fa-cube" style="display: none;"></i>
-                    </div>
-                    <h1>TBOS v2.0</h1>
-                    <p>Tomstudio BizHub Operations System</p>
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fas fa-cube"></i>
                 </div>
-
-                <form onsubmit="event.preventDefault(); app.login();">
-                    <div class="form-group">
-                        <label>
-                            <i class="fas fa-user-circle"></i>
-                            <span>Staff ID / Email / Phone</span>
-                        </label>
-                        <input type="text" id="login-id" placeholder="Enter your credentials">
-                        <i class="fas fa-user input-icon"></i>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <i class="fas fa-lock"></i>
-                            Password
-                        </label>
-                        <input type="password" id="login-pass" placeholder="Enter password" required>
-                        <i class="fas fa-lock input-icon"></i>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" id="submit-btn">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>Sign In</span>
-                    </button>
-                </form>
-
-                <div class="login-footer">
-                    <p style="margin-bottom: 10px; color: var(--gray); font-size: 0.85rem;">
-                        New Staff? <a href="#" onclick="app.showRegisterModal()">Register Here</a>
-                    </p>
-                    <p style="font-size: 0.75rem; color: var(--gray);">
-                        <i class="fas fa-info-circle"></i> Admin: Use email admin@tbos.com
-                    </p>
-                </div>
-
-                <div id="login-msg" class="login-msg"></div>
+                <h1>TBOS v2.0</h1>
+                <p>Tomstudio BizHub Operations System</p>
+                <p style="font-size: 0.75rem; margin-top: 5px;">Track • Record • Route • Report • Improve</p>
             </div>
+
+            <div class="login-toggle">
+                <button id="staff-login-btn" class="active" onclick="app.setLoginType('staff')">
+                    <i class="fas fa-user"></i> Staff
+                </button>
+                <button id="admin-login-btn" onclick="app.setLoginType('admin')">
+                    <i class="fas fa-shield-alt"></i> Admin
+                </button>
+            </div>
+
+            <form onsubmit="event.preventDefault(); app.login();">
+                <div class="form-group" id="staff-id-group">
+                    <label>Staff ID / Email / Phone</label>
+                    <input type="text" id="login-id" placeholder="Enter credentials">
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-pass" placeholder="Enter password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>New Staff? <a href="#" onclick="app.showRegisterModal()">Register Here</a></p>
+                <p style="margin-top: 8px;">Admin: admin@tbos.com | @admin123#</p>
+            </div>
+
+            <div id="login-msg" class="login-msg"></div>
         </div>
     </div>
 
@@ -865,12 +709,8 @@
     <div id="app-container" class="app-container hidden">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <button class="sidebar-close" onclick="document.getElementById('sidebar').classList.remove('active')">
-                    <i class="fas fa-times"></i>
-                </button>
                 <div class="sidebar-logo">
-                    <img src="logo-192.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                    <i class="fas fa-cube" style="display: none; color: white;"></i>
+                    <i class="fas fa-cube"></i>
                 </div>
                 <h2>TBOS v2.0</h2>
                 <p>Operations System</p>
@@ -878,71 +718,29 @@
 
             <ul class="sidebar-menu">
                 <div class="menu-category">Main</div>
-                <li>
-                    <button class="active" onclick="app.showView('dashboard')">
-                        <i class="fas fa-home"></i> Dashboard
-                    </button>
-                </li>
-                <li>
-                    <button onclick="app.showView('jobs')">
-                        <i class="fas fa-briefcase"></i> Jobs
-                    </button>
-                </li>
-                <li>
-                    <button onclick="app.showView('new-job')">
-                        <i class="fas fa-plus-circle"></i> New Job
-                    </button>
-                </li>
-                <li>
-                    <button onclick="app.showView('reports')">
-                        <i class="fas fa-clipboard-list"></i> Reports
-                    </button>
-                </li>
-                <li>
-                    <button onclick="app.showView('inventory')">
-                        <i class="fas fa-boxes"></i> Inventory
-                    </button>
-                </li>
-                <li>
-                    <button onclick="app.showView('knowledge')">
-                        <i class="fas fa-book"></i> Knowledge Center
-                    </button>
-                </li>
+                <li><button class="active" onclick="app.showView('dashboard')"><i class="fas fa-home"></i> Dashboard</button></li>
+                <li><button onclick="app.showView('jobs')"><i class="fas fa-briefcase"></i> Jobs</button></li>
+                <li><button onclick="app.showView('new-job')"><i class="fas fa-plus-circle"></i> New Job</button></li>
+                <li><button onclick="app.showView('reports')"><i class="fas fa-clipboard"></i> Reports</button></li>
+                <li><button onclick="app.showView('knowledge')"><i class="fas fa-book"></i> Knowledge Center</button></li>
 
-                <div class="menu-category hidden" id="admin-menu-category">Admin</div>
-                <li id="admin-staff-tab" class="hidden">
-                    <button onclick="app.showView('admin-staff')">
-                        <i class="fas fa-users-cog"></i> Staff Mgmt
-                    </button>
-                </li>
-                <li id="admin-approvals-tab" class="hidden">
-                    <button onclick="app.showView('admin-approvals')">
-                        <i class="fas fa-user-check"></i> Approvals
-                    </button>
-                </li>
-                <li id="admin-analytics-tab" class="hidden">
-                    <button onclick="app.showView('admin-analytics')">
-                        <i class="fas fa-chart-line"></i> Analytics
-                    </button>
-                </li>
-                <li id="admin-pricing-tab" class="hidden">
-                    <button onclick="app.showView('admin-pricing')">
-                        <i class="fas fa-tags"></i> Pricing
-                    </button>
-                </li>
+                <div class="menu-category hidden" id="admin-menu">Admin</div>
+                <li id="admin-staff" class="hidden"><button onclick="app.showView('staff')"><i class="fas fa-users"></i> Staff</button></li>
+                <li id="admin-approvals" class="hidden"><button onclick="app.showView('approvals')"><i class="fas fa-user-check"></i> Approvals</button></li>
+                <li id="admin-announcements" class="hidden"><button onclick="app.showView('announcements')"><i class="fas fa-bullhorn"></i> Announcements</button></li>
+                <li id="admin-files" class="hidden"><button onclick="app.showView('files')"><i class="fas fa-file-upload"></i> File Uploads</button></li>
+                <li id="admin-analytics" class="hidden"><button onclick="app.showView('analytics')"><i class="fas fa-chart-line"></i> Analytics</button></li>
             </ul>
 
-            <div class="sidebar-footer">
+            <div style="margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
                 <div class="user-info">
-                    <div class="user-avatar" id="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="user-details">
-                        <h4 id="user-name">User</h4>
-                        <p id="user-role">Role</p>
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div>
+                        <div style="font-size: 0.85rem; font-weight: 600;" id="user-name">User</div>
+                        <div style="font-size: 0.7rem; opacity: 0.7;" id="user-role">Role</div>
                     </div>
                 </div>
-                <button class="btn btn-danger btn-sm btn-block" onclick="app.logout()">
+                <button class="btn" style="background: #dc3545;" onclick="app.logout()">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
@@ -950,25 +748,20 @@
 
         <main class="main-content">
             <div class="top-bar">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <button class="mobile-menu-toggle" onclick="document.getElementById('sidebar').classList.add('active')">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 id="page-title">Dashboard</h1>
-                </div>
+                <h1 id="page-title">Dashboard</h1>
                 <div class="top-actions">
-                    <button class="notification-btn" onclick="app.showAnnouncements()">
+                    <button class="notification-btn" onclick="app.showNotifications()">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notification-badge">0</span>
+                        <span id="notif-count" style="position:absolute;top:-5px;right:-5px;background:#dc3545;color:white;font-size:0.6rem;padding:2px 6px;border-radius:10px;">0</span>
                     </button>
                     <button class="theme-toggle" onclick="app.toggleTheme()">
-                        <i class="fas fa-moon" id="theme-icon"></i>
+                        <i class="fas fa-moon"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Dashboard View -->
-            <div id="view-dashboard" class="view-container">
+            <!-- Dashboard -->
+            <div id="view-dashboard">
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="icon"><i class="fas fa-calendar-day"></i></div>
@@ -988,231 +781,254 @@
                     <div class="stat-card">
                         <div class="icon"><i class="fas fa-naira-sign"></i></div>
                         <div class="number" id="stat-revenue">₦0</div>
-                        <div class="label">Revenue (Today)</div>
+                        <div class="label">Revenue</div>
                     </div>
                 </div>
 
                 <div class="card">
                     <h3><i class="fas fa-bullhorn"></i> Announcements</h3>
-                    <div id="dashboard-announcements"></div>
+                    <div id="announcements-list"></div>
                 </div>
 
                 <div class="card">
                     <h3><i class="fas fa-briefcase"></i> Recent Jobs</h3>
-                    <div id="recent-jobs-list"></div>
+                    <div id="recent-jobs"></div>
                 </div>
             </div>
 
-            <!-- Jobs View -->
-            <div id="view-jobs" class="view-container hidden">
+            <!-- Jobs -->
+            <div id="view-jobs" class="hidden">
                 <div class="card">
                     <h3><i class="fas fa-list"></i> Job Inventory</h3>
                     <div class="filter-bar">
-                        <input type="text" id="job-search" placeholder="🔍 Search by Client or Tracking ID..." onkeyup="app.renderJobs()">
-                        <select id="job-status-filter" onchange="app.renderJobs()">
+                        <input type="text" id="job-search" placeholder="Search..." onkeyup="app.renderJobs()">
+                        <select id="job-status" onchange="app.renderJobs()">
                             <option value="all">All Status</option>
                             <option value="pending">Pending</option>
                             <option value="in-progress">In Progress</option>
-                            <option value="review">Under Review</option>
                             <option value="delivered">Delivered</option>
-                            <option value="delayed">Delayed</option>
                         </select>
-                        <select id="job-hub-filter" onchange="app.renderJobs()">
+                        <select id="job-hub" onchange="app.renderJobs()">
                             <option value="all">All Hubs</option>
                             <option value="Tech Academy">Tech Academy</option>
                             <option value="Printing">Printing</option>
                             <option value="Photography">Photography</option>
-                            <option value="Gadgets">Gadgets</option>
-                            <option value="CBT Center">CBT Center</option>
-                            <option value="Tech Lab">Tech Lab</option>
-                            <option value="Online Shop">Online Shop</option>
                             <option value="Graphics Design">Graphics Design</option>
                         </select>
                     </div>
-                    <div id="all-jobs-list"></div>
+                    <div id="jobs-list"></div>
                 </div>
             </div>
 
-            <!-- New Job View -->
-            <div id="view-new-job" class="view-container hidden">
+            <!-- New Job -->
+            <div id="view-new-job" class="hidden">
                 <div class="card">
                     <h3><i class="fas fa-plus-circle"></i> Create New Job</h3>
                     <form onsubmit="event.preventDefault(); app.createJob();">
                         <div class="form-group">
-                            <label><i class="fas fa-user"></i> Client Name *</label>
-                            <input type="text" id="job-client" placeholder="Client full name" required>
-                            <i class="fas fa-user input-icon"></i>
+                            <label>Client Name *</label>
+                            <input type="text" id="job-client" required>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-phone"></i> Mobile Contact *</label>
-                            <input type="tel" id="job-client-contact" placeholder="Phone number" required>
-                            <i class="fas fa-phone input-icon"></i>
+                            <label>Mobile Contact *</label>
+                            <input type="tel" id="job-contact" required>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-tag"></i> Job Category *</label>
-                            <select id="job-category" required>
-                                <option value="">Select Category...</option>
-                                <option value="Design">Design</option>
-                                <option value="Print">Print</option>
-                                <option value="Photo">Photography</option>
-                                <option value="Tech">Technical Support</option>
-                                <option value="Sales">Sales</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-building"></i> Department Responsible *</label>
-                            <select id="job-hub" required>
+                            <label>Hub *</label>
+                            <select id="job-hub-select" required>
                                 <option value="">Select Hub...</option>
                                 <option value="Tech Academy">Tech Academy</option>
                                 <option value="Printing">Printing</option>
                                 <option value="Photography">Photography</option>
-                                <option value="Gadgets">Gadgets</option>
-                                <option value="CBT Center">CBT Center</option>
-                                <option value="Tech Lab">Tech Lab</option>
-                                <option value="Online Shop">Online Shop</option>
                                 <option value="Graphics Design">Graphics Design</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-align-left"></i> Job Description *</label>
-                            <textarea id="job-details" placeholder="Detailed job description" required></textarea>
+                            <label>Description *</label>
+                            <textarea id="job-details" rows="3" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-naira-sign"></i> Job Amount (₦) *</label>
-                            <input type="number" id="job-amount" placeholder="0.00" required>
-                            <i class="fas fa-naira-sign input-icon"></i>
+                            <label>Amount (₦) *</label>
+                            <input type="number" id="job-amount" required>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-money-bill-wave"></i> Payment Received (₦)</label>
-                            <input type="number" id="job-payment" placeholder="0.00" value="0">
-                            <i class="fas fa-money-bill-wave input-icon"></i>
+                            <label>Payment Received (₦)</label>
+                            <input type="number" id="job-payment" value="0">
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-calendar"></i> Delivery Date *</label>
+                            <label>Delivery Date *</label>
                             <input type="date" id="job-due" required>
-                            <i class="fas fa-calendar input-icon"></i>
                         </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-file-upload"></i> Upload Files</label>
-                            <input type="file" id="job-files" multiple>
-                        </div>
-                        <button type="submit" class="btn btn-success btn-block">
-                            <i class="fas fa-check-circle"></i> Create Job & Generate Tracking ID
+                        <button type="submit" class="btn">
+                            <i class="fas fa-check-circle"></i> Create Job
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- Reports View -->
-            <div id="view-reports" class="view-container hidden">
+            <!-- Reports -->
+            <div id="view-reports" class="hidden">
                 <div class="card">
-                    <h3><i class="fas fa-file-alt"></i> My Reports</h3>
-                    <div id="my-reports-list"></div>
-                </div>
-            </div>
-
-            <!-- Inventory View -->
-            <div id="view-inventory" class="view-container hidden">
-                <div class="card">
-                    <h3><i class="fas fa-boxes"></i> Inventory Management</h3>
-                    <div class="form-group">
-                        <label>Item Name</label>
-                        <input type="text" id="inv-name" placeholder="e.g. A4 Paper Ream">
+                    <h3><i class="fas fa-clipboard"></i> My Reports</h3>
+                    <div class="form-group" id="admin-report-section">
+                        <label>Create New Report</label>
+                        <textarea id="report-content" rows="3" placeholder="Write your report..."></textarea>
+                        <button class="btn" onclick="app.createReport()" style="margin-top:10px;">
+                            <i class="fas fa-plus"></i> Submit Report
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label>Stock Level</label>
-                        <input type="number" id="inv-stock" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Reorder Alert Level</label>
-                        <input type="number" id="inv-alert" placeholder="10">
-                    </div>
-                    <button class="btn btn-primary btn-block" onclick="app.addInventoryItem()">
-                        <i class="fas fa-plus"></i> Add Item
-                    </button>
-                    <div id="inventory-list" style="margin-top: 20px;"></div>
+                    <div id="reports-list"></div>
                 </div>
             </div>
 
             <!-- Knowledge Center -->
-            <div id="view-knowledge" class="view-container hidden">
+            <div id="view-knowledge" class="hidden">
                 <div class="card">
                     <h3><i class="fas fa-book"></i> Knowledge Center</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                        <div class="card" style="margin:0; border-left-color: var(--secondary);">
+                    <div class="knowledge-grid">
+                        <div class="knowledge-card">
                             <h4><i class="fas fa-info-circle"></i> Help Center</h4>
-                            <p style="font-size: 0.9rem; color: var(--gray); margin-top: 10px;">User guides and troubleshooting for TBOS v2.0.</p>
-                            <button class="btn btn-sm btn-primary" style="margin-top: 10px;">Open Guide</button>
+                            <p>User guides and troubleshooting for TBOS v2.0</p>
+                            <button class="btn btn-sm" onclick="app.openHelpCenter()">
+                                <i class="fas fa-external-link-alt"></i> Open Guide
+                            </button>
                         </div>
-                        <div class="card" style="margin:0; border-left-color: var(--primary);">
+                        <div class="knowledge-card">
                             <h4><i class="fas fa-clipboard-check"></i> Job SOP Guides</h4>
-                            <p style="font-size: 0.9rem; color: var(--gray); margin-top: 10px;">Standard Operating Procedures for all hubs.</p>
-                            <button class="btn btn-sm btn-primary" style="margin-top: 10px;">View SOPs</button>
+                            <p>Standard Operating Procedures for all hubs</p>
+                            <button class="btn btn-sm" onclick="app.openSOPs()">
+                                <i class="fas fa-download"></i> View SOPs
+                            </button>
                         </div>
-                        <div class="card" style="margin:0; border-left-color: var(--secondary);">
+                        <div class="knowledge-card">
+                            <h4><i class="fas fa-graduation-cap"></i> Course Catalogue</h4>
+                            <p>Tomstudio Tech Academy courses and fees</p>
+                            <button class="btn btn-sm" onclick="app.openCourses()">
+                                <i class="fas fa-download"></i> View Courses
+                            </button>
+                        </div>
+                        <div class="knowledge-card">
+                            <h4><i class="fas fa-tags"></i> Price List</h4>
+                            <p>Updated pricing for all services</p>
+                            <button class="btn btn-sm" onclick="app.openPrices()">
+                                <i class="fas fa-download"></i> View Prices
+                            </button>
+                        </div>
+                        <div class="knowledge-card">
                             <h4><i class="fas fa-building"></i> About TBOS</h4>
-                            <p style="font-size: 0.9rem; color: var(--gray); margin-top: 10px;">Information about Tomstudio BizHub and TBOS.</p>
-                            <button class="btn btn-sm btn-primary" style="margin-top: 10px;">Learn More</button>
+                            <p>Information about Tomstudio BizHub and TBOS</p>
+                            <button class="btn btn-sm" onclick="app.openAbout()">
+                                <i class="fas fa-info-circle"></i> Learn More
+                            </button>
+                        </div>
+                        <div class="knowledge-card" id="files-card">
+                            <h4><i class="fas fa-folder-open"></i> Hub Files</h4>
+                            <p>Download documents and resources</p>
+                            <button class="btn btn-sm" onclick="app.showView('files')">
+                                <i class="fas fa-download"></i> Browse Files
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Admin Staff View -->
-            <div id="view-admin-staff" class="view-container hidden">
+            <!-- Staff -->
+            <div id="view-staff" class="hidden">
                 <div class="card">
                     <h3><i class="fas fa-users"></i> Staff Directory</h3>
                     <div id="staff-list"></div>
                 </div>
             </div>
 
-            <!-- Admin Approvals View -->
-            <div id="view-admin-approvals" class="view-container hidden">
+            <!-- Approvals -->
+            <div id="view-approvals" class="hidden">
                 <div class="card">
                     <h3><i class="fas fa-user-check"></i> Staff Approvals</h3>
-                    <div id="pending-staff-list"></div>
+                    <div id="approvals-list"></div>
                 </div>
                 <div class="card">
-                    <h3><i class="fas fa-id-card"></i> ID Card Generation</h3>
-                    <div class="form-group">
-                        <label>Select Staff</label>
-                        <select id="idcard-staff-select" onchange="app.previewIDCard()">
-                            <option value="">Choose staff member...</option>
-                        </select>
-                    </div>
-                    <div id="id-card-preview"></div>
-                    <button class="btn btn-success btn-block" onclick="app.downloadIDCard()">
-                        <i class="fas fa-download"></i> Download ID Card as PDF
+                    <h3><i class="fas fa-id-card"></i> ID Cards</h3>
+                    <select id="idcard-select" onchange="app.previewIDCard()" style="width:100%;padding:10px;margin-bottom:15px;">
+                        <option value="">Select Staff...</option>
+                    </select>
+                    <div id="idcard-preview"></div>
+                    <button class="btn" onclick="app.downloadIDCard()" style="margin-top:15px;">
+                        <i class="fas fa-download"></i> Download PDF
                     </button>
                 </div>
             </div>
 
-            <!-- Admin Analytics View -->
-            <div id="view-admin-analytics" class="view-container hidden">
+            <!-- Announcements -->
+            <div id="view-announcements" class="hidden">
                 <div class="card">
-                    <h3><i class="fas fa-chart-pie"></i> Analytics Dashboard</h3>
-                    <div style="height: 300px; margin-bottom: 20px;">
-                        <canvas id="hubChart"></canvas>
+                    <h3><i class="fas fa-bullhorn"></i> Create Announcement</h3>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="announce-msg" rows="3" placeholder="Enter announcement..."></textarea>
                     </div>
-                    <div style="height: 300px;">
-                        <canvas id="revenueChart"></canvas>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="announce-type">
+                            <option value="info">Information</option>
+                            <option value="warning">Warning</option>
+                            <option value="alert">Alert</option>
+                            <option value="success">Success</option>
+                        </select>
                     </div>
+                    <div class="form-group">
+                        <label>Target Hub</label>
+                        <select id="announce-hub">
+                            <option value="all">All Hubs</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="app.postAnnouncement()">
+                        <i class="fas fa-paper-plane"></i> Post Announcement
+                    </button>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-history"></i> All Announcements</h3>
+                    <div id="all-announcements"></div>
                 </div>
             </div>
 
-            <!-- Admin Pricing View -->
-            <div id="view-admin-pricing" class="view-container hidden">
+            <!-- File Uploads -->
+            <div id="view-files" class="hidden">
                 <div class="card">
-                    <h3><i class="fas fa-tags"></i> Pricing Management</h3>
-                    <p style="color: var(--gray); margin-bottom: 15px;">Review and approve pricing updates from hubs.</p>
-                    <div id="pricing-list"></div>
+                    <h3><i class="fas fa-file-upload"></i> Upload Files</h3>
+                    <p style="color:var(--gray);font-size:0.85rem;margin-bottom:15px;">Admin can upload documents for all hubs to view/download</p>
+                    <div class="file-upload-area" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:var(--primary);"></i>
+                        <p style="margin-top:10px;">Click to upload file</p>
+                        <small style="color:var(--gray);">PDF, DOC, Images supported</small>
+                    </div>
+                    <input type="file" id="file-input" style="display:none;" onchange="app.uploadFile()">
+                    <div id="upload-status"></div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-folder"></i> Uploaded Files</h3>
+                    <div id="files-list"></div>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div id="view-analytics" class="hidden">
+                <div class="card">
+                    <h3><i class="fas fa-chart-pie"></i> Analytics</h3>
+                    <canvas id="hubChart" style="max-height:300px;"></canvas>
                 </div>
             </div>
         </main>
+
+        <footer>
+            TBOS v2.0 | Built by Tomstudio Tech Academy | Contact: +234 803 082 7417
+        </footer>
     </div>
 
-    <!-- Registration Modal -->
+    <!-- Register Modal -->
     <div id="register-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -1233,16 +1049,12 @@
                     <input type="tel" id="reg-phone" required>
                 </div>
                 <div class="form-group">
-                    <label>Department / Hub *</label>
+                    <label>Hub *</label>
                     <select id="reg-hub" required>
                         <option value="">Select Hub...</option>
                         <option value="Tech Academy">Tech Academy</option>
                         <option value="Printing">Printing</option>
                         <option value="Photography">Photography</option>
-                        <option value="Gadgets">Gadgets</option>
-                        <option value="CBT Center">CBT Center</option>
-                        <option value="Tech Lab">Tech Lab</option>
-                        <option value="Online Shop">Online Shop</option>
                         <option value="Graphics Design">Graphics Design</option>
                     </select>
                 </div>
@@ -1251,78 +1063,43 @@
                     <select id="reg-role" required>
                         <option value="Staff">Staff</option>
                         <option value="Manager">Manager</option>
-                        <option value="Secretary">Secretary</option>
-                        <option value="Executive Director">Executive Director</option>
                         <option value="Admin">Admin</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Address</label>
-                    <input type="text" id="reg-address">
-                </div>
-                <div class="form-group">
-                    <label>Staff Photo</label>
-                    <input type="file" id="reg-photo" accept="image/*">
-                    <small style="color: var(--gray);">Upload or use camera</small>
-                </div>
-                <div class="form-group">
                     <label>Password *</label>
-                    <input type="password" id="reg-pass" required>
+                    <input type="password" id="reg-pass" required minlength="6">
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="fas fa-check-circle"></i> Register Staff
-                </button>
+                <button type="submit" class="btn">Register</button>
             </form>
         </div>
     </div>
-  <footer>
-            TBOS v2.0 | Built by Tomstudio Tech Academy
-        </footer>
+
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAVqFiFiSwNhnMpeuv_KNJyUhby_CmX0Nw",
-            authDomain: "tsbh-daily-performance-tracker.firebaseapp.com",
-            projectId: "tsbh-daily-performance-tracker",
-            storageBucket: "tsbh-daily-performance-tracker.firebasestorage.app",
-            messagingSenderId: "829971849666",
-            appId: "1:829971849666:web:fdcab382fa3e46f8ea365b",
-            measurementId: "G-BPQPQ7V9JC"
-        };
+        // Firebase Configuration - NEW PRODUCTION PROJECT
+       const firebaseConfig = {
+    apiKey: "AIzaSyAVqFiFiSwNhnMpeuv_KNJyUhby_CmX0Nw",
+    authDomain: "tsbh-daily-performance-tracker.firebaseapp.com",
+    projectId: "tsbh-daily-performance-tracker",
+    storageBucket: "tsbh-daily-performance-tracker.firebasestorage.app",
+    messagingSenderId: "829971849666",
+    appId: "1:829971849666:web:fdcab382fa3e46f8ea365b",
+    measurementId: "G-BPQPQ7V9JC"
+};
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         const storage = firebase.storage();
 
-        // Add this after Firebase initialization
-firebase.firestore().enablePersistence()
-    .catch((err) => {
-        if (err.code == 'failed-precondition') {
-            console.warn('Persistence failed: Multiple tabs open');
-        } else if (err.code == 'unimplemented') {
-            console.warn('Persistence not supported in this browser');
-        }
-    });
-
-// Test connection
-db.collection('jobs').limit(1).get()
-    .then(() => console.log('✅ Firebase Connected'))
-    .catch((err) => console.error('❌ Firebase Error:', err.message));
-
         const app = {
-            currentUser: null,
             userData: null,
-            hubChart: null,
-            revenueChart: null,
+            loginType: 'staff',
 
             init: () => {
                 console.log('🚀 TBOS v2.0 Initializing...');
                 
-                setTimeout(() => {
-                    document.getElementById('loading-screen').classList.add('hidden');
-                }, 2000);
-
-                const adminSession = sessionStorage.getItem('ts_admin_session');
+                const adminSession = sessionStorage.getItem('ts_admin');
                 if (adminSession) {
                     app.userData = JSON.parse(adminSession);
                     app.initializeApp();
@@ -1331,18 +1108,12 @@ db.collection('jobs').limit(1).get()
 
                 auth.onAuthStateChanged(async (user) => {
                     if (user) {
-                        try {
-                            const doc = await db.collection('users').doc(user.uid).get();
-                            if (doc.exists) {
-                                app.userData = doc.data();
-                                app.currentUser = user;
-                                app.initializeApp();
-                            } else {
-                                app.logout();
-                            }
-                        } catch (error) {
-                            console.error('Error loading user:', error);
-                            app.showNotification('Error loading user data', 'error');
+                        const doc = await db.collection('users').doc(user.uid).get();
+                        if (doc.exists) {
+                            app.userData = doc.data();
+                            app.initializeApp();
+                        } else {
+                            app.showLogin();
                         }
                     } else {
                         app.showLogin();
@@ -1354,19 +1125,21 @@ db.collection('jobs').limit(1).get()
                 document.getElementById('login-page').classList.add('hidden');
                 document.getElementById('app-container').classList.remove('hidden');
                 
-                // Apply Hub Theme
-                document.documentElement.setAttribute('data-hub', app.userData.hub);
+                if (app.userData.hub) {
+                    document.documentElement.setAttribute('data-hub', app.userData.hub);
+                }
                 
                 document.getElementById('user-name').innerText = app.userData.name;
                 document.getElementById('user-role').innerText = app.userData.role;
                 
-                const isAdmin = app.userData.role === 'admin' || sessionStorage.getItem('ts_admin_session');
-                if (isAdmin) {
-                    document.getElementById('admin-menu-category').classList.remove('hidden');
-                    document.getElementById('admin-staff-tab').classList.remove('hidden');
-                    document.getElementById('admin-approvals-tab').classList.remove('hidden');
-                    document.getElementById('admin-analytics-tab').classList.remove('hidden');
-                    document.getElementById('admin-pricing-tab').classList.remove('hidden');
+                if (app.userData.role === 'admin' || app.userData.isAdmin) {
+                    document.getElementById('admin-menu').classList.remove('hidden');
+                    document.getElementById('admin-staff').classList.remove('hidden');
+                    document.getElementById('admin-approvals').classList.remove('hidden');
+                    document.getElementById('admin-announcements').classList.remove('hidden');
+                    document.getElementById('admin-files').classList.remove('hidden');
+                    document.getElementById('admin-analytics').classList.remove('hidden');
+                    document.getElementById('admin-report-section').classList.remove('hidden');
                 }
 
                 app.showView('dashboard');
@@ -1388,294 +1161,220 @@ db.collection('jobs').limit(1).get()
                 const phone = document.getElementById('reg-phone').value;
                 const hub = document.getElementById('reg-hub').value;
                 const role = document.getElementById('reg-role').value;
-                const address = document.getElementById('reg-address').value;
                 const pass = document.getElementById('reg-pass').value;
-                const photoFile = document.getElementById('reg-photo').files[0];
 
                 try {
-                    const credential = await auth.createUserWithEmailAndPassword(email, pass);
-                    
-                    let photoURL = null;
-                    if (photoFile) {
-                        const photoRef = storage.ref(`staff_photos/${credential.user.uid}`);
-                        await photoRef.put(photoFile);
-                        photoURL = await photoRef.getDownloadURL();
-                    }
-
+                    const cred = await auth.createUserWithEmailAndPassword(email, pass);
                     const staffId = `TBOS-${Date.now().toString().slice(-6)}`;
-
-                    await db.collection('users').doc(credential.user.uid).set({
-                        name,
-                        email,
-                        phone,
-                        hub,
-                        role,
-                        address,
-                        staffId,
-                        portfolio: `${name} | ${hub} | ${role}`,
+                    
+                    await db.collection('users').doc(cred.user.uid).set({
+                        name, email, phone, hub, role, staffId,
                         approved: false,
-                        isAdmin: role === 'admin',
-                        passportPhoto: photoURL,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        isAdmin: role === 'admin'
                     });
 
-                    app.showNotification(`Registration successful! Staff ID: ${staffId}. Wait for Admin Approval.`, 'success');
+                    app.showNotification('Registration successful! Wait for approval.', 'success');
                     document.getElementById('register-modal').classList.add('hidden');
                 } catch (error) {
-                    app.showNotification('Registration error: ' + error.message, 'error');
+                    app.showNotification('Error: ' + error.message, 'error');
                 }
+            },
+
+            setLoginType: (type) => {
+                app.loginType = type;
+                document.getElementById('staff-login-btn').classList.toggle('active', type === 'staff');
+                document.getElementById('admin-login-btn').classList.toggle('active', type === 'admin');
+                document.getElementById('staff-id-group').classList.toggle('hidden', type === 'admin');
             },
 
             toggleTheme: () => {
                 const current = document.documentElement.getAttribute('data-theme');
-                const next = current === 'dark' ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', next);
-                localStorage.setItem('tsbh-theme', next);
-                app.showNotification(`Switched to ${next} mode`, 'info');
+                document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
             },
 
-            showView: (viewName) => {
-                document.querySelectorAll('.view-container').forEach(el => el.classList.add('hidden'));
-                document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            showView: (view) => {
+                document.querySelectorAll('.main-content > div[id^="view-"]').forEach(el => el.classList.add('hidden'));
+                document.getElementById(`view-${view}`).classList.remove('hidden');
                 
                 document.querySelectorAll('.sidebar-menu button').forEach(btn => btn.classList.remove('active'));
-                const activeBtn = document.querySelector(`.sidebar-menu button[onclick="app.showView('${viewName}')"]`);
+                const activeBtn = document.querySelector(`.sidebar-menu button[onclick="app.showView('${view}')"]`);
                 if (activeBtn) activeBtn.classList.add('active');
 
-                const titles = {
-                    'dashboard': 'Dashboard',
-                    'jobs': 'Job Inventory',
-                    'new-job': 'Create New Job',
-                    'reports': 'Reports',
-                    'inventory': 'Inventory',
-                    'knowledge': 'Knowledge Center',
-                    'admin-staff': 'Staff Management',
-                    'admin-approvals': 'Approvals & ID Cards',
-                    'admin-analytics': 'Analytics',
-                    'admin-pricing': 'Pricing Management'
-                };
-                document.getElementById('page-title').innerText = titles[viewName] || 'Dashboard';
-
+                // Close mobile menu
                 document.getElementById('sidebar').classList.remove('active');
 
-                if (viewName === 'dashboard') app.loadDashboard();
-                if (viewName === 'jobs') app.renderJobs();
-                if (viewName === 'reports') app.loadReports();
-                if (viewName === 'inventory') app.loadInventory();
-                if (viewName === 'admin-staff') app.renderStaffList();
-                if (viewName === 'admin-approvals') app.renderAdminApprovals();
-                if (viewName === 'admin-analytics') app.loadAnalytics();
+                const titles = { 
+                    'dashboard':'Dashboard', 
+                    'jobs':'Jobs', 
+                    'new-job':'New Job', 
+                    'reports':'Reports', 
+                    'knowledge':'Knowledge Center',
+                    'staff':'Staff', 
+                    'approvals':'Approvals', 
+                    'announcements':'Announcements',
+                    'files':'File Uploads',
+                    'analytics':'Analytics' 
+                };
+                document.getElementById('page-title').innerText = titles[view];
+
+                if (view === 'dashboard') app.loadDashboard();
+                if (view === 'jobs') app.renderJobs();
+                if (view === 'approvals') app.renderApprovals();
+                if (view === 'announcements') app.loadAnnouncements();
+                if (view === 'files') app.loadFiles();
+                if (view === 'analytics') app.loadAnalytics();
+                if (view === 'reports') app.loadReports();
             },
 
-            showNotification: (message, type = 'info') => {
-                const container = document.getElementById('notification-container');
-                const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.innerHTML = `
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                `;
-                container.appendChild(notification);
-                setTimeout(() => notification.remove(), 4500);
+            showNotification: (msg, type) => {
+                const n = document.createElement('div');
+                n.className = 'notification';
+                n.style.borderLeft = `4px solid ${type === 'success' ? '#00D68F' : '#dc3545'}`;
+                n.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+                document.body.appendChild(n);
+                setTimeout(() => n.remove(), 4000);
             },
 
             login: async () => {
                 const id = document.getElementById('login-id').value.trim();
                 const pass = document.getElementById('login-pass').value;
                 const msg = document.getElementById('login-msg');
-                const submitBtn = document.getElementById('submit-btn');
 
-                if (id === 'admin@tbos.com' && pass === '@admin123#') {
-                    const adminData = {
-                        role: 'admin',
-                        hub: 'Head Office',
-                        name: 'Super Admin',
-                        staffId: 'ADMIN-001',
-                        portfolio: 'Super Admin | Head Office',
-                        isAdmin: true
-                    };
-                    sessionStorage.setItem('ts_admin_session', JSON.stringify(adminData));
-                    app.userData = adminData;
-                    app.showNotification('Admin login successful!', 'success');
+                if (app.loginType === 'admin' && id === 'admin@tbos.com' && pass === '@admin123#') {
+                    const data = { role:'admin', hub:'Head Office', name:'Super Admin', staffId:'ADMIN-001', isAdmin:true };
+                    sessionStorage.setItem('ts_admin', JSON.stringify(data));
+                    app.userData = data;
                     app.initializeApp();
                     return;
                 }
 
-                if (!id || !pass) {
-                    msg.className = 'login-msg error';
-                    msg.innerHTML = '<i class="fas fa-times-circle"></i> Please enter credentials';
-                    msg.style.display = 'block';
-                    return;
-                }
-
-                msg.className = 'login-msg';
-                msg.innerHTML = '<span class="spinner"></span> Logging in...';
-                msg.style.display = 'block';
-                submitBtn.disabled = true;
-
                 try {
-                    let user = null;
-                    let userDoc = null;
-
+                    let user;
                     if (id.includes('@')) {
                         user = await auth.signInWithEmailAndPassword(id, pass);
-                        userDoc = await db.collection('users').doc(user.user.uid).get();
                     } else {
-                        const staffQuery = await db.collection('users').where('staffId', '==', id).get();
-                        if (staffQuery.empty) throw new Error('Staff ID not found');
-                        const userData = staffQuery.docs[0].data();
-                        user = await auth.signInWithEmailAndPassword(userData.email, pass);
-                        userDoc = staffQuery.docs[0];
+                        const q = await db.collection('users').where('staffId', '==', id).get();
+                        if (q.empty) throw new Error('Staff ID not found');
+                        const u = q.docs[0].data();
+                        user = await auth.signInWithEmailAndPassword(u.email, pass);
                     }
                     
-                    if (!userDoc || !userDoc.exists) throw new Error('User data not found');
-                    const userData = userDoc.data();
-                    if (!userData.approved) {
-                        await auth.signOut();
-                        throw new Error('Account pending Admin Approval');
-                    }
-
-                    app.userData = userData;
-                    app.currentUser = user.user;
-                    app.showNotification(`Welcome back, ${userData.name}!`, 'success');
+                    const doc = await db.collection('users').doc(user.user.uid).get();
+                    const data = doc.data();
+                    if (!data.approved) throw new Error('Account pending approval');
+                    
+                    app.userData = data;
                     app.initializeApp();
                 } catch (error) {
                     msg.className = 'login-msg error';
-                    msg.innerHTML = `<i class="fas fa-times-circle"></i> ${error.message}`;
-                    msg.style.display = 'block';
-                    submitBtn.disabled = false;
+                    msg.innerText = error.message;
                 }
             },
 
             logout: () => {
-                if (app.currentUser) auth.signOut();
-                sessionStorage.removeItem('ts_admin_session');
-                app.currentUser = null;
-                app.userData = null;
+                auth.signOut();
+                sessionStorage.removeItem('ts_admin');
                 app.showLogin();
-                app.showNotification('Logged out successfully', 'info');
             },
 
             loadDashboard: async () => {
                 const today = new Date();
-                today.setHours(0, 0, 0, 0);
+                today.setHours(0,0,0,0);
+                
+                const snap = await db.collection('jobs').get();
+                let t=0, p=0, d=0, r=0;
+                
+                snap.forEach(doc => {
+                    const j = doc.data();
+                    const jd = j.dateCreated?.toDate();
+                    if (jd >= today) { t++; r += (j.amount||0); }
+                    if (j.status === 'pending') p++;
+                    if (j.status === 'delivered') d++;
+                });
 
-                try {
-                    const jobsSnap = await db.collection('jobs').get();
-                    let todayCount = 0, deliveredCount = 0, pendingCount = 0, revenue = 0;
-                    
-                    jobsSnap.forEach(doc => {
-                        const job = doc.data();
-                        const jobDate = job.dateCreated?.toDate();
-                        if (jobDate && jobDate >= today) {
-                            todayCount++;
-                            revenue += (job.amount || 0);
-                        }
-                        if (job.status === 'delivered') deliveredCount++;
-                        if (job.status === 'pending') pendingCount++;
-                    });
+                document.getElementById('stat-today').innerText = t;
+                document.getElementById('stat-pending').innerText = p;
+                document.getElementById('stat-delivered').innerText = d;
+                document.getElementById('stat-revenue').innerText = '₦'+r.toLocaleString();
 
-                    document.getElementById('stat-today').innerText = todayCount;
-                    document.getElementById('stat-pending').innerText = pendingCount;
-                    document.getElementById('stat-delivered').innerText = deliveredCount;
-                    document.getElementById('stat-revenue').innerText = '₦' + revenue.toLocaleString();
-
-                    app.renderRecentJobs();
-                    app.loadAnnouncements();
-                } catch (error) {
-                    console.error('Dashboard error:', error);
-                }
+                app.renderRecentJobs();
+                app.loadAnnouncements();
             },
 
             renderRecentJobs: async () => {
-                const container = document.getElementById('recent-jobs-list');
-                try {
-                    const snapshot = await db.collection('jobs').orderBy('dateCreated', 'desc').limit(5).get();
-                    if (snapshot.empty) {
-                        container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No jobs yet</p></div>';
-                    } else {
-                        container.innerHTML = '';
-                        snapshot.forEach(doc => container.innerHTML += app.createJobCard(doc.id, doc.data()));
-                    }
-                } catch (error) {
-                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading jobs</p></div>';
+                const snap = await db.collection('jobs').orderBy('dateCreated','desc').limit(5).get();
+                const div = document.getElementById('recent-jobs');
+                
+                if (snap.empty) {
+                    div.innerHTML = '<p style="color:var(--gray);text-align:center;">No jobs yet</p>';
+                } else {
+                    div.innerHTML = '';
+                    snap.forEach(doc => {
+                        const j = doc.data();
+                        div.innerHTML += `
+                            <div class="job-card">
+                                <div class="job-header">
+                                    <strong>${j.trackingId || 'No ID'}</strong>
+                                    <span class="job-status status-${j.status}">${j.status}</span>
+                                </div>
+                                <div class="job-meta"><span class="hub-badge">${j.hub}</span> ${j.clientId}</div>
+                                <div class="job-meta">Due: ${j.dueDate} | ₦${j.amount}</div>
+                            </div>
+                        `;
+                    });
                 }
             },
 
             renderJobs: async () => {
                 const search = document.getElementById('job-search').value.toLowerCase();
-                const statusFilter = document.getElementById('job-status-filter').value;
-                const hubFilter = document.getElementById('job-hub-filter').value;
-                const container = document.getElementById('all-jobs-list');
-
-                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading jobs...</p></div>';
-
-                try {
-                    const snapshot = await db.collection('jobs').orderBy('dateCreated', 'desc').get();
-                    let jobs = [];
-                    snapshot.forEach(doc => jobs.push({ id: doc.id, ...doc.data() }));
-
-                    // Check for delayed jobs
-                    const now = new Date();
-                    jobs = jobs.map(job => {
-                        const due = new Date(job.dueDate);
-                        if (job.status !== 'delivered' && due < now) {
-                            job.status = 'delayed';
-                        }
-                        return job;
+                const status = document.getElementById('job-status').value;
+                const hub = document.getElementById('job-hub').value;
+                
+                const snap = await db.collection('jobs').get();
+                const div = document.getElementById('jobs-list');
+                div.innerHTML = '';
+                
+                let jobs = [];
+                snap.forEach(doc => jobs.push({id:doc.id, ...doc.data()}));
+                
+                if (search) jobs = jobs.filter(j => j.clientId?.toLowerCase().includes(search));
+                if (status !== 'all') jobs = jobs.filter(j => j.status === status);
+                if (hub !== 'all') jobs = jobs.filter(j => j.hub === hub);
+                
+                if (jobs.length === 0) {
+                    div.innerHTML = '<p style="color:var(--gray);text-align:center;">No jobs found</p>';
+                } else {
+                    jobs.forEach(j => {
+                        div.innerHTML += `
+                            <div class="job-card">
+                                <div class="job-header">
+                                    <strong>${j.trackingId || 'No ID'}</strong>
+                                    <span class="job-status status-${j.status}">${j.status}</span>
+                                </div>
+                                <div class="job-meta"><span class="hub-badge">${j.hub}</span> ${j.clientId} | ${j.clientContact}</div>
+                                <div class="job-meta">Due: ${j.dueDate} | ₦${j.amount} | Paid: ₦${j.payment}</div>
+                            </div>
+                        `;
                     });
-
-                    if (search) {
-                        jobs = jobs.filter(j => 
-                            j.clientId?.toLowerCase().includes(search) || 
-                            j.trackingId?.toLowerCase().includes(search)
-                        );
-                    }
-                    if (statusFilter !== 'all') jobs = jobs.filter(j => j.status === statusFilter);
-                    if (hubFilter !== 'all') jobs = jobs.filter(j => j.hub === hubFilter);
-
-                    if (jobs.length === 0) {
-                        container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No jobs found</p></div>';
-                    } else {
-                        container.innerHTML = '';
-                        jobs.forEach(job => container.innerHTML += app.createJobCard(job.id, job, true));
-                    }
-                } catch (error) {
-                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading jobs</p></div>';
                 }
             },
 
             createJob: async () => {
-                const client = document.getElementById('job-client').value.trim();
-                const clientContact = document.getElementById('job-client-contact').value.trim();
-                const category = document.getElementById('job-category').value;
-                const hub = document.getElementById('job-hub').value;
-                const details = document.getElementById('job-details').value.trim();
+                const client = document.getElementById('job-client').value;
+                const contact = document.getElementById('job-contact').value;
+                const hub = document.getElementById('job-hub-select').value;
+                const details = document.getElementById('job-details').value;
                 const amount = parseFloat(document.getElementById('job-amount').value) || 0;
                 const payment = parseFloat(document.getElementById('job-payment').value) || 0;
                 const due = document.getElementById('job-due').value;
 
-                if (!client || !clientContact || !hub || !details || !due) {
-                    app.showNotification('Please fill all required fields', 'error');
-                    return;
-                }
-
                 try {
-                    // Generate Tracking ID
-                    const countSnap = await db.collection('jobs').count().get();
-                    const trackingId = `TBOS-${(countSnap.data().count + 1).toString().padStart(6, '0')}`;
+                    const count = await db.collection('jobs').count().get();
+                    const trackingId = `TBOS-${(count.data().count+1).toString().padStart(6,'0')}`;
 
-                    // Check Incentive
-                    let incentive = 0;
-                    if (amount >= 5000) {
-                        incentive = 500;
-                        app.showNotification(`🎉 Bonus Eligible! ₦500 incentive for logging high-value job.`, 'success');
-                    }
-
-                    const jobData = {
+                    await db.collection('jobs').add({
                         clientId: client,
-                        clientContact,
-                        category,
+                        clientContact: contact,
                         hub,
                         details,
                         amount,
@@ -1683,282 +1382,427 @@ db.collection('jobs').limit(1).get()
                         balance: amount - payment,
                         dueDate: due,
                         trackingId,
-                        status: payment >= amount ? 'in-progress' : 'pending', // Must pay full to start
-                        assignedStaffId: app.userData.staffId,
-                        assignedStaffName: app.userData.name,
-                        incentive,
-                        dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
-                        route: [{ hub, status: 'logged', timestamp: new Date() }]
-                    };
+                        status: payment >= amount ? 'in-progress' : 'pending',
+                        staffId: app.userData.staffId,
+                        dateCreated: firebase.firestore.FieldValue.serverTimestamp()
+                    });
 
-                    await db.collection('jobs').add(jobData);
-
-                    app.showNotification(`Job Created! Tracking ID: ${trackingId}`, 'success');
-                    
-                    // Clear form
-                    document.querySelectorAll('#view-new-job input, #view-new-job textarea').forEach(i => i.value = '');
+                    app.showNotification('Job created! ID: '+trackingId, 'success');
                     app.showView('jobs');
                 } catch (error) {
-                    console.error('Create job error:', error);
-                    app.showNotification('Error creating job: ' + error.message, 'error');
-                }
-            },
-
-            createJobCard: (jobId, job, showActions = false) => {
-                const statusClass = `status-${job.status}` || 'status-pending';
-                const balance = job.amount - job.payment;
-                const isDelayed = job.status === 'delayed';
-
-                return `
-                <div class="job-card">
-                    <div class="job-header">
-                        <strong><i class="fas fa-briefcase"></i> ${job.trackingId || 'No ID'}</strong>
-                        <span class="job-status ${statusClass}">${job.status} ${isDelayed ? '(PENALTY)' : ''}</span>
-                    </div>
-                    <div class="job-meta">
-                        <span class="hub-badge">${job.hub}</span>
-                        <span><i class="fas fa-user"></i> ${job.clientId}</span>
-                        <span><i class="fas fa-phone"></i> ${job.clientContact}</span>
-                    </div>
-                    <div class="job-meta">
-                        <span><i class="fas fa-naira-sign"></i> Amount: ₦${job.amount}</span>
-                        <span><i class="fas fa-money-bill"></i> Paid: ₦${job.payment}</span>
-                        ${balance > 0 ? `<span style="color: #dc3545;"><i class="fas fa-exclamation-circle"></i> Balance: ₦${balance}</span>` : '<span style="color: #00D68F;"><i class="fas fa-check"></i> Paid</span>'}
-                    </div>
-                    <div class="job-meta">
-                        <span><i class="fas fa-calendar"></i> Due: ${job.dueDate}</span>
-                        ${job.incentive > 0 ? '<span style="color: #00D68F;"><i class="fas fa-gift"></i> Bonus: ₦500</span>' : ''}
-                    </div>
-                    ${showActions && app.userData.role === 'admin' ? `
-                        <div style="margin-top: 10px; display: flex; gap: 5px;">
-                            <button class="btn btn-sm btn-primary" onclick="app.routeJob('${jobId}')">Route</button>
-                            <button class="btn btn-sm btn-success" onclick="app.completeJob('${jobId}')">Complete</button>
-                        </div>
-                    ` : ''}
-                </div>`;
-            },
-
-            routeJob: (jobId) => {
-                const nextHub = prompt("Enter next hub name (e.g., Printing):");
-                if (nextHub) {
-                    db.collection('jobs').doc(jobId).update({
-                        hub: nextHub,
-                        route: firebase.firestore.FieldValue.arrayUnion({ hub: nextHub, status: 'routed', timestamp: new Date() })
-                    }).then(() => {
-                        app.showNotification(`Job routed to ${nextHub}`, 'success');
-                        app.renderJobs();
-                    });
-                }
-            },
-
-            completeJob: (jobId) => {
-                if (confirm("Mark job as delivered?")) {
-                    db.collection('jobs').doc(jobId).update({ status: 'delivered' })
-                    .then(() => {
-                        app.showNotification('Job delivered!', 'success');
-                        app.renderJobs();
-                    });
+                    app.showNotification('Error: '+error.message, 'error');
                 }
             },
 
             loadReports: async () => {
-                const container = document.getElementById('my-reports-list');
-                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading reports...</p></div>';
-                // Implementation similar to previous versions
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-file-alt"></i><p>No reports yet</p></div>';
-            },
-
-            loadInventory: async () => {
-                const container = document.getElementById('inventory-list');
-                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading inventory...</p></div>';
-                // Mock data for demo
-                container.innerHTML = `
-                    <div class="job-card">
-                        <div class="job-header"><strong>A4 Paper Ream</strong> <span class="job-status status-pending">Low Stock</span></div>
-                        <div class="job-meta">Stock: 5 | Alert: 10</div>
-                    </div>
-                    <div class="job-card">
-                        <div class="job-header"><strong>Ink Cartridge</strong> <span class="job-status status-delivered">OK</span></div>
-                        <div class="job-meta">Stock: 50 | Alert: 10</div>
-                    </div>
-                `;
-            },
-
-            addInventoryItem: () => {
-                app.showNotification('Item added to inventory', 'success');
-            },
-
-            renderStaffList: async () => {
-                const container = document.getElementById('staff-list');
-                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading staff...</p></div>';
+                const div = document.getElementById('reports-list');
+                div.innerHTML = '<p style="color:var(--gray);text-align:center;">Loading...</p>';
+                
                 try {
-                    const snapshot = await db.collection('users').where('approved', '==', true).get();
-                    if (snapshot.empty) {
-                        container.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No staff found</p></div>';
+                    const snap = await db.collection('reports').orderBy('createdAt','desc').limit(20).get();
+                    if (snap.empty) {
+                        div.innerHTML = '<p style="color:var(--gray);text-align:center;">No reports yet</p>';
                     } else {
-                        container.innerHTML = '<div class="table-responsive"><table class="data-table"><thead><tr><th>Name</th><th>Staff ID</th><th>Role</th><th>Hub</th></tr></thead><tbody>';
-                        snapshot.forEach(doc => {
-                            const u = doc.data();
-                            container.innerHTML += `<tr><td>${u.name}</td><td>${u.staffId}</td><td>${u.role}</td><td>${u.hub}</td></tr>`;
-                        });
-                        container.innerHTML += '</tbody></table></div>';
-                    }
-                } catch (error) {
-                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading staff</p></div>';
-                }
-            },
-
-            renderAdminApprovals: async () => {
-                const container = document.getElementById('pending-staff-list');
-                container.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Loading approvals...</p></div>';
-                try {
-                    const snapshot = await db.collection('users').where('approved', '==', false).get();
-                    if (snapshot.empty) {
-                        container.innerHTML = '<div class="empty-state"><i class="fas fa-check-circle"></i><p>No pending approvals</p></div>';
-                    } else {
-                        container.innerHTML = '';
-                        snapshot.forEach(doc => {
-                            const u = doc.data();
-                            container.innerHTML += `
+                        div.innerHTML = '';
+                        snap.forEach(doc => {
+                            const r = doc.data();
+                            div.innerHTML += `
                                 <div class="job-card">
-                                    <div class="job-header"><strong>${u.name}</strong> <span class="job-status status-pending">Pending</span></div>
-                                    <div class="job-meta">${u.hub} | ${u.role}</div>
-                                    <div style="margin-top: 10px; display: flex; gap: 5px;">
-                                        <button class="btn btn-sm btn-success" onclick="app.approveStaff('${doc.id}')">Approve</button>
-                                        <button class="btn btn-sm btn-danger" onclick="app.rejectStaff('${doc.id}')">Reject</button>
-                                    </div>
+                                    <div style="font-weight:600;">${r.author}</div>
+                                    <div style="font-size:0.75rem;color:var(--gray);">${new Date(r.createdAt?.toDate()).toLocaleDateString()}</div>
+                                    <div style="margin-top:8px;">${r.content}</div>
                                 </div>
                             `;
                         });
                     }
-                    // Load staff for ID cards
-                    const select = document.getElementById('idcard-staff-select');
-                    select.innerHTML = '<option value="">Choose staff member...</option>';
-                    const staffSnap = await db.collection('users').where('approved', '==', true).get();
-                    staffSnap.forEach(doc => {
-                        const u = doc.data();
-                        select.innerHTML += `<option value="${doc.id}">${u.name} (${u.staffId})</option>`;
-                    });
                 } catch (error) {
-                    container.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Error</p></div>';
+                    div.innerHTML = '<p style="color:#dc3545;text-align:center;">Error loading reports</p>';
                 }
             },
 
-            approveStaff: async (docId) => {
-                await db.collection('users').doc(docId).update({ approved: true });
-                app.showNotification('Staff approved!', 'success');
-                app.renderAdminApprovals();
+            createReport: async () => {
+                const content = document.getElementById('report-content').value;
+                if (!content.trim()) {
+                    app.showNotification('Please enter report content', 'error');
+                    return;
+                }
+
+                try {
+                    await db.collection('reports').add({
+                        content,
+                        author: app.userData.name,
+                        staffId: app.userData.staffId,
+                        hub: app.userData.hub,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    app.showNotification('Report submitted!', 'success');
+                    document.getElementById('report-content').value = '';
+                    app.loadReports();
+                } catch (error) {
+                    app.showNotification('Error: '+error.message, 'error');
+                }
             },
 
-            rejectStaff: async (docId) => {
+            // Knowledge Center Functions
+            openHelpCenter: () => {
+                const helpContent = `
+                    <h3>TBOS v2.0 Help Center</h3>
+                    <h4>Getting Started</h4>
+                    <ul>
+                        <li>Login with your Staff ID or email</li>
+                        <li>Complete your profile</li>
+                        <li>Review SOPs for your hub</li>
+                    </ul>
+                    <h4>Common Issues</h4>
+                    <ul>
+                        <li>Login problems: Contact admin@tbos.com</li>
+                        <li>Job not showing: Refresh page (Ctrl+F5)</li>
+                        <li>File upload fails: Check file size (max 10MB)</li>
+                    </ul>
+                    <h4>Contact Support</h4>
+                    <p>📧 admin@tbos.com<br>📞 +234 803 082 7417</p>
+                `;
+                app.showModal('Help Center', helpContent);
+            },
+
+            openSOPs: () => {
+                const sopContent = `
+                    <h3>Standard Operating Procedures</h3>
+                    <h4>General Rules (All Hubs)</h4>
+                    <ul>
+                        <li>Be professional and courteous</li>
+                        <li>Record every transaction</li>
+                        <li>Collect payment before delivery</li>
+                        <li>Meet timelines</li>
+                        <li>Escalate issues early</li>
+                    </ul>
+                    <h4>Tech Academy</h4>
+                    <p>Register students → Collect payment → Issue receipt → Add to class group → Conduct classes → Track attendance → Issue certificates</p>
+                    <h4>Printing & Graphics</h4>
+                    <p>Receive job → Confirm specs → Quote price → Collect advance → Design/Print → Quality check → Deliver</p>
+                    <h4>Photography</h4>
+                    <p>Book event → Collect fee → Shoot → Backup files → Edit → Deliver → Request feedback</p>
+                    <h4>Gadgets</h4>
+                    <p>Inquiry → Explain features → Confirm availability → Collect payment → Issue receipt → Update inventory</p>
+                    <h4>Tech Lab</h4>
+                    <p>Receive device → Diagnose → Quote cost → Collect advance → Repair → Test → Deliver → Collect balance</p>
+                `;
+                app.showModal('SOP Guides', sopContent);
+            },
+
+            openCourses: () => {
+                const courseContent = `
+                    <h3>Tomstudio Tech Academy Courses</h3>
+                    <h4>Short Courses</h4>
+                    <ul>
+                        <li>Digital Literacy (4-6 weeks) - ₦25,000</li>
+                        <li>Graphics Design (3 months) - ₦80,000</li>
+                        <li>Video Editing (2 months) - ₦80,000</li>
+                        <li>Digital Marketing (2 months) - ₦50,000</li>
+                    </ul>
+                    <h4>Advanced Courses</h4>
+                    <ul>
+                        <li>Front-End Coding (4 months) - ₦180,000</li>
+                        <li>Back-End Coding (5 months) - ₦200,000</li>
+                        <li>UI/UX Design (3 months) - ₦200,000</li>
+                        <li>Data Analysis with AI (3-4 months) - ₦250,000</li>
+                    </ul>
+                    <h4>Enrollment</h4>
+                    <p>📍 265, Isawo Road, Agric Ikorodu, Lagos<br>📞 090 709 013 82<br>💳 60% deposit required</p>
+                `;
+                app.showModal('Course Catalogue', courseContent);
+            },
+
+            openPrices: () => {
+                const priceContent = `
+                    <h3>Service Price List</h3>
+                    <h4>Printing</h4>
+                    <ul>
+                        <li>B/W Printing - ₦300/copy</li>
+                        <li>Color Printing - ₦500/copy</li>
+                        <li>Photocopy - ₦100/copy</li>
+                        <li>Laminating - ₦500 (ID) / ₦1,000 (Certificate)</li>
+                    </ul>
+                    <h4>Graphics Design</h4>
+                    <ul>
+                        <li>Logo Design - ₦3,500</li>
+                        <li>Flyer Design - ₦2,500</li>
+                        <li>Business Card (100pcs) - ₦10,000</li>
+                        <li>Rollup Banner - ₦50,000</li>
+                    </ul>
+                    <h4>Photography</h4>
+                    <ul>
+                        <li>Passport (5pcs) - ₦1,000</li>
+                        <li>Passport (10pcs) - ₦2,000</li>
+                        <li>Frame 8x10 - ₦8,000</li>
+                        <li>Frame 16x20 - ₦22,000</li>
+                    </ul>
+                    <h4>Custom Items</h4>
+                    <ul>
+                        <li>Mug - ₦7,000</li>
+                        <li>T-Shirt - ₦5,000</li>
+                        <li>Rubber Stamp - ₦3,000</li>
+                    </ul>
+                `;
+                app.showModal('Price List', priceContent);
+            },
+
+            openAbout: () => {
+                const aboutContent = `
+                    <h3>About TBOS v2.0</h3>
+                    <p><strong>TBOS</strong> (Tomstudio BizHub Operations System) is a comprehensive ERP platform designed to manage all operations across Tomstudio BizHub's multiple service hubs.</p>
+                    <h4>Our Hubs</h4>
+                    <ul>
+                        <li>Tech Academy - Professional tech training</li>
+                        <li>Printing & Graphics - Design and print services</li>
+                        <li>Photography - Professional photo services</li>
+                        <li>Gadgets - Sales and repairs</li>
+                        <li>Tech Lab - Device maintenance</li>
+                        <li>CBT Center - Computer-based training</li>
+                    </ul>
+                    <h4>Our Mission</h4>
+                    <p>"Consistency builds trust. Trust builds growth."</p>
+                    <h4>Contact</h4>
+                    <p>📍 265, Isawo Road, Agric Ikorodu, Lagos<br>📞 +234 803 082 7417<br>📧 admin@tbos.com</p>
+                `;
+                app.showModal('About TBOS', aboutContent);
+            },
+
+            showModal: (title, content) => {
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>${title}</h3>
+                            <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                        </div>
+                        <div style="line-height:1.6;">${content}</div>
+                        <button class="btn" onclick="this.closest('.modal').remove()" style="margin-top:20px;">
+                            <i class="fas fa-check"></i> Close
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            },
+
+            renderApprovals: async () => {
+                const snap = await db.collection('users').where('approved','==',false).get();
+                const div = document.getElementById('approvals-list');
+                
+                if (snap.empty) {
+                    div.innerHTML = '<p style="color:var(--gray);">No pending approvals</p>';
+                } else {
+                    div.innerHTML = '';
+                    snap.forEach(doc => {
+                        const u = doc.data();
+                        div.innerHTML += `
+                            <div class="job-card">
+                                <div><strong>${u.name}</strong> (${u.staffId})</div>
+                                <div style="font-size:0.85rem;color:var(--gray);">${u.hub} | ${u.role}</div>
+                                <div style="margin-top:10px;">
+                                    <button class="btn" style="background:#00D68F;width:auto;padding:8px 16px;" onclick="app.approveStaff('${doc.id}')">Approve</button>
+                                    <button class="btn" style="background:#dc3545;width:auto;padding:8px 16px;" onclick="app.rejectStaff('${doc.id}')">Reject</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                const select = document.getElementById('idcard-select');
+                select.innerHTML = '<option value="">Select Staff...</option>';
+                const staff = await db.collection('users').where('approved','==',true).get();
+                staff.forEach(doc => {
+                    const u = doc.data();
+                    select.innerHTML += `<option value="${doc.id}">${u.name} (${u.staffId})</option>`;
+                });
+            },
+
+            approveStaff: async (id) => {
+                await db.collection('users').doc(id).update({approved:true});
+                app.showNotification('Staff approved!', 'success');
+                app.renderApprovals();
+            },
+
+            rejectStaff: async (id) => {
                 if(confirm('Reject this staff?')) {
-                    await db.collection('users').doc(docId).delete();
+                    await db.collection('users').doc(id).delete();
                     app.showNotification('Staff rejected', 'info');
-                    app.renderAdminApprovals();
+                    app.renderApprovals();
                 }
             },
 
             previewIDCard: () => {
-                const staffId = document.getElementById('idcard-staff-select').value;
-                if (!staffId) return;
-                db.collection('users').doc(staffId).get().then(doc => {
+                const id = document.getElementById('idcard-select').value;
+                if (!id) return;
+                
+                db.collection('users').doc(id).get().then(doc => {
                     if (doc.exists) {
                         const u = doc.data();
-                        const preview = document.getElementById('id-card-preview');
-                        preview.innerHTML = `
-                            <div class="id-card-preview">
-                                <div style="text-align: center; margin-bottom: 18px;">
-                                    <h3 style="margin-bottom: 4px; font-weight: 700;">TBOS v2.0</h3>
-                                    <small>Staff Identification Card</small>
+                        document.getElementById('idcard-preview').innerHTML = `
+                            <div style="background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:20px;border-radius:12px;text-align:center;">
+                                <div style="width:80px;height:80px;background:white;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
+                                    <i class="fas fa-user" style="font-size:2.5rem;color:var(--primary);"></i>
                                 </div>
-                                <div class="id-card-photo">
-                                    ${u.passportPhoto ? `<img src="${u.passportPhoto}">` : '<i class="fas fa-user" style="font-size: 2.5rem; color: var(--primary);"></i>'}
-                                </div>
-                                <div style="text-align: center;">
-                                    <div style="font-size: 1.2rem; font-weight: 700;">${u.name}</div>
-                                    <div style="opacity: 0.95; margin-bottom: 10px;">${u.role} | ${u.hub}</div>
-                                    <div style="background: rgba(255,255,255,0.25); padding: 5px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">${u.staffId}</div>
-                                    <div id="qrcode" style="margin-top: 15px; background: white; padding: 5px; display: inline-block;"></div>
-                                </div>
+                                <div style="font-size:1.2rem;font-weight:700;">${u.name}</div>
+                                <div style="opacity:0.9;">${u.role} | ${u.hub}</div>
+                                <div style="background:rgba(255,255,255,0.2);padding:5px 15px;border-radius:20px;display:inline-block;margin-top:10px;">${u.staffId}</div>
                             </div>
                         `;
-                        new QRCode(document.getElementById("qrcode"), {
-                            text: `TBOS Verify: ${u.staffId}`,
-                            width: 80,
-                            height: 80
-                        });
                     }
                 });
             },
 
             downloadIDCard: () => {
                 const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({ format: [85.6, 54], unit: 'mm' });
-                doc.setFillColor(0, 214, 143);
-                doc.rect(0, 0, 85.6, 54, 'F');
-                doc.setTextColor(255, 255, 255);
+                const doc = new jsPDF({format:[85.6,54],unit:'mm'});
+                doc.setFillColor(128,0,128);
+                doc.rect(0,0,85.6,54,'F');
+                doc.setTextColor(255,255,255);
                 doc.setFontSize(10);
-                doc.text('TBOS v2.0', 42.8, 10, { align: 'center' });
+                doc.text('TBOS v2.0', 42.8, 10, {align:'center'});
                 doc.setFontSize(7);
-                doc.text('Staff ID Card', 42.8, 14, { align: 'center' });
-                doc.save(`id-card-${new Date().getTime()}.pdf`);
+                doc.text('Staff ID Card', 42.8, 14, {align:'center'});
+                doc.save(`id-card-${Date.now()}.pdf`);
                 app.showNotification('ID Card downloaded!', 'success');
             },
 
-            loadAnalytics: () => {
-                const ctx1 = document.getElementById('hubChart').getContext('2d');
-                const ctx2 = document.getElementById('revenueChart').getContext('2d');
-                
-                if (app.hubChart) app.hubChart.destroy();
-                if (app.revenueChart) app.revenueChart.destroy();
-
-                app.hubChart = new Chart(ctx1, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Tech Academy', 'Printing', 'Photography', 'Gadgets'],
-                        datasets: [{
-                            data: [12, 19, 3, 5],
-                            backgroundColor: ['#800080', '#FF0000', '#FFD700', '#FFA500']
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-
-                app.revenueChart = new Chart(ctx2, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-                        datasets: [{
-                            label: 'Revenue (₦)',
-                            data: [12000, 19000, 3000, 5000, 2000, 30000],
-                            backgroundColor: '#00D68F'
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            },
-
             loadAnnouncements: async () => {
-                const container = document.getElementById('dashboard-announcements');
-                const snapshot = await db.collection('announcements').orderBy('createdAt', 'desc').limit(3).get();
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="color: var(--gray);">No new announcements</p>';
+                const snap = await db.collection('announcements').orderBy('createdAt','desc').limit(10).get();
+                const div = document.getElementById('announcements-list');
+                const allDiv = document.getElementById('all-announcements');
+                
+                if (snap.empty) {
+                    if (div) div.innerHTML = '<p style="color:var(--gray);">No announcements</p>';
+                    if (allDiv) allDiv.innerHTML = '<p style="color:var(--gray);">No announcements</p>';
                 } else {
-                    container.innerHTML = '';
-                    snapshot.forEach(doc => {
+                    let html = '';
+                    snap.forEach(doc => {
                         const a = doc.data();
-                        container.innerHTML += `
-                            <div class="announcement-card" style="margin-bottom: 10px; padding: 15px; background: var(--gray-light); border-left: 4px solid var(--primary); border-radius: 8px;">
-                                <strong>${a.type.toUpperCase()}</strong>: ${a.message}
-                                <div style="font-size: 0.75rem; color: var(--gray); margin-top: 5px;">${new Date(a.createdAt?.toDate()).toLocaleDateString()}</div>
+                        html += `
+                            <div class="job-card" style="border-left-color:${a.type==='warning'?'#ffc107':a.type==='alert'?'#dc3545':'#00D68F'}">
+                                <div style="font-weight:600;">${a.type.toUpperCase()}</div>
+                                <div style="margin-top:5px;">${a.message}</div>
+                                <div style="font-size:0.7rem;color:var(--gray);margin-top:5px;">${new Date(a.createdAt?.toDate()).toLocaleDateString()}</div>
                             </div>
                         `;
                     });
+                    if (div) div.innerHTML = html;
+                    if (allDiv) allDiv.innerHTML = html;
                 }
             },
 
-            showAnnouncements: () => {
-                app.showNotification('Announcements feature active!', 'info');
+            postAnnouncement: async () => {
+                const msg = document.getElementById('announce-msg').value;
+                const type = document.getElementById('announce-type').value;
+                const hub = document.getElementById('announce-hub').value;
+
+                if (!msg.trim()) {
+                    app.showNotification('Please enter a message', 'error');
+                    return;
+                }
+
+                try {
+                    await db.collection('announcements').add({
+                        message: msg,
+                        type,
+                        hub,
+                        author: app.userData.name,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    app.showNotification('Announcement posted!', 'success');
+                    document.getElementById('announce-msg').value = '';
+                    app.loadAnnouncements();
+                } catch (error) {
+                    app.showNotification('Error: '+error.message, 'error');
+                }
+            },
+
+            // File Upload Functions
+            uploadFile: async () => {
+                const fileInput = document.getElementById('file-input');
+                const file = fileInput.files[0];
+                
+                if (!file) return;
+
+                const statusDiv = document.getElementById('upload-status');
+                statusDiv.innerHTML = '<p style="color:var(--primary);"><i class="fas fa-spinner fa-spin"></i> Uploading...</p>';
+
+                try {
+                    const fileRef = storage.ref(`files/${file.name}`);
+                    await fileRef.put(file);
+                    const downloadURL = await fileRef.getDownloadURL();
+
+                    await db.collection('files').add({
+                        name: file.name,
+                        url: downloadURL,
+                        uploadedBy: app.userData.name,
+                        uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        size: file.size
+                    });
+
+                    statusDiv.innerHTML = '<p style="color:#00D68F;"><i class="fas fa-check-circle"></i> Upload successful!</p>';
+                    app.loadFiles();
+                } catch (error) {
+                    statusDiv.innerHTML = '<p style="color:#dc3545;"><i class="fas fa-times-circle"></i> Upload failed: '+error.message+'</p>';
+                }
+            },
+
+            loadFiles: async () => {
+                const div = document.getElementById('files-list');
+                div.innerHTML = '<p style="color:var(--gray);text-align:center;">Loading...</p>';
+
+                try {
+                    const snap = await db.collection('files').orderBy('uploadedAt','desc').get();
+                    
+                    if (snap.empty) {
+                        div.innerHTML = '<p style="color:var(--gray);text-align:center;">No files uploaded yet</p>';
+                    } else {
+                        div.innerHTML = '';
+                        snap.forEach(doc => {
+                            const f = doc.data();
+                            const sizeKB = (f.size / 1024).toFixed(1);
+                            div.innerHTML += `
+                                <div class="job-card">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                                        <div>
+                                            <i class="fas fa-file" style="color:var(--primary);"></i>
+                                            <strong>${f.name}</strong>
+                                            <div style="font-size:0.75rem;color:var(--gray);">${sizeKB} KB | ${f.uploadedBy}</div>
+                                        </div>
+                                        <a href="${f.url}" target="_blank" class="btn" style="width:auto;padding:8px 16px;">
+                                            <i class="fas fa-download"></i> Download
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                } catch (error) {
+                    div.innerHTML = '<p style="color:#dc3545;text-align:center;">Error loading files</p>';
+                }
+            },
+
+            loadAnalytics: () => {
+                const ctx = document.getElementById('hubChart').getContext('2d');
+                
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Tech Academy', 'Printing', 'Photography', 'Graphics'],
+                        datasets: [{
+                            data: [12, 19, 3, 5],
+                            backgroundColor: ['#800080', '#FF0000', '#FFD700', '#0000FF']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            },
+
+            showNotifications: () => {
+                app.showNotification('No new notifications', 'info');
             }
         };
 
