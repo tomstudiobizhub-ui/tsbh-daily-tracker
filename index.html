@@ -1294,6 +1294,21 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
+        // Add this after Firebase initialization
+firebase.firestore().enablePersistence()
+    .catch((err) => {
+        if (err.code == 'failed-precondition') {
+            console.warn('Persistence failed: Multiple tabs open');
+        } else if (err.code == 'unimplemented') {
+            console.warn('Persistence not supported in this browser');
+        }
+    });
+
+// Test connection
+db.collection('jobs').limit(1).get()
+    .then(() => console.log('✅ Firebase Connected'))
+    .catch((err) => console.error('❌ Firebase Error:', err.message));
+
         const app = {
             currentUser: null,
             userData: null,
