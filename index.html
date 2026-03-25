@@ -3,16 +3,1044 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#667eea">
-    <meta name="description" content="TBOS Daily Performance Tracker - Track • Record • Route • Report • Improve">
-    <title>TBOS v3.0 | Tomstudio BizHub</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="logo-192.png">
-    <link rel="apple-touch-icon" href="logo-512.png">
+    <meta name="theme-color" content="#008080">
+    <meta name="description" content="TBOS v2.0 - Tomstudio BizHub Operations System">
+    <title>TBOS v2.0 | Tomstudio BizHub</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --primary: #008080;
+            --primary-dark: #006666;
+            --success: #00c851;
+            --warning: #ffbb33;
+            --danger: #ff4444;
+            --info: #00b0ff;
+            --bg-light: #f5f6fa;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3436;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show { opacity: 1; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0,128,128,0.4);
+        }
+
+        .login-card h1 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .login-form {
+            margin-bottom: 20px;
+        }
+
+        .login-form label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,128,128,0.4);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .support-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .support-info p {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .support-info a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .credit {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Main App */
+        #mainApp {
+            display: none;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .header-left i {
+            font-size: 1.5rem;
+        }
+
+        .header-center {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #staffDisplay {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Sign In Info */
+        .sign-in-info {
+            padding: 20px;
+            background: white;
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .sign-in-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .sign-in-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .sign-in-details {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .sign-in-details p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 4px 0;
+        }
+
+        .btn-signin {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-signin:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 20px;
+            background: white;
+            margin: 0 15px 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .main-nav::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .main-nav::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 18px;
+            background: var(--bg-light);
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            min-width: 80px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-link i {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 0 15px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Panels */
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+        }
+
+        /* Forms */
+        .form input, .form textarea, .form select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form input:focus, .form textarea:focus, .form select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-actions button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #000;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        /* Data List */
+        .data-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .data-item {
+            padding: 18px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .data-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .data-item-info {
+            flex: 1;
+        }
+
+        .data-item-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .data-item-info p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 4px 0;
+        }
+
+        .data-item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .data-item-actions button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+
+        .data-item-actions button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,128,128,0.3);
+        }
+
+        .stat-box strong {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-box span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .stat-box.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #ff9900 100%);
+        }
+
+        .stat-box.danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #cc0000 100%);
+        }
+
+        .stat-box.success {
+            background: linear-gradient(135deg, var(--success) 0%, #00a040 100%);
+        }
+
+        /* Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .summary-box strong {
+            display: block;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .summary-box span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Export Buttons */
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .export-buttons button {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        /* Admin Dashboard */
+        .staff-list-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .staff-list {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .staff-data-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            min-height: 400px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .staff-item {
+            padding: 14px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .staff-item:hover, .staff-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .badge {
+            background: var(--danger);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-paid { background: rgba(0,200,81,0.2); color: var(--success); }
+        .status-partial { background: rgba(255,187,51,0.2); color: var(--warning); }
+        .status-unpaid { background: rgba(255,68,68,0.2); color: var(--danger); }
+        .status-completed { background: rgba(0,176,255,0.2); color: var(--info); }
+
+        /* Routing Timeline */
+        .routing-timeline {
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: 12px;
+        }
+
+        .routing-stages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stage-item {
+            flex: 1;
+            min-width: 90px;
+            text-align: center;
+            padding: 12px 8px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stage-item:hover {
+            border-color: var(--primary);
+        }
+
+        .stage-item.active {
+            border-color: var(--primary);
+            background: rgba(0,128,128,0.1);
+        }
+
+        .stage-item.completed {
+            border-color: var(--success);
+            background: rgba(0,200,81,0.1);
+        }
+
+        .stage-item .icon {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .stage-item .label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Image Upload */
+        .image-upload {
+            margin: 15px 0;
+        }
+
+        .image-upload label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .image-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-item .delete-img {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: white;
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .app-header {
+                padding: 12px 15px;
+            }
+
+            .header-center {
+                display: none;
+            }
+
+            #staffDisplay {
+                display: none;
+            }
+
+            .main-nav {
+                margin: 0 10px 10px;
+                padding: 10px;
+            }
+
+            .nav-link {
+                min-width: 70px;
+                font-size: 0.75rem;
+                padding: 10px 14px;
+            }
+
+            .panel {
+                padding: 20px 15px;
+                margin: 10px;
+            }
+
+            .form-actions, .export-buttons {
+                flex-direction: column;
+            }
+
+            .form-actions button, .export-buttons button {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .staff-list-container {
+                grid-template-columns: 1fr;
+            }
+
+            .routing-stages {
+                flex-direction: column;
+            }
+
+            .stage-item {
+                min-width: 100%;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* PDF Preview */
+        .pdf-preview {
+            background: white;
+            color: black;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .pdf-preview.active {
+            display: block;
+        }
+
+        .pdf-header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pdf-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .pdf-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f6fa;
+            border-radius: 10px;
+        }
+
+        .pdf-section {
+            margin-bottom: 25px;
+        }
+
+        .pdf-section h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pdf-section ul {
+            list-style: disc;
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .pdf-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Toast Notification -->
@@ -22,220 +1050,1201 @@
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-user-shield"></i> Admin Access</h3>
+                <h3>🔐 Admin Access</h3>
                 <button class="modal-close" onclick="closeAdminModal()">&times;</button>
             </div>
-            <p style="margin-bottom: 20px; color: #636e72;">Enter admin password to continue</p>
-            <input type="password" id="adminPassword" placeholder="Admin Password">
-            <div class="modal-buttons">
-                <button onclick="checkAdminPassword()"><i class="fas fa-sign-in-alt"></i> Login</button>
-                <button class="cancel" onclick="closeAdminModal()">Cancel</button>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Enter admin password to continue</p>
+            <input type="password" id="adminPassword" placeholder="Admin Password" style="width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 20px; font-size: 16px;">
+            <div class="form-actions">
+                <button class="btn-primary" onclick="checkAdminPassword()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="btn-outline" onclick="closeAdminModal()">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Login Screen -->
     <div id="loginScreen">
-        <img src="logo-192.png" alt="TBOS Logo">
-        <h1>TBOS v3.0</h1>
-        <h3>Tomstudio BizHub Operations System</h3>
-        <p>Track • Record • Route • Report • Improve</p>
-        
-        <input type="text" id="staffId" placeholder="Enter Staff ID">
-        <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-        
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-            <button onclick="openClientPortal()" style="flex: 1; background: #00b894;"><i class="fas fa-user"></i> Client Portal</button>
-            <button onclick="openAdminModal()" style="flex: 1; background: #6c5ce7;"><i class="fas fa-user-shield"></i> Admin</button>
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+            </div>
+            <h1>TBOS v2.0</h1>
+            <p class="tagline">Track • Record • Route • Report • Improve</p>
+            
+            <div class="login-form">
+                <label>Staff ID / Email</label>
+                <input type="text" id="staffId" placeholder="Enter your Staff ID">
+                <button class="btn-primary" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </div>
+
+            <div class="quick-actions">
+                <button class="btn-outline" onclick="openClientPortal()">
+                    <i class="fas fa-user"></i> Client Portal
+                </button>
+                <button class="btn-outline" onclick="openAdminModal()">
+                    <i class="fas fa-user-shield"></i> Admin
+                </button>
+            </div>
+
+            <div class="support-info">
+                <p><i class="fas fa-phone"></i> <a href="tel:+2348185504382">+234 818 550 4382</a></p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:info@tbos.com">info@tbos.com</a></p>
+                <p class="credit">Built by Tomstudio Tech Academy</p>
+            </div>
         </div>
-        
-        <footer style="margin-top: 30px;">
-            <p><i class="fas fa-phone"></i> <a href="tel:+2348185504382">+234 818 550 4382</a></p>
-            <p><i class="fas fa-envelope"></i> <a href="mailto:info@tbos.com">info@tbos.com</a></p>
-            <p>Built by Tomstudio Tech Academy</p>
-        </footer>
     </div>
 
     <!-- Main App -->
     <div id="mainApp" style="display: none;">
-        <div class="container">
-            <!-- Sign In Info -->
-            <div class="sign-in-info">
-                <img class="mal" src="logo-192.png" alt="Profile">
-                <h1>TBOS v3.0</h1>
-                <p>Staff ID: <span id="staffDisplay">N/A</span></p>
-                <p id="signInTime">Not signed in</p>
-                <p id="locationInfo">📍 Location: Not recorded</p>
-                <button onclick="recordSignIn()"><i class="fas fa-map-marker-alt"></i> Record Sign-In</button>
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-cube"></i>
+                <span>TBOS v2.0</span>
             </div>
+            <div class="header-center">
+                <span id="currentDate"></span>
+            </div>
+            <div class="header-right">
+                <span id="staffDisplay">ID: N/A</span>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
 
-            <!-- Navigation -->
-            <nav>
-                <a href="#clients" class="tab-link active" data-tab="clients"><i class="fas fa-user-friends"></i> Clients</a>
-                <a href="#jobs" class="tab-link" data-tab="jobs"><i class="fas fa-briefcase"></i> Jobs</a>
-                <a href="#staff" class="tab-link" data-tab="staff"><i class="fas fa-users"></i> Staff</a>
-                <a href="#inventory" class="tab-link" data-tab="inventory"><i class="fas fa-boxes"></i> Inventory</a>
-                <a href="#reports" class="tab-link" data-tab="reports"><i class="fas fa-chart-bar"></i> Reports</a>
-                <a href="#admin" class="tab-link" data-tab="admin"><i class="fas fa-cog"></i> Admin</a>
-                <a href="#" onclick="logout()" style="background: #e17055;"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </nav>
+        <!-- Sign In Info -->
+        <div class="sign-in-info">
+            <div class="sign-in-card">
+                <div class="sign-in-icon">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div class="sign-in-details">
+                    <p id="signInTime">Not signed in</p>
+                    <p id="locationInfo">📍 Location: Not recorded</p>
+                </div>
+                <button class="btn-signin" onclick="recordSignIn()">
+                    <i class="fas fa-map-marker-alt"></i> Record Sign-In
+                </button>
+            </div>
+        </div>
 
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <a href="#clients" class="nav-link active" data-tab="clients">
+                <i class="fas fa-user-friends"></i>
+                <span>Clients</span>
+            </a>
+            <a href="#jobs" class="nav-link" data-tab="jobs">
+                <i class="fas fa-briefcase"></i>
+                <span>Jobs</span>
+            </a>
+            <a href="#reports" class="nav-link" data-tab="reports">
+                <i class="fas fa-file-alt"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#inventory" class="nav-link" data-tab="inventory">
+                <i class="fas fa-boxes"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="#admin" class="nav-link" data-tab="admin">
+                <i class="fas fa-cog"></i>
+                <span>Admin</span>
+            </a>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="tab-content-container">
+            
             <!-- Clients Tab -->
             <div id="clients" class="tab-content active">
-                <div class="form">
+                <div class="panel">
                     <h3><i class="fas fa-user-plus"></i> Add Client</h3>
-                    <input type="text" id="clientName" placeholder="Client Name">
-                    <input type="tel" id="clientPhone" placeholder="Phone Number">
-                    <input type="email" id="clientEmail" placeholder="Email">
-                    <textarea id="clientComment" placeholder="Comment/Requirement"></textarea>
-                    <button onclick="addClient()"><i class="fas fa-plus"></i> Add Client</button>
-                    <button class="clear-btn" onclick="clearClients()"><i class="fas fa-trash"></i> Clear</button>
+                    <div class="form">
+                        <input type="text" id="clientName" placeholder="Client Name">
+                        <input type="tel" id="clientPhone" placeholder="Phone Number">
+                        <input type="email" id="clientEmail" placeholder="Email">
+                        <textarea id="clientComment" placeholder="Comment/Requirement"></textarea>
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="addClient()">
+                                <i class="fas fa-plus"></i> Add Client
+                            </button>
+                            <button class="btn-danger" onclick="clearClients()">
+                                <i class="fas fa-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div id="clientList"></div>
+                <div class="panel">
+                    <h3><i class="fas fa-list"></i> Today's Clients</h3>
+                    <div id="clientList" class="data-list"></div>
+                </div>
             </div>
 
             <!-- Jobs Tab -->
             <div id="jobs" class="tab-content">
-                <div class="form">
+                <div class="panel">
                     <h3><i class="fas fa-plus-circle"></i> Log New Job</h3>
-                    <input type="text" id="jobClient" placeholder="Client Name">
-                    <input type="tel" id="jobPhone" placeholder="Phone Number">
-                    <select id="jobHub">
-                        <option value="">Select Hub...</option>
-                        <option value="Graphics Design">Graphics Design</option>
-                        <option value="Printing">Printing</option>
-                        <option value="Photography">Photography</option>
-                        <option value="Tech Academy">Tech Academy</option>
-                        <option value="Online Shop">Online Shop</option>
-                        <option value="CBT Center">CBT Center</option>
-                        <option value="Tech Lab">Tech Lab</option>
-                        <option value="Gadgets">Gadgets</option>
-                        <option value="Other Services">Other Services</option>
-                    </select>
-                    <textarea id="jobDescription" placeholder="Job Description"></textarea>
-                    <input type="number" id="jobAmount" placeholder="Amount (₦)">
-                    <input type="number" id="jobPaid" placeholder="Amount Paid (₦)" value="0">
-                    <input type="date" id="jobDelivery">
-                    <button onclick="addJob()"><i class="fas fa-save"></i> Create Job</button>
-                </div>
-                <div class="form">
-                    <h3><i class="fas fa-filter"></i> Filter Jobs</h3>
-                    <select id="filterHub" onchange="renderJobs()">
-                        <option value="">All Hubs</option>
-                        <option value="Graphics Design">Graphics Design</option>
-                        <option value="Printing">Printing</option>
-                        <option value="Photography">Photography</option>
-                        <option value="Tech Academy">Tech Academy</option>
-                        <option value="Online Shop">Online Shop</option>
-                        <option value="CBT Center">CBT Center</option>
-                        <option value="Tech Lab">Tech Lab</option>
-                        <option value="Gadgets">Gadgets</option>
-                        <option value="Other Services">Other Services</option>
-                    </select>
-                    <select id="filterStatus" onchange="renderJobs()">
-                        <option value="">All Status</option>
-                        <option value="Pending">Pending</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
-                    </select>
-                </div>
-                <div id="jobList"></div>
-            </div>
-
-            <!-- Staff Tab -->
-            <div id="staff" class="tab-content">
-                <div class="form">
-                    <h3><i class="fas fa-user-plus"></i> Record Staff Activity</h3>
-                    <input type="text" id="staffName" placeholder="Staff Name">
-                    <select id="staffRole">
-                        <option value="Receptionist">Receptionist</option>
-                        <option value="Designer">Designer</option>
-                        <option value="Printer">Printer</option>
-                        <option value="Photographer">Photographer</option>
-                        <option value="Instructor">Instructor</option>
-                        <option value="Sales">Sales Officer</option>
-                        <option value="Technician">Technician</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <textarea id="staffActivity" placeholder="Activity Description"></textarea>
-                    <div class="image-upload">
-                        <label>📸 Upload Photos</label>
-                        <input type="file" id="staffPhotos" multiple accept="image/*" onchange="previewImages('staffPhotos', 'staffPhotoPreview')">
-                        <div id="staffPhotoPreview" class="image-preview"></div>
+                    <div class="form">
+                        <input type="text" id="jobClient" placeholder="Client Name">
+                        <input type="tel" id="jobPhone" placeholder="Phone Number">
+                        <select id="jobHub">
+                            <option value="">Select Hub...</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="CBT Center">CBT Center</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="Other Services">Other Services</option>
+                        </select>
+                        <textarea id="jobDescription" placeholder="Job Description"></textarea>
+                        <input type="number" id="jobAmount" placeholder="Amount (₦)">
+                        <input type="number" id="jobPaid" placeholder="Amount Paid (₦)" value="0">
+                        <input type="date" id="jobDelivery" placeholder="Delivery Date">
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="addJob()">
+                                <i class="fas fa-save"></i> Create Job
+                            </button>
+                            <button class="btn-outline" onclick="clearJobs()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                        </div>
                     </div>
-                    <button onclick="addStaffActivity()"><i class="fas fa-save"></i> Record</button>
-                    <button class="clear-btn" onclick="clearStaff()"><i class="fas fa-trash"></i> Clear</button>
                 </div>
-                <div id="staffList"></div>
-            </div>
-
-            <!-- Inventory Tab -->
-            <div id="inventory" class="tab-content">
-                <div class="form">
-                    <h3><i class="fas fa-plus"></i> Add Inventory Item</h3>
-                    <input type="text" id="itemName" placeholder="Item Name">
-                    <select id="itemCategory">
-                        <option value="Printing Materials">Printing Materials</option>
-                        <option value="Photography Equipment">Photography Equipment</option>
-                        <option value="Office Supplies">Office Supplies</option>
-                        <option value="Tech Equipment">Tech Equipment</option>
-                        <option value="Graphics Materials">Graphics Materials</option>
-                    </select>
-                    <input type="number" id="itemStock" placeholder="Stock Quantity">
-                    <input type="number" id="itemAlert" placeholder="Alert Level">
-                    <button onclick="addInventory()"><i class="fas fa-save"></i> Add Item</button>
+                <div class="panel">
+                    <h3><i class="fas fa-list"></i> Active Jobs</h3>
+                    <div class="filter-bar">
+                        <select id="filterHub" onchange="renderJobs()">
+                            <option value="">All Hubs</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="CBT Center">CBT Center</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="Other Services">Other Services</option>
+                        </select>
+                        <select id="filterStatus" onchange="renderJobs()">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div id="jobList" class="data-list"></div>
                 </div>
-                <div class="summary-grid">
-                    <div class="summary-box"><strong id="totalItems">0</strong><span>Total Items</span></div>
-                    <div class="summary-box"><strong id="lowStock">0</strong><span>Low Stock</span></div>
-                    <div class="summary-box"><strong id="outStock">0</strong><span>Out of Stock</span></div>
-                </div>
-                <div id="inventoryList"></div>
             </div>
 
             <!-- Reports Tab -->
             <div id="reports" class="tab-content">
-                <div class="summary-grid">
-                    <div class="summary-box"><strong id="reportClients">0</strong><span>Clients</span></div>
-                    <div class="summary-box"><strong id="reportJobs">0</strong><span>Jobs</span></div>
-                    <div class="summary-box"><strong id="reportSales">₦0</strong><span>Sales</span></div>
-                    <div class="summary-box"><strong id="reportStaff">0</strong><span>Staff Active</span></div>
+                <div class="panel">
+                    <h3><i class="fas fa-file-alt"></i> Daily Report</h3>
+                    <div class="form">
+                        <input type="date" id="reportDate">
+                        <select id="reportHub">
+                            <option value="">Select Hub...</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="CBT Center">CBT Center</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="Other Services">Other Services</option>
+                        </select>
+                        <textarea id="reportTasks" placeholder="Tasks Completed Today"></textarea>
+                        <textarea id="reportChallenges" placeholder="Challenges/Issues Faced"></textarea>
+                        <textarea id="reportPlans" placeholder="Plans for Tomorrow"></textarea>
+                        <input type="number" id="reportHours" placeholder="Hours Worked" value="8">
+                        <input type="number" id="reportJobs" placeholder="Jobs Completed" value="0">
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="submitReport()">
+                                <i class="fas fa-save"></i> Submit Report
+                            </button>
+                            <button class="btn-success" onclick="generateReportPDF()">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="export">
-                    <button onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
-                    <button onclick="backupData()"><i class="fas fa-download"></i> Backup Data</button>
+                <div class="panel">
+                    <h3><i class="fas fa-chart-bar"></i> Today's Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-box">
+                            <strong id="reportClients">0</strong>
+                            <span>Clients</span>
+                        </div>
+                        <div class="summary-box">
+                            <strong id="reportJobs">0</strong>
+                            <span>Jobs</span>
+                        </div>
+                        <div class="summary-box">
+                            <strong id="reportSales">₦0</strong>
+                            <span>Sales</span>
+                        </div>
+                        <div class="summary-box">
+                            <strong id="reportStaff">0</strong>
+                            <span>Staff Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-file-export"></i> Export Data</h3>
+                    <div class="export-buttons">
+                        <button class="btn-primary" onclick="generatePDF()">
+                            <i class="fas fa-file-pdf"></i> PDF Report
+                        </button>
+                        <button class="btn-success" onclick="exportCSV()">
+                            <i class="fas fa-file-csv"></i> CSV Export
+                        </button>
+                        <button class="btn-info" onclick="backupData()">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                    </div>
+                </div>
+                <!-- PDF Preview -->
+                <div id="pdfPreview" class="pdf-preview">
+                    <div class="pdf-header">
+                        <h1><i class="fas fa-cube"></i> TBOS v2.0</h1>
+                        <p>Tomstudio BizHub Operations System</p>
+                        <p style="font-size: 1.1rem; font-weight: 600; margin-top: 10px;">Daily Staff Report</p>
+                    </div>
+                    <div class="pdf-info">
+                        <div>
+                            <strong>Staff Name:</strong>
+                            <span id="previewStaff">-</span>
+                        </div>
+                        <div>
+                            <strong>Hub/Department:</strong>
+                            <span id="previewHub">-</span>
+                        </div>
+                        <div>
+                            <strong>Report Date:</strong>
+                            <span id="previewDate">-</span>
+                        </div>
+                        <div>
+                            <strong>Hours Worked:</strong>
+                            <span id="previewHours">-</span>
+                        </div>
+                        <div>
+                            <strong>Jobs Completed:</strong>
+                            <span id="previewJobs">-</span>
+                        </div>
+                        <div>
+                            <strong>Report ID:</strong>
+                            <span id="previewId">-</span>
+                        </div>
+                    </div>
+                    <div class="pdf-section">
+                        <h3><i class="fas fa-check-circle"></i> Tasks Completed Today</h3>
+                        <ul id="previewTasks"></ul>
+                    </div>
+                    <div class="pdf-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Challenges/Issues Faced</h3>
+                        <ul id="previewChallenges"></ul>
+                    </div>
+                    <div class="pdf-section">
+                        <h3><i class="fas fa-calendar-day"></i> Plans for Tomorrow</h3>
+                        <ul id="previewPlans"></ul>
+                    </div>
+                    <div class="pdf-footer">
+                        <p><strong>Tomstudio BizHub</strong></p>
+                        <p>265, Isawo Road, Between Oluwakemi and Santos Bustop, Agric Ikorodu, Lagos</p>
+                        <p>Phone: +234 818 550 4382 | Email: info@tbos.com</p>
+                        <p style="margin-top: 15px;">Generated on: <span id="previewGenerated"></span></p>
+                        <p style="font-size: 0.75rem; margin-top: 10px;">"Consistency builds trust. Trust builds growth."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Tab -->
+            <div id="inventory" class="tab-content">
+                <div class="panel">
+                    <h3><i class="fas fa-plus"></i> Add Inventory Item</h3>
+                    <div class="form">
+                        <input type="text" id="itemName" placeholder="Item Name">
+                        <select id="itemCategory">
+                            <option value="Printing Materials">Printing Materials</option>
+                            <option value="Photography Equipment">Photography Equipment</option>
+                            <option value="Office Supplies">Office Supplies</option>
+                            <option value="Tech Equipment">Tech Equipment</option>
+                            <option value="Graphics Materials">Graphics Materials</option>
+                        </select>
+                        <input type="number" id="itemStock" placeholder="Stock Quantity">
+                        <input type="number" id="itemAlert" placeholder="Alert Level">
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="addInventory()">
+                                <i class="fas fa-save"></i> Add Item
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-boxes"></i> Inventory Items</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <strong id="totalItems">0</strong>
+                            <span>Total Items</span>
+                        </div>
+                        <div class="stat-box warning">
+                            <strong id="lowStock">0</strong>
+                            <span>Low Stock</span>
+                        </div>
+                        <div class="stat-box danger">
+                            <strong id="outStock">0</strong>
+                            <span>Out of Stock</span>
+                        </div>
+                    </div>
+                    <div id="inventoryList" class="data-list"></div>
                 </div>
             </div>
 
             <!-- Admin Tab -->
             <div id="admin" class="tab-content">
-                <div class="admin-header">
-                    <h2><i class="fas fa-user-shield"></i> Admin Dashboard</h2>
-                </div>
-                <div class="staff-list-container">
-                    <div class="staff-list">
-                        <input type="text" class="search-bar" id="adminSearch" placeholder="Search staff..." oninput="filterStaffList()">
-                        <div id="staffListElement"></div>
+                <div class="panel">
+                    <h3><i class="fas fa-user-shield"></i> Admin Dashboard</h3>
+                    <div class="staff-list-container">
+                        <div class="staff-list">
+                            <input type="text" class="search-bar" id="adminSearch" placeholder="Search staff..." oninput="filterStaffList()">
+                            <div id="staffListElement"></div>
+                        </div>
+                        <div class="staff-data-container" id="staffDataContainer">
+                            <p>Select a staff member to view details</p>
+                        </div>
                     </div>
-                    <div class="staff-data-container" id="staffDataContainer">
-                        <p>Select a staff member to view details</p>
-                    </div>
                 </div>
-                <div class="export" style="margin-top: 20px;">
-                    <button onclick="generateAdminPDF()"><i class="fas fa-file-pdf"></i> Admin PDF</button>
-                    <button class="clear-btn" onclick="clearAllData()"><i class="fas fa-trash"></i> Clear All Data</button>
-                    <button onclick="logout()" style="background: #636e72;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <div class="panel">
+                    <h3><i class="fas fa-cog"></i> Admin Actions</h3>
+                    <div class="export-buttons">
+                        <button class="btn-primary" onclick="generateAdminPDF()">
+                            <i class="fas fa-file-pdf"></i> Admin Report
+                        </button>
+                        <button class="btn-danger" onclick="clearAllData()">
+                            <i class="fas fa-trash"></i> Clear All Data
+                        </button>
+                        <button class="btn-outline" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </main>
+
+        <!-- Footer -->
         <footer>
-            <p>TBOS v3.0 | Tomstudio BizHub Operations System</p>
+            <p>TBOS v2.0 | Tomstudio BizHub Operations System</p>
             <p>Built by Tomstudio Tech Academy | <a href="tel:+2348185504382">+234 818 550 4382</a></p>
         </footer>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // ==================== GLOBAL VARIABLES ====================
+        let currentStaffId = null;
+        let clients = [];
+        let jobs = [];
+        let reports = [];
+        let inventory = [];
+        let isAdminAuthenticated = false;
+        const ADMIN_PASSWORD = "tomstudio123";
+        const WHATSAPP_NUMBER = "2348185504382";
+
+        // ==================== INITIALIZATION ====================
+        window.onload = function() {
+            updateDate();
+            checkLoginStatus();
+            loadAllData();
+        };
+
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+            document.getElementById('reportDate').value = now.toISOString().split('T')[0];
+        }
+
+        function checkLoginStatus() {
+            const savedId = localStorage.getItem('currentStaffId');
+            if (savedId) {
+                currentStaffId = savedId;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('staffDisplay').textContent = `ID: ${savedId}`;
+                loadAllData();
+                showToast(`Welcome back, ${savedId}!`);
+            }
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function showToast(msg, dur = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), dur);
+        }
+
+        function saveData(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                showToast('Storage error!');
+            }
+        }
+
+        function loadAllData() {
+            try {
+                clients = JSON.parse(localStorage.getItem('clients') || '[]');
+                jobs = JSON.parse(localStorage.getItem('jobs') || '[]');
+                reports = JSON.parse(localStorage.getItem('reports') || '[]');
+                inventory = JSON.parse(localStorage.getItem('inventory') || '[]');
+            } catch (e) {
+                console.error('Load error:', e);
+            }
+        }
+
+        function clearForm(ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function generateId() {
+            return 'TBOS-' + Date.now().toString().slice(-6);
+        }
+
+        // ==================== LOGIN/LOGOUT ====================
+        function login() {
+            const id = document.getElementById('staffId').value.trim();
+            if (!id) {
+                showToast('Please enter Staff ID');
+                return;
+            }
+            currentStaffId = id;
+            localStorage.setItem('currentStaffId', id);
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('staffDisplay').textContent = `ID: ${id}`;
+            loadAllData();
+            showToast(`Welcome, ${id}!`);
+        }
+
+        function logout() {
+            if (confirm('Log out?')) {
+                currentStaffId = null;
+                localStorage.removeItem('currentStaffId');
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+                showToast('Logged out');
+            }
+        }
+
+        // ==================== SIGN-IN WITH GPS ====================
+        function recordSignIn() {
+            const now = new Date();
+            const signInData = {
+                time: now.toLocaleTimeString(),
+                date: now.toLocaleDateString(),
+                timestamp: now.toISOString()
+            };
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    signInData.location = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude
+                    };
+                    document.getElementById('locationInfo').innerHTML = 
+                        `📍 Lat: ${pos.coords.latitude.toFixed(4)}, Long: ${pos.coords.longitude.toFixed(4)}`;
+                    saveSignInData(signInData);
+                    showToast('GPS location recorded!');
+                }, () => {
+                    saveSignInData(signInData);
+                    showToast('Location unavailable');
+                });
+            } else {
+                saveSignInData(signInData);
+            }
+            
+            document.getElementById('signInTime').textContent = `Signed in at ${signInData.time}`;
+        }
+
+        function saveSignInData(data) {
+            if (!currentStaffId) return;
+            localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
+        }
+
+        // ==================== NAVIGATION ====================
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                
+                if (tabId === 'admin' && !isAdminAuthenticated) {
+                    openAdminModal();
+                    return;
+                }
+                
+                document.querySelectorAll('.tab-content, .nav-link').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                document.getElementById(tabId).classList.add('active');
+                this.classList.add('active');
+                
+                if (tabId === 'clients') renderClients();
+                else if (tabId === 'jobs') renderJobs();
+                else if (tabId === 'reports') updateReportStats();
+                else if (tabId === 'inventory') renderInventory();
+                else if (tabId === 'admin') showAdminDashboard();
+            });
+        });
+
+        // ==================== CLIENTS ====================
+        function addClient() {
+            const name = document.getElementById('clientName').value.trim();
+            if (!name) {
+                showToast('Name required');
+                return;
+            }
+            
+            const now = new Date();
+            clients.push({
+                id: Date.now(),
+                name,
+                phone: document.getElementById('clientPhone').value.trim(),
+                email: document.getElementById('clientEmail').value.trim(),
+                comment: document.getElementById('clientComment').value.trim(),
+                date: now.toLocaleDateString(),
+                time: now.toLocaleTimeString(),
+                staffId: currentStaffId
+            });
+            
+            saveData('clients', clients);
+            renderClients();
+            clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
+            showToast('Client added!');
+        }
+
+        function renderClients() {
+            const list = document.getElementById('clientList');
+            const todayClients = clients.filter(c => c.date === new Date().toLocaleDateString());
+            
+            if (todayClients.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No clients today</p>';
+                return;
+            }
+            
+            list.innerHTML = todayClients.map(c => `
+                <div class="data-item">
+                    <div class="data-item-info">
+                        <h4>${c.name}</h4>
+                        <p>📞 ${c.phone || 'N/A'}</p>
+                        <p>✉️ ${c.email || 'N/A'}</p>
+                        <p>${c.comment || 'No comment'}</p>
+                        <p style="font-size: 0.75rem; color: #999;">${c.time}</p>
+                    </div>
+                    <div class="data-item-actions">
+                        <button class="btn-success" onclick="sendWhatsApp('${c.name}', '${c.phone}')">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearClients() {
+            if (confirm('Clear all clients?')) {
+                clients = [];
+                saveData('clients', clients);
+                renderClients();
+                showToast('Cleared!');
+            }
+        }
+
+        // ==================== JOBS WITH ROUTING ====================
+        const JOB_STAGES = [
+            'Client/staff',
+            'Graphics',
+            'Printing',
+            'Photography',
+            'Secretary Review',
+            'Admin Approval',
+            'Delivery',
+            'Completed'
+        ];
+
+        function addJob() {
+            const client = document.getElementById('jobClient').value.trim();
+            if (!client) {
+                showToast('Client name required');
+                return;
+            }
+            
+            const now = new Date();
+            const amount = parseFloat(document.getElementById('jobAmount').value) || 0;
+            const paid = parseFloat(document.getElementById('jobPaid').value) || 0;
+            const trackingId = generateId();
+            
+            jobs.push({
+                id: Date.now(),
+                trackingId,
+                client,
+                phone: document.getElementById('jobPhone').value.trim(),
+                email: document.getElementById('jobEmail')?.value || '',
+                hub: document.getElementById('jobHub').value,
+                description: document.getElementById('jobDescription').value.trim(),
+                amount,
+                paid,
+                balance: amount - paid,
+                paymentStatus: paid >= amount ? 'PAID' : (paid > 0 ? 'PARTIALLY PAID' : 'UNPAID'),
+                status: paid >= amount ? 'Completed' : 'Pending',
+                stage: 'Client/staff',
+                delivery: document.getElementById('jobDelivery').value,
+                date: now.toLocaleDateString(),
+                time: now.toLocaleTimeString(),
+                staffId: currentStaffId,
+                createdAt: now.toISOString()
+            });
+            
+            saveData('jobs', jobs);
+            renderJobs();
+            clearForm(['jobClient', 'jobPhone', 'jobHub', 'jobDescription', 'jobAmount', 'jobPaid', 'jobDelivery']);
+            showToast(`Job created! ID: ${trackingId}`);
+            
+            // Send WhatsApp notification
+            sendJobWhatsApp(trackingId, document.getElementById('jobPhone').value.trim(), 'created');
+        }
+
+        function renderJobs() {
+            const list = document.getElementById('jobList');
+            const hubFilter = document.getElementById('filterHub').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            let filteredJobs = jobs;
+            if (hubFilter) filteredJobs = filteredJobs.filter(j => j.hub === hubFilter);
+            if (statusFilter) filteredJobs = filteredJobs.filter(j => j.status === statusFilter);
+            
+            if (filteredJobs.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No jobs found</p>';
+                return;
+            }
+            
+            list.innerHTML = filteredJobs.map(j => {
+                const statusClass = j.paymentStatus === 'PAID' ? 'status-paid' : 
+                                   j.paymentStatus === 'PARTIALLY PAID' ? 'status-partial' : 'status-unpaid';
+                
+                return `
+                <div class="data-item">
+                    <div class="data-item-info">
+                        <h4>${j.trackingId} - ${j.client}</h4>
+                        <p>🏢 ${j.hub || 'N/A'}</p>
+                        <p>📝 ${j.description || 'No description'}</p>
+                        <p>💰 ₦${j.amount.toLocaleString()} | Paid: ₦${j.paid.toLocaleString()}</p>
+                        <p>📊 Status: <span class="status-badge ${statusClass}">${j.paymentStatus}</span> | Stage: ${j.stage}</p>
+                        <p style="font-size: 0.75rem; color: #999;">${j.date} ${j.time}</p>
+                    </div>
+                    <div class="data-item-actions">
+                        <button class="btn-info" onclick="viewJobDetail(${j.id})" title="View & Route">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-success" onclick="sendJobWhatsApp('${j.trackingId}', '${j.phone}', 'update')" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function viewJobDetail(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            const currentIndex = JOB_STAGES.indexOf(job.stage);
+            const nextStage = currentIndex < JOB_STAGES.length - 1 ? JOB_STAGES[currentIndex + 1] : null;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 700px;">
+                    <div class="modal-header">
+                        <h3>📋 Job Details & Routing</h3>
+                        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div class="form-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <div><strong>Tracking ID:</strong> ${job.trackingId}</div>
+                            <div><strong>Client:</strong> ${job.client}</div>
+                            <div><strong>Phone:</strong> ${job.phone}</div>
+                            <div><strong>Hub:</strong> ${job.hub}</div>
+                            <div><strong>Stage:</strong> ${job.stage}</div>
+                            <div><strong>Status:</strong> <span class="status-badge ${job.paymentStatus === 'PAID' ? 'status-paid' : job.paymentStatus === 'PARTIALLY PAID' ? 'status-partial' : 'status-unpaid'}">${job.paymentStatus}</span></div>
+                            <div><strong>Amount:</strong> ₦${job.amount.toLocaleString()}</div>
+                            <div><strong>Paid:</strong> ₦${job.paid.toLocaleString()}</div>
+                            <div><strong>Balance:</strong> ₦${job.balance.toLocaleString()}</div>
+                            <div><strong>Delivery:</strong> ${job.delivery}</div>
+                        </div>
+                        
+                        <div class="routing-timeline">
+                            <h4><i class="fas fa-route"></i> Job Routing</h4>
+                            <div class="routing-stages">
+                                ${JOB_STAGES.map((stage, index) => {
+                                    let className = 'stage-item';
+                                    if (index === currentIndex) className += ' active';
+                                    if (index < currentIndex) className += ' completed';
+                                    return `<div class="${className}" onclick="alert('Stage: ${stage}')">
+                                        <div class="icon"><i class="fas ${getStageIcon(stage)}"></i></div>
+                                        <div class="label">${stage}</div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions" style="margin-top: 20px;">
+                            ${nextStage ? `
+                            <button class="btn-primary" onclick="routeJob(${job.id}, '${nextStage}')" style="flex: 1;">
+                                <i class="fas fa-arrow-right"></i> Route to ${nextStage}
+                            </button>
+                            ` : '<button class="btn-success" disabled><i class="fas fa-check"></i> Job Completed</button>'}
+                            <button class="btn-success" onclick="sendJobWhatsApp('${job.trackingId}', '${job.phone}', 'update')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function getStageIcon(stage) {
+            const icons = {
+                'Client/staff': 'fa-user',
+                'Graphics': 'fa-paint-brush',
+                'Printing': 'fa-print',
+                'Photography': 'fa-camera',
+                'Secretary Review': 'fa-clipboard-check',
+                'Admin Approval': 'fa-user-shield',
+                'Delivery': 'fa-truck',
+                'Completed': 'fa-check-circle'
+            };
+            return icons[stage] || 'fa-circle';
+        }
+
+        function routeJob(jobId, nextStage) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            if (!confirm(`Route this job from ${job.stage} to ${nextStage}?`)) return;
+            
+            job.stage = nextStage;
+            job.status = nextStage === 'Completed' ? 'Completed' : 'In Progress';
+            job.routedAt = new Date().toISOString();
+            job.routedBy = currentStaffId;
+            
+            saveData('jobs', jobs);
+            renderJobs();
+            
+            // Close modal
+            document.querySelector('.modal.active')?.remove();
+            
+            showToast(`Job routed to: ${nextStage}`);
+            sendJobWhatsApp(job.trackingId, job.phone, `routed to ${nextStage}`);
+        }
+
+        function clearJobs() {
+            clearForm(['jobClient', 'jobPhone', 'jobHub', 'jobDescription', 'jobAmount', 'jobPaid', 'jobDelivery']);
+        }
+
+        // ==================== WHATSAPP INTEGRATION ====================
+        function sendWhatsApp(name, phone) {
+            if (!phone) {
+                showToast('No phone number');
+                return;
+            }
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const message = `Hello ${name},\n\nThank you for choosing Tomstudio BizHub!\n\nContact: +234 818 550 4382`;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function sendJobWhatsApp(trackingId, phone, action) {
+            if (!phone) {
+                showToast('No phone number');
+                return;
+            }
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const message = `Hello,\n\nYour job status update - ${trackingId}\nAction: ${action}\n\nThank you for choosing Tomstudio BizHub!\nContact: +234 818 550 4382`;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // ==================== REPORTS WITH PDF ====================
+        function submitReport() {
+            const date = document.getElementById('reportDate').value;
+            const hub = document.getElementById('reportHub').value;
+            const tasks = document.getElementById('reportTasks').value.trim();
+            
+            if (!date || !hub || !tasks) {
+                showToast('Please fill required fields');
+                return;
+            }
+            
+            const now = new Date();
+            const report = {
+                id: generateId(),
+                staffId: currentStaffId,
+                staffName: currentStaffId,
+                hub,
+                date,
+                tasks,
+                challenges: document.getElementById('reportChallenges').value.trim() || 'None',
+                plans: document.getElementById('reportPlans').value.trim() || 'Continue ongoing tasks',
+                hoursWorked: parseInt(document.getElementById('reportHours').value) || 8,
+                jobsCompleted: parseInt(document.getElementById('reportJobs').value) || 0,
+                submittedAt: now.toISOString()
+            };
+            
+            reports.push(report);
+            saveData('reports', reports);
+            
+            // Show PDF preview
+            showReportPDF(report);
+            
+            showToast('Report submitted!');
+            clearForm(['reportTasks', 'reportChallenges', 'reportPlans', 'reportHours', 'reportJobs']);
+            updateReportStats();
+        }
+
+        function showReportPDF(report) {
+            document.getElementById('previewStaff').textContent = report.staffName;
+            document.getElementById('previewHub').textContent = report.hub;
+            document.getElementById('previewDate').textContent = report.date;
+            document.getElementById('previewHours').textContent = report.hoursWorked + ' hours';
+            document.getElementById('previewJobs').textContent = report.jobsCompleted;
+            document.getElementById('previewId').textContent = report.id;
+            document.getElementById('previewGenerated').textContent = new Date().toLocaleString();
+            
+            document.getElementById('previewTasks').innerHTML = report.tasks.split('\n').filter(t => t.trim()).map(t => `<li>${t.trim()}</li>`).join('');
+            document.getElementById('previewChallenges').innerHTML = report.challenges.split('\n').filter(t => t.trim()).map(t => `<li>${t.trim()}</li>`).join('');
+            document.getElementById('previewPlans').innerHTML = report.plans.split('\n').filter(t => t.trim()).map(t => `<li>${t.trim()}</li>`).join('');
+            
+            document.getElementById('pdfPreview').classList.add('active');
+            document.getElementById('pdfPreview').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateReportPDF() {
+            const date = document.getElementById('reportDate').value;
+            const hub = document.getElementById('reportHub').value;
+            const tasks = document.getElementById('reportTasks').value.trim();
+            
+            if (!date || !hub || !tasks) {
+                showToast('Please fill report first');
+                return;
+            }
+            
+            const report = {
+                id: generateId(),
+                staffName: currentStaffId,
+                hub,
+                date,
+                tasks,
+                challenges: document.getElementById('reportChallenges').value.trim() || 'None',
+                plans: document.getElementById('reportPlans').value.trim() || 'Continue ongoing tasks',
+                hoursWorked: parseInt(document.getElementById('reportHours').value) || 8,
+                jobsCompleted: parseInt(document.getElementById('reportJobs').value) || 0
+            };
+            
+            showReportPDF(report);
+            
+            const element = document.getElementById('pdfPreview');
+            const opt = {
+                margin: 10,
+                filename: `TBOS_Report_${currentStaffId}_${date}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                showToast('PDF downloaded!');
+            }).catch(err => {
+                showToast('PDF error: ' + err.message);
+            });
+        }
+
+        function updateReportStats() {
+            const today = new Date().toLocaleDateString();
+            const todayClients = clients.filter(c => c.date === today).length;
+            const todayJobs = jobs.filter(j => j.date === today).length;
+            const todaySales = jobs.filter(j => j.date === today).reduce((sum, j) => sum + (j.paid || 0), 0);
+            const todayStaff = [...new Set(reports.filter(r => r.date === today).map(r => r.staffId))].length;
+            
+            document.getElementById('reportClients').textContent = todayClients;
+            document.getElementById('reportJobs').textContent = todayJobs;
+            document.getElementById('reportSales').textContent = '₦' + todaySales.toLocaleString();
+            document.getElementById('reportStaff').textContent = todayStaff;
+        }
+
+        function generatePDF() {
+            showToast('Use "PDF" button in Reports section');
+        }
+
+        function exportCSV() {
+            const today = new Date().toLocaleDateString();
+            let csv = 'Type,Name,Phone,Amount,Date,Time,Staff\n';
+            
+            clients.filter(c => c.date === today).forEach(c => {
+                csv += `Client,${c.name},${c.phone},0,${c.date},${c.time},${c.staffId}\n`;
+            });
+            
+            jobs.filter(j => j.date === today).forEach(j => {
+                csv += `Job,${j.client},${j.phone},${j.amount},${j.date},${j.time},${j.staffId}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `TBOS_Report_${today.replace(/\//g, '-')}.csv`;
+            a.click();
+            showToast('CSV exported!');
+        }
+
+        function backupData() {
+            const backup = {
+                clients,
+                jobs,
+                reports,
+                inventory,
+                date: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `TBOS_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showToast('Backup downloaded!');
+        }
+
+        // ==================== INVENTORY ====================
+        function addInventory() {
+            const name = document.getElementById('itemName').value.trim();
+            if (!name) {
+                showToast('Item name required');
+                return;
+            }
+            
+            inventory.push({
+                id: Date.now(),
+                name,
+                category: document.getElementById('itemCategory').value,
+                stock: parseInt(document.getElementById('itemStock').value) || 0,
+                alert: parseInt(document.getElementById('itemAlert').value) || 5,
+                status: 'OK'
+            });
+            
+            updateInventoryStatus();
+            saveData('inventory', inventory);
+            renderInventory();
+            clearForm(['itemName', 'itemCategory', 'itemStock', 'itemAlert']);
+            showToast('Item added!');
+        }
+
+        function updateInventoryStatus() {
+            inventory.forEach(item => {
+                if (item.stock === 0) item.status = 'OUT';
+                else if (item.stock <= item.alert) item.status = 'LOW';
+                else item.status = 'OK';
+            });
+        }
+
+        function renderInventory() {
+            const list = document.getElementById('inventoryList');
+            updateInventoryStatus();
+            
+            const total = inventory.length;
+            const low = inventory.filter(i => i.status === 'LOW').length;
+            const out = inventory.filter(i => i.status === 'OUT').length;
+            
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('lowStock').textContent = low;
+            document.getElementById('outStock').textContent = out;
+            
+            if (inventory.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No inventory items</p>';
+                return;
+            }
+            
+            list.innerHTML = inventory.map(i => `
+                <div class="data-item">
+                    <div class="data-item-info">
+                        <h4>${i.name}</h4>
+                        <p>📦 ${i.category}</p>
+                        <p>Stock: ${i.stock} | Alert: ${i.alert}</p>
+                        <p>Status: <span style="color: ${i.status === 'OK' ? 'var(--success)' : i.status === 'LOW' ? 'var(--warning)' : 'var(--danger)'}">${i.status}</span></p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== ADMIN ====================
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                closeAdminModal();
+                document.querySelectorAll('.tab-content, .nav-link').forEach(el => el.classList.remove('active'));
+                document.getElementById('admin').classList.add('active');
+                document.querySelector('[data-tab="admin"]').classList.add('active');
+                showAdminDashboard();
+                showToast('Admin access granted!');
+            } else {
+                showToast('Wrong password!');
+            }
+        }
+
+        function showAdminDashboard() {
+            const staffIds = getAllStaffIds();
+            const list = document.getElementById('staffListElement');
+            
+            if (staffIds.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No staff data</p>';
+                document.getElementById('staffDataContainer').innerHTML = '<p>No staff data available</p>';
+                return;
+            }
+            
+            list.innerHTML = staffIds.map(id => {
+                const count = getDataCount(id);
+                return `
+                    <div class="staff-item" onclick="loadStaffData('${id}')">
+                        <span>${id}</span>
+                        <span class="badge">${count}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            loadStaffData(staffIds[0]);
+        }
+
+        function getAllStaffIds() {
+            const staffIds = new Set();
+            ['clients', 'jobs', 'reports'].forEach(p => {
+                try {
+                    const data = JSON.parse(localStorage.getItem(p) || '[]');
+                    data.forEach(d => {
+                        if (d.staffId) staffIds.add(d.staffId);
+                    });
+                } catch (e) {}
+            });
+            return Array.from(staffIds);
+        }
+
+        function getDataCount(staffId) {
+            let count = 0;
+            ['clients', 'jobs', 'reports'].forEach(p => {
+                try {
+                    const data = JSON.parse(localStorage.getItem(p) || '[]');
+                    count += data.filter(d => d.staffId === staffId).length;
+                } catch (e) {}
+            });
+            return count;
+        }
+
+        function loadStaffData(staffId) {
+            document.querySelectorAll('.staff-item').forEach(i => i.classList.remove('active'));
+            event.target.closest('.staff-item').classList.add('active');
+            
+            const allClients = clients.filter(c => c.staffId === staffId);
+            const allJobs = jobs.filter(j => j.staffId === staffId);
+            const allReports = reports.filter(r => r.staffId === staffId);
+            const signIn = JSON.parse(localStorage.getItem(`signin_${staffId}`) || '{}');
+            
+            const totalSales = allJobs.reduce((sum, j) => sum + (j.paid || 0), 0);
+            
+            document.getElementById('staffDataContainer').innerHTML = `
+                <h3>📋 ${staffId}</h3>
+                ${signIn.time ? `<p>🕐 Signed in: ${signIn.time}</p>` : ''}
+                ${signIn.location ? `<p>📍 Location: ${signIn.location.lat.toFixed(4)}, ${signIn.location.lng.toFixed(4)}</p>` : ''}
+                <p>👥 Clients: ${allClients.length}</p>
+                <p>💼 Jobs: ${allJobs.length}</p>
+                <p>💰 Total Sales: ₦${totalSales.toLocaleString()}</p>
+                <p>📝 Reports: ${allReports.length}</p>
+                <div style="margin: 20px 0;">
+                    <button class="btn-primary" onclick="approveStaff('${staffId}')" style="width: 100%;">
+                        <i class="fas fa-check"></i> Approve & Clear
+                    </button>
+                </div>
+            `;
+        }
+
+        function approveStaff(staffId) {
+            if (confirm(`Approve and clear ${staffId}'s data?`)) {
+                clients = clients.filter(c => c.staffId !== staffId);
+                jobs = jobs.filter(j => j.staffId !== staffId);
+                reports = reports.filter(r => r.staffId !== staffId);
+                localStorage.removeItem(`signin_${staffId}`);
+                
+                saveData('clients', clients);
+                saveData('jobs', jobs);
+                saveData('reports', reports);
+                
+                showAdminDashboard();
+                showToast(`${staffId} approved and cleared!`);
+            }
+        }
+
+        function generateAdminPDF() {
+            showToast('Admin PDF - Feature coming soon!');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ WARNING: This will delete ALL data! Continue?')) {
+                localStorage.clear();
+                clients = [];
+                jobs = [];
+                reports = [];
+                inventory = [];
+                location.reload();
+            }
+        }
+
+        function filterStaffList() {
+            const search = document.getElementById('adminSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.staff-item');
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(search) ? 'flex' : 'none';
+            });
+        }
+
+        // ==================== CLIENT PORTAL LINK ====================
+        function openClientPortal() {
+            // For now, show a message - you can create a separate client portal page
+            alert('Client Portal Feature:\n\nClients can track their jobs by entering Tracking ID or Phone Number.\n\nTo enable: Create clients.html page with job tracking functionality.');
+        }
+    </script>
 </body>
 </html>
