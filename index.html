@@ -2,538 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TBOS v2.0 | Tomstudio BizHub Operations System</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800080">
-    <link rel="icon" type="image/png" href="logo-192.png">
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-    
-    <!-- Font Awesome -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#008080">
+    <meta name="description" content="TBOS v2.0 - Tomstudio BizHub Operations System">
+    <title>TBOS v2.0 | Tomstudio BizHub</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- QR Code & PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary: #800080;
-            --primary-dark: #660066;
-            --secondary: #0047AB;
-            --white: #ffffff;
-            --black: #0a0a0a;
-            --gray: #666666;
-            --gray-light: #f5f5f5;
-            --border: #e0e0e0;
-            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --primary: #008080;
+            --primary-dark: #006666;
+            --success: #00c851;
+            --warning: #ffbb33;
+            --danger: #ff4444;
+            --info: #00b0ff;
+            --bg-light: #f5f6fa;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
             --radius: 12px;
-            --sidebar-width: 250px;
         }
 
-        /* Hub Themes */
-        [data-hub="Online Shop"] { --primary: #008080; --primary-dark: #006666; }
-        [data-hub="Graphics Design"] { --primary: #0000FF; --primary-dark: #0000CC; }
-        [data-hub="Printing"] { --primary: #FF0000; --primary-dark: #CC0000; }
-        [data-hub="Photography"] { --primary: #FFD700; --primary-dark: #CCAC00; }
-        [data-hub="CBT Center"] { --primary: #4B0082; --primary-dark: #3A0066; }
-        [data-hub="Tech Lab"] { --primary: #00FFFF; --primary-dark: #00CCCC; }
-        [data-hub="Tech Academy"] { --primary: #800080; --primary-dark: #660066; }
-        [data-hub="Gadgets"] { --primary: #FFA500; --primary-dark: #CC8400; }
-
-        [data-theme="dark"] {
-            --white: #1a1a1a;
-            --black: #f5f5f5;
-            --gray-light: #2d2d2d;
-            --border: #404040;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--gray-light);
-            color: var(--black);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-dark);
             min-height: 100vh;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* LOGIN - COMPACT & PROFESSIONAL */
-        .login-page {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 20px;
-        }
-
-        .login-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 35px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .login-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 2.5rem;
-            color: var(--white);
-        }
-
-        .login-header h1 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--black);
-            margin-bottom: 5px;
-        }
-
-        .login-header p {
-            color: var(--gray);
-            font-size: 0.85rem;
-        }
-
-        .login-toggle {
-            display: flex;
-            background: var(--gray-light);
-            border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 20px;
-        }
-
-        .login-toggle button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            color: var(--gray);
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .login-toggle button.active {
-            background: var(--primary);
-            color: var(--white);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: var(--black);
-            font-size: 0.85rem;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px 12px 12px 40px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            background: var(--gray-light);
-            color: var(--black);
-        }
-
-        .form-group textarea {
-            padding: 12px;
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        .form-group .input-icon {
-            position: absolute;
-            left: 14px;
-            top: 38px;
-            color: var(--gray);
-        }
-
-        .btn {
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3436;
+            color: white;
             padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-        }
+        .toast.show { opacity: 1; }
 
-        .btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-
-        .login-footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .login-msg {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            display: none;
-            text-align: center;
-        }
-
-        .login-msg.error {
-            background: rgba(220,53,69,0.1);
-            color: #dc3545;
-            display: block;
-        }
-
-        .login-msg.success {
-            background: rgba(0,214,143,0.1);
-            color: #00b87a;
-            display: block;
-        }
-
-        /* MAIN APP */
-        .app-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: var(--sidebar-width);
-            background: linear-gradient(180deg, #0a0a0a, #1a1a1a);
-            color: var(--white);
-            padding: 20px;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            border-right: 3px solid var(--primary);
-            z-index: 1000;
-        }
-
-        .sidebar-header {
-            text-align: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 15px;
-        }
-
-        .sidebar-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 1.8rem;
-            color: var(--white);
-        }
-
-        .sidebar-header h2 {
-            font-size: 0.95rem;
-            font-weight: 700;
-        }
-
-        .sidebar-header p {
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu button {
-            width: 100%;
-            padding: 10px 14px;
-            background: transparent;
-            border: none;
-            color: rgba(255,255,255,0.8);
-            text-align: left;
-            cursor: pointer;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-        }
-
-        .sidebar-menu button:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .sidebar-menu button.active {
-            background: var(--primary);
-            color: var(--white);
-        }
-
-        .sidebar-menu .menu-category {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-            padding: 10px 14px 5px;
-            font-weight: 700;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            background: var(--primary);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .main-content {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .top-bar h1 {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .top-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .theme-toggle, .notification-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            border: none;
-            background: var(--white);
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: var(--shadow);
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
-            box-shadow: var(--shadow);
-        }
-
-        .card h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 18px;
-            text-align: center;
-            border-bottom: 4px solid var(--primary);
-            box-shadow: var(--shadow);
-        }
-
-        .stat-card .icon {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 1.3rem;
-            color: var(--white);
-        }
-
-        .stat-card .number {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .stat-card .label {
-            font-size: 0.75rem;
-            color: var(--gray);
-            margin-top: 5px;
-        }
-
-        .job-card {
-            background: var(--white);
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .job-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .job-status {
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--white);
-        }
-
-        .status-pending { background: #ffc107; color: var(--black); }
-        .status-in-progress { background: var(--secondary); }
-        .status-delivered { background: #00D68F; }
-        .status-delayed { background: #dc3545; }
-
-        .job-meta {
-            font-size: 0.75rem;
-            color: var(--gray);
-            margin: 4px 0;
-        }
-
-        .hub-badge {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            background: var(--primary);
-            color: var(--white);
-        }
-
-        .filter-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .filter-bar select, .filter-bar input {
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            background: var(--white);
-            flex: 1;
-            min-width: 120px;
-        }
-
+        /* Modal */
         .modal {
+            display: none;
             position: fixed;
-            top: 0;
+            z-index: 10000;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
+            background: rgba(0,0,0,0.6);
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            padding: 20px;
         }
 
+        .modal.active { display: flex; }
+
         .modal-content {
-            background: var(--white);
-            padding: 25px;
-            border-radius: var(--radius);
-            max-width: 500px;
-            width: 90%;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
             max-height: 90vh;
             overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
         }
 
         .modal-close {
@@ -541,1271 +104,2147 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: var(--text-muted);
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--white);
-            padding: 12px 18px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            z-index: 9999;
-            font-size: 0.85rem;
+        /* Login Screen */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .hidden { display: none !important; }
-
-        footer {
+        .login-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
             text-align: center;
-            padding: 15px;
-            margin-top: 30px;
-            border-top: 1px solid var(--border);
-            font-size: 0.8rem;
-            color: var(--gray);
         }
 
-        /* Knowledge Center Cards */
-        .knowledge-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        .logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0,128,128,0.4);
+        }
+
+        .login-card h1 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .login-form {
+            margin-bottom: 20px;
+        }
+
+        .login-form label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,128,128,0.4);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .support-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .support-info p {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .support-info a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .credit {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Main App */
+        #mainApp {
+            display: none;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .header-left i {
+            font-size: 1.5rem;
+        }
+
+        .header-center {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
 
-        .knowledge-card {
-            background: var(--white);
-            border-radius: var(--radius);
+        #staffDisplay {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Sign In Info */
+        .sign-in-info {
             padding: 20px;
-            border-left: 4px solid var(--primary);
+            background: white;
+            margin: 15px;
+            border-radius: 15px;
             box-shadow: var(--shadow);
         }
 
-        .knowledge-card h4 {
+        .sign-in-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .sign-in-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .sign-in-details {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .sign-in-details p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 4px 0;
+        }
+
+        .btn-signin {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-signin:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 20px;
+            background: white;
+            margin: 0 15px 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .main-nav::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .main-nav::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 18px;
+            background: var(--bg-light);
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            min-width: 80px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-link i {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 0 15px 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Panels */
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel h3 {
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+        }
+
+        /* Forms */
+        .form input, .form textarea, .form select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form input:focus, .form textarea:focus, .form select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-actions button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #000;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        /* Data List */
+        .data-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .data-item {
+            padding: 18px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .data-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .data-item-info {
+            flex: 1;
+        }
+
+        .data-item-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 6px;
             font-size: 1rem;
         }
 
-        .knowledge-card p {
+        .data-item-info p {
+            color: var(--text-muted);
             font-size: 0.85rem;
-            color: var(--gray);
+            margin: 4px 0;
+        }
+
+        .data-item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .data-item-actions button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+
+        .data-item-actions button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,128,128,0.3);
+        }
+
+        .stat-box strong {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-box span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .stat-box.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #ff9900 100%);
+        }
+
+        .stat-box.danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #cc0000 100%);
+        }
+
+        .stat-box.success {
+            background: linear-gradient(135deg, var(--success) 0%, #00a040 100%);
+        }
+
+        /* Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .summary-box strong {
+            display: block;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .summary-box span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Export Buttons */
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .export-buttons button {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        /* Admin Dashboard */
+        .staff-list-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .staff-list {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .staff-data-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            min-height: 400px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .staff-item {
+            padding: 14px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .staff-item:hover, .staff-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .badge {
+            background: var(--danger);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-paid { background: rgba(0,200,81,0.2); color: var(--success); }
+        .status-partial { background: rgba(255,187,51,0.2); color: var(--warning); }
+        .status-unpaid { background: rgba(255,68,68,0.2); color: var(--danger); }
+        .status-completed { background: rgba(0,176,255,0.2); color: var(--info); }
+
+        /* Routing Timeline */
+        .routing-timeline {
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--bg-light);
+            border-radius: 12px;
+        }
+
+        .routing-stages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stage-item {
+            flex: 1;
+            min-width: 90px;
+            text-align: center;
+            padding: 12px 8px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stage-item:hover {
+            border-color: var(--primary);
+        }
+
+        .stage-item.active {
+            border-color: var(--primary);
+            background: rgba(0,128,128,0.1);
+        }
+
+        .stage-item.completed {
+            border-color: var(--success);
+            background: rgba(0,200,81,0.1);
+        }
+
+        .stage-item .icon {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .stage-item .label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Image Upload */
+        .image-upload {
+            margin: 15px 0;
+        }
+
+        .image-upload label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .image-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-item .delete-img {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: white;
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .app-header {
+                padding: 12px 15px;
+            }
+
+            .header-center {
+                display: none;
+            }
+
+            #staffDisplay {
+                display: none;
+            }
+
+            .main-nav {
+                margin: 0 10px 10px;
+                padding: 10px;
+            }
+
+            .nav-link {
+                min-width: 70px;
+                font-size: 0.75rem;
+                padding: 10px 14px;
+            }
+
+            .panel {
+                padding: 20px 15px;
+                margin: 10px;
+            }
+
+            .form-actions, .export-buttons {
+                flex-direction: column;
+            }
+
+            .form-actions button, .export-buttons button {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .staff-list-container {
+                grid-template-columns: 1fr;
+            }
+
+            .routing-stages {
+                flex-direction: column;
+            }
+
+            .stage-item {
+                min-width: 100%;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* PDF Preview */
+        .pdf-preview {
+            background: white;
+            color: black;
+            padding: 40px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .pdf-preview.active {
+            display: block;
+        }
+
+        .pdf-header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pdf-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .pdf-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f6fa;
+            border-radius: 10px;
+        }
+
+        .pdf-section {
+            margin-bottom: 25px;
+        }
+
+        .pdf-section h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
             margin-bottom: 15px;
         }
 
-        /* File Upload */
-        .file-upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            padding: 20px;
+        .pdf-section ul {
+            list-style: disc;
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .pdf-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
             text-align: center;
-            margin: 15px 0;
-            cursor: pointer;
-        }
-
-        .file-upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(128,0,128,0.05);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1001;
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-            border: none;
-            background: var(--white);
-            box-shadow: var(--shadow);
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar { 
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            .sidebar.active { 
-                transform: translateX(0);
-            }
-            .main-content { 
-                margin-left: 0;
-                padding-top: 70px;
-            }
-            .mobile-menu-btn {
-                display: block;
-            }
-            .stats-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-            }
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            color: var(--text-muted);
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick="document.getElementById('sidebar').classList.toggle('active')">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- LOGIN PAGE -->
-    <div id="login-page" class="login-page">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-logo">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <h1>TBOS v2.0</h1>
-                <p>Tomstudio BizHub Operations System</p>
-                <p style="font-size: 0.75rem; margin-top: 5px;">Track • Record • Route • Report • Improve</p>
-            </div>
-
-            <div class="login-toggle">
-                <button id="staff-login-btn" class="active" onclick="app.setLoginType('staff')">
-                    <i class="fas fa-user"></i> Staff
-                </button>
-                <button id="admin-login-btn" onclick="app.setLoginType('admin')">
-                    <i class="fas fa-shield-alt"></i> Admin
-                </button>
-            </div>
-
-            <form onsubmit="event.preventDefault(); app.login();">
-                <div class="form-group" id="staff-id-group">
-                    <label>Staff ID / Email / Phone</label>
-                    <input type="text" id="login-id" placeholder="Enter credentials">
-                    <i class="fas fa-user input-icon"></i>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="login-pass" placeholder="Enter password" required>
-                    <i class="fas fa-lock input-icon"></i>
-                </div>
-
-                <button type="submit" class="btn">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
-                </button>
-            </form>
-
-            <div class="login-footer">
-                <p>New Staff? <a href="#" onclick="app.showRegisterModal()">Register Here</a></p>
-                <p style="margin-top: 8px;">Admin: admin@tbos.com | @admin123#</p>
-            </div>
-
-            <div id="login-msg" class="login-msg"></div>
-        </div>
-    </div>
-
-    <!-- MAIN APP -->
-    <div id="app-container" class="app-container hidden">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo">
-                    <i class="fas fa-cube"></i>
-                </div>
-                <h2>TBOS v2.0</h2>
-                <p>Operations System</p>
-            </div>
-
-            <ul class="sidebar-menu">
-                <div class="menu-category">Main</div>
-                <li><button class="active" onclick="app.showView('dashboard')"><i class="fas fa-home"></i> Dashboard</button></li>
-                <li><button onclick="app.showView('jobs')"><i class="fas fa-briefcase"></i> Jobs</button></li>
-                <li><button onclick="app.showView('new-job')"><i class="fas fa-plus-circle"></i> New Job</button></li>
-                <li><button onclick="app.showView('reports')"><i class="fas fa-clipboard"></i> Reports</button></li>
-                <li><button onclick="app.showView('knowledge')"><i class="fas fa-book"></i> Knowledge Center</button></li>
-
-                <div class="menu-category hidden" id="admin-menu">Admin</div>
-                <li id="admin-staff" class="hidden"><button onclick="app.showView('staff')"><i class="fas fa-users"></i> Staff</button></li>
-                <li id="admin-approvals" class="hidden"><button onclick="app.showView('approvals')"><i class="fas fa-user-check"></i> Approvals</button></li>
-                <li id="admin-announcements" class="hidden"><button onclick="app.showView('announcements')"><i class="fas fa-bullhorn"></i> Announcements</button></li>
-                <li id="admin-files" class="hidden"><button onclick="app.showView('files')"><i class="fas fa-file-upload"></i> File Uploads</button></li>
-                <li id="admin-analytics" class="hidden"><button onclick="app.showView('analytics')"><i class="fas fa-chart-line"></i> Analytics</button></li>
-            </ul>
-
-            <div style="margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
-                <div class="user-info">
-                    <div class="user-avatar"><i class="fas fa-user"></i></div>
-                    <div>
-                        <div style="font-size: 0.85rem; font-weight: 600;" id="user-name">User</div>
-                        <div style="font-size: 0.7rem; opacity: 0.7;" id="user-role">Role</div>
-                    </div>
-                </div>
-                <button class="btn" style="background: #dc3545;" onclick="app.logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <div class="top-bar">
-                <h1 id="page-title">Dashboard</h1>
-                <div class="top-actions">
-                    <button class="notification-btn" onclick="app.showNotifications()">
-                        <i class="fas fa-bell"></i>
-                        <span id="notif-count" style="position:absolute;top:-5px;right:-5px;background:#dc3545;color:white;font-size:0.6rem;padding:2px 6px;border-radius:10px;">0</span>
-                    </button>
-                    <button class="theme-toggle" onclick="app.toggleTheme()">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Dashboard -->
-            <div id="view-dashboard">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="icon"><i class="fas fa-calendar-day"></i></div>
-                        <div class="number" id="stat-today">0</div>
-                        <div class="label">Today's Jobs</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon"><i class="fas fa-clock"></i></div>
-                        <div class="number" id="stat-pending">0</div>
-                        <div class="label">Pending</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="number" id="stat-delivered">0</div>
-                        <div class="label">Delivered</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon"><i class="fas fa-naira-sign"></i></div>
-                        <div class="number" id="stat-revenue">₦0</div>
-                        <div class="label">Revenue</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3><i class="fas fa-bullhorn"></i> Announcements</h3>
-                    <div id="announcements-list"></div>
-                </div>
-
-                <div class="card">
-                    <h3><i class="fas fa-briefcase"></i> Recent Jobs</h3>
-                    <div id="recent-jobs"></div>
-                </div>
-            </div>
-
-            <!-- Jobs -->
-            <div id="view-jobs" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-list"></i> Job Inventory</h3>
-                    <div class="filter-bar">
-                        <input type="text" id="job-search" placeholder="Search..." onkeyup="app.renderJobs()">
-                        <select id="job-status" onchange="app.renderJobs()">
-                            <option value="all">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="delivered">Delivered</option>
-                        </select>
-                        <select id="job-hub" onchange="app.renderJobs()">
-                            <option value="all">All Hubs</option>
-                            <option value="Tech Academy">Tech Academy</option>
-                            <option value="Printing">Printing</option>
-                            <option value="Photography">Photography</option>
-                            <option value="Graphics Design">Graphics Design</option>
-                        </select>
-                    </div>
-                    <div id="jobs-list"></div>
-                </div>
-            </div>
-
-            <!-- New Job -->
-            <div id="view-new-job" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-plus-circle"></i> Create New Job</h3>
-                    <form onsubmit="event.preventDefault(); app.createJob();">
-                        <div class="form-group">
-                            <label>Client Name *</label>
-                            <input type="text" id="job-client" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Mobile Contact *</label>
-                            <input type="tel" id="job-contact" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Hub *</label>
-                            <select id="job-hub-select" required>
-                                <option value="">Select Hub...</option>
-                                <option value="Tech Academy">Tech Academy</option>
-                                <option value="Printing">Printing</option>
-                                <option value="Photography">Photography</option>
-                                <option value="Graphics Design">Graphics Design</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Description *</label>
-                            <textarea id="job-details" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Amount (₦) *</label>
-                            <input type="number" id="job-amount" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Received (₦)</label>
-                            <input type="number" id="job-payment" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>Delivery Date *</label>
-                            <input type="date" id="job-due" required>
-                        </div>
-                        <button type="submit" class="btn">
-                            <i class="fas fa-check-circle"></i> Create Job
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Reports -->
-            <div id="view-reports" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-clipboard"></i> My Reports</h3>
-                    <div class="form-group" id="admin-report-section">
-                        <label>Create New Report</label>
-                        <textarea id="report-content" rows="3" placeholder="Write your report..."></textarea>
-                        <button class="btn" onclick="app.createReport()" style="margin-top:10px;">
-                            <i class="fas fa-plus"></i> Submit Report
-                        </button>
-                    </div>
-                    <div id="reports-list"></div>
-                </div>
-            </div>
-
-            <!-- Knowledge Center -->
-            <div id="view-knowledge" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-book"></i> Knowledge Center</h3>
-                    <div class="knowledge-grid">
-                        <div class="knowledge-card">
-                            <h4><i class="fas fa-info-circle"></i> Help Center</h4>
-                            <p>User guides and troubleshooting for TBOS v2.0</p>
-                            <button class="btn btn-sm" onclick="app.openHelpCenter()">
-                                <i class="fas fa-external-link-alt"></i> Open Guide
-                            </button>
-                        </div>
-                        <div class="knowledge-card">
-                            <h4><i class="fas fa-clipboard-check"></i> Job SOP Guides</h4>
-                            <p>Standard Operating Procedures for all hubs</p>
-                            <button class="btn btn-sm" onclick="app.openSOPs()">
-                                <i class="fas fa-download"></i> View SOPs
-                            </button>
-                        </div>
-                        <div class="knowledge-card">
-                            <h4><i class="fas fa-graduation-cap"></i> Course Catalogue</h4>
-                            <p>Tomstudio Tech Academy courses and fees</p>
-                            <button class="btn btn-sm" onclick="app.openCourses()">
-                                <i class="fas fa-download"></i> View Courses
-                            </button>
-                        </div>
-                        <div class="knowledge-card">
-                            <h4><i class="fas fa-tags"></i> Price List</h4>
-                            <p>Updated pricing for all services</p>
-                            <button class="btn btn-sm" onclick="app.openPrices()">
-                                <i class="fas fa-download"></i> View Prices
-                            </button>
-                        </div>
-                        <div class="knowledge-card">
-                            <h4><i class="fas fa-building"></i> About TBOS</h4>
-                            <p>Information about Tomstudio BizHub and TBOS</p>
-                            <button class="btn btn-sm" onclick="app.openAbout()">
-                                <i class="fas fa-info-circle"></i> Learn More
-                            </button>
-                        </div>
-                        <div class="knowledge-card" id="files-card">
-                            <h4><i class="fas fa-folder-open"></i> Hub Files</h4>
-                            <p>Download documents and resources</p>
-                            <button class="btn btn-sm" onclick="app.showView('files')">
-                                <i class="fas fa-download"></i> Browse Files
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Staff -->
-            <div id="view-staff" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-users"></i> Staff Directory</h3>
-                    <div id="staff-list"></div>
-                </div>
-            </div>
-
-            <!-- Approvals -->
-            <div id="view-approvals" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-user-check"></i> Staff Approvals</h3>
-                    <div id="approvals-list"></div>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-id-card"></i> ID Cards</h3>
-                    <select id="idcard-select" onchange="app.previewIDCard()" style="width:100%;padding:10px;margin-bottom:15px;">
-                        <option value="">Select Staff...</option>
-                    </select>
-                    <div id="idcard-preview"></div>
-                    <button class="btn" onclick="app.downloadIDCard()" style="margin-top:15px;">
-                        <i class="fas fa-download"></i> Download PDF
-                    </button>
-                </div>
-            </div>
-
-            <!-- Announcements -->
-            <div id="view-announcements" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-bullhorn"></i> Create Announcement</h3>
-                    <div class="form-group">
-                        <label>Message</label>
-                        <textarea id="announce-msg" rows="3" placeholder="Enter announcement..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Type</label>
-                        <select id="announce-type">
-                            <option value="info">Information</option>
-                            <option value="warning">Warning</option>
-                            <option value="alert">Alert</option>
-                            <option value="success">Success</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Target Hub</label>
-                        <select id="announce-hub">
-                            <option value="all">All Hubs</option>
-                            <option value="Tech Academy">Tech Academy</option>
-                            <option value="Printing">Printing</option>
-                            <option value="Photography">Photography</option>
-                            <option value="Graphics Design">Graphics Design</option>
-                        </select>
-                    </div>
-                    <button class="btn" onclick="app.postAnnouncement()">
-                        <i class="fas fa-paper-plane"></i> Post Announcement
-                    </button>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-history"></i> All Announcements</h3>
-                    <div id="all-announcements"></div>
-                </div>
-            </div>
-
-            <!-- File Uploads -->
-            <div id="view-files" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-file-upload"></i> Upload Files</h3>
-                    <p style="color:var(--gray);font-size:0.85rem;margin-bottom:15px;">Admin can upload documents for all hubs to view/download</p>
-                    <div class="file-upload-area" onclick="document.getElementById('file-input').click()">
-                        <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:var(--primary);"></i>
-                        <p style="margin-top:10px;">Click to upload file</p>
-                        <small style="color:var(--gray);">PDF, DOC, Images supported</small>
-                    </div>
-                    <input type="file" id="file-input" style="display:none;" onchange="app.uploadFile()">
-                    <div id="upload-status"></div>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-folder"></i> Uploaded Files</h3>
-                    <div id="files-list"></div>
-                </div>
-            </div>
-
-            <!-- Analytics -->
-            <div id="view-analytics" class="hidden">
-                <div class="card">
-                    <h3><i class="fas fa-chart-pie"></i> Analytics</h3>
-                    <canvas id="hubChart" style="max-height:300px;"></canvas>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Register Modal -->
-    <div id="register-modal" class="modal hidden">
+    <!-- Admin Password Modal -->
+    <div id="adminModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-user-plus"></i> Staff Registration</h3>
-                <button class="modal-close" onclick="document.getElementById('register-modal').classList.add('hidden')">&times;</button>
+                <h3>🔐 Admin Access</h3>
+                <button class="modal-close" onclick="closeAdminModal()">&times;</button>
             </div>
-            <form onsubmit="event.preventDefault(); app.register();">
-                <div class="form-group">
-                    <label>Full Name *</label>
-                    <input type="text" id="reg-name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" id="reg-email" required>
-                </div>
-                <div class="form-group">
-                    <label>Phone *</label>
-                    <input type="tel" id="reg-phone" required>
-                </div>
-                <div class="form-group">
-                    <label>Hub *</label>
-                    <select id="reg-hub" required>
-                        <option value="">Select Hub...</option>
-                        <option value="Tech Academy">Tech Academy</option>
-                        <option value="Printing">Printing</option>
-                        <option value="Photography">Photography</option>
-                        <option value="Graphics Design">Graphics Design</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Role *</label>
-                    <select id="reg-role" required>
-                        <option value="Staff">Staff</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Admin">Admin</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Password *</label>
-                    <input type="password" id="reg-pass" required minlength="6">
-                </div>
-                <button type="submit" class="btn">Register</button>
-            </form>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Enter admin password to continue</p>
+            <input type="password" id="adminPassword" placeholder="Admin Password" style="width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 20px; font-size: 16px;">
+            <div class="form-actions">
+                <button class="btn-primary" onclick="checkAdminPassword()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="btn-outline" onclick="closeAdminModal()">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
-    <footer>
-            TBOS v2.0 | Built by Tomstudio Tech Academy | Contact: +234 803 082 7417
-        </footer>
 
-    <script>
-        // Firebase Configuration - NEW PRODUCTION PROJECT
-       const firebaseConfig = {
-    apiKey: "AIzaSyAVqFiFiSwNhnMpeuv_KNJyUhby_CmX0Nw",
-    authDomain: "tsbh-daily-performance-tracker.firebaseapp.com",
-    projectId: "tsbh-daily-performance-tracker",
-    storageBucket: "tsbh-daily-performance-tracker.firebasestorage.app",
-    messagingSenderId: "829971849666",
-    appId: "1:829971849666:web:fdcab382fa3e46f8ea365b",
-    measurementId: "G-BPQPQ7V9JC"
-};
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+            </div>
+            <h1>TBOS v2.0</h1>
+            <p class="tagline">Track • Record • Route • Report • Improve</p>
+            
+            <div class="login-form">
+                <label>Staff ID / Email</label>
+                <input type="text" id="staffId" placeholder="Enter your Staff ID">
+                <button class="btn-primary" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </div>
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
+            <div class="quick-actions">
+                <button class="btn-outline" onclick="openClientPortal()">
+                    <i class="fas fa-user"></i> Client Portal
+                </button>
+                <button class="btn-outline" onclick="openAdminModal()">
+                    <i class="fas fa-user-shield"></i> Admin
+                </button>
+            </div>
 
-        const app = {
-            userData: null,
-            loginType: 'staff',
+            <div class="support-info">
+                <p><i class="fas fa-phone"></i> <a href="tel:+2348185504382">+234 818 550 4382</a></p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:info@tbos.com">info@tbos.com</a></p>
+                <p class="credit">Built by Tomstudio Tech Academy</p>
+            </div>
+        </div>
+    </div>
 
-            init: () => {
-                console.log('🚀 TBOS v2.0 Initializing...');
-                
-                const adminSession = sessionStorage.getItem('ts_admin');
-                if (adminSession) {
-                    app.userData = JSON.parse(adminSession);
-                    app.initializeApp();
-                    return;
-                }
+    <!-- Main App -->
+    <div id="mainApp" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-cube"></i>
+                <span>TBOS v2.0</span>
+            </div>
+            <div class="header-center">
+                <span id="currentDate"></span>
+            </div>
+            <div class="header-right">
+                <span id="staffDisplay">ID: N/A</span>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
 
-                auth.onAuthStateChanged(async (user) => {
-                    if (user) {
-                        const doc = await db.collection('users').doc(user.uid).get();
-                        if (doc.exists) {
-                            app.userData = doc.data();
-                            app.initializeApp();
-                        } else {
-                            app.showLogin();
-                        }
-                    } else {
-                        app.showLogin();
-                    }
-                });
-            },
+        <!-- Sign In Info -->
+        <div class="sign-in-info">
+            <div class="sign-in-card">
+                <div class="sign-in-icon">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div class="sign-in-details">
+                    <p id="signInTime">Not signed in</p>
+                    <p id="locationInfo">📍 Location: Not recorded</p>
+                </div>
+                <button class="btn-signin" onclick="recordSignIn()">
+                    <i class="fas fa-map-marker-alt"></i> Record Sign-In
+                </button>
+            </div>
+        </div>
 
-            initializeApp: () => {
-                document.getElementById('login-page').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                
-                if (app.userData.hub) {
-                    document.documentElement.setAttribute('data-hub', app.userData.hub);
-                }
-                
-                document.getElementById('user-name').innerText = app.userData.name;
-                document.getElementById('user-role').innerText = app.userData.role;
-                
-                if (app.userData.role === 'admin' || app.userData.isAdmin) {
-                    document.getElementById('admin-menu').classList.remove('hidden');
-                    document.getElementById('admin-staff').classList.remove('hidden');
-                    document.getElementById('admin-approvals').classList.remove('hidden');
-                    document.getElementById('admin-announcements').classList.remove('hidden');
-                    document.getElementById('admin-files').classList.remove('hidden');
-                    document.getElementById('admin-analytics').classList.remove('hidden');
-                    document.getElementById('admin-report-section').classList.remove('hidden');
-                }
+        <!-- Navigation -->
+        <nav class="main-nav">
+            <a href="#clients" class="nav-link active" data-tab="clients">
+                <i class="fas fa-user-friends"></i>
+                <span>Clients</span>
+            </a>
+            <a href="#jobs" class="nav-link" data-tab="jobs">
+                <i class="fas fa-briefcase"></i>
+                <span>Jobs</span>
+            </a>
+            <a href="#reports" class="nav-link" data-tab="reports">
+                <i class="fas fa-file-alt"></i>
+                <span>Reports</span>
+            </a>
+            <a href="#inventory" class="nav-link" data-tab="inventory">
+                <i class="fas fa-boxes"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="#admin" class="nav-link" data-tab="admin">
+                <i class="fas fa-cog"></i>
+                <span>Admin</span>
+            </a>
+        </nav>
 
-                app.showView('dashboard');
-                app.loadDashboard();
-            },
-
-            showLogin: () => {
-                document.getElementById('login-page').classList.remove('hidden');
-                document.getElementById('app-container').classList.add('hidden');
-            },
-
-            showRegisterModal: () => {
-                document.getElementById('register-modal').classList.remove('hidden');
-            },
-
-            register: async () => {
-                const name = document.getElementById('reg-name').value;
-                const email = document.getElementById('reg-email').value;
-                const phone = document.getElementById('reg-phone').value;
-                const hub = document.getElementById('reg-hub').value;
-                const role = document.getElementById('reg-role').value;
-                const pass = document.getElementById('reg-pass').value;
-
-                try {
-                    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                    const staffId = `TBOS-${Date.now().toString().slice(-6)}`;
-                    
-                    await db.collection('users').doc(cred.user.uid).set({
-                        name, email, phone, hub, role, staffId,
-                        approved: false,
-                        isAdmin: role === 'admin'
-                    });
-
-                    app.showNotification('Registration successful! Wait for approval.', 'success');
-                    document.getElementById('register-modal').classList.add('hidden');
-                } catch (error) {
-                    app.showNotification('Error: ' + error.message, 'error');
-                }
-            },
-
-            setLoginType: (type) => {
-                app.loginType = type;
-                document.getElementById('staff-login-btn').classList.toggle('active', type === 'staff');
-                document.getElementById('admin-login-btn').classList.toggle('active', type === 'admin');
-                document.getElementById('staff-id-group').classList.toggle('hidden', type === 'admin');
-            },
-
-            toggleTheme: () => {
-                const current = document.documentElement.getAttribute('data-theme');
-                document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-            },
-
-            showView: (view) => {
-                document.querySelectorAll('.main-content > div[id^="view-"]').forEach(el => el.classList.add('hidden'));
-                document.getElementById(`view-${view}`).classList.remove('hidden');
-                
-                document.querySelectorAll('.sidebar-menu button').forEach(btn => btn.classList.remove('active'));
-                const activeBtn = document.querySelector(`.sidebar-menu button[onclick="app.showView('${view}')"]`);
-                if (activeBtn) activeBtn.classList.add('active');
-
-                // Close mobile menu
-                document.getElementById('sidebar').classList.remove('active');
-
-                const titles = { 
-                    'dashboard':'Dashboard', 
-                    'jobs':'Jobs', 
-                    'new-job':'New Job', 
-                    'reports':'Reports', 
-                    'knowledge':'Knowledge Center',
-                    'staff':'Staff', 
-                    'approvals':'Approvals', 
-                    'announcements':'Announcements',
-                    'files':'File Uploads',
-                    'analytics':'Analytics' 
-                };
-                document.getElementById('page-title').innerText = titles[view];
-
-                if (view === 'dashboard') app.loadDashboard();
-                if (view === 'jobs') app.renderJobs();
-                if (view === 'approvals') app.renderApprovals();
-                if (view === 'announcements') app.loadAnnouncements();
-                if (view === 'files') app.loadFiles();
-                if (view === 'analytics') app.loadAnalytics();
-                if (view === 'reports') app.loadReports();
-            },
-
-            showNotification: (msg, type) => {
-                const n = document.createElement('div');
-                n.className = 'notification';
-                n.style.borderLeft = `4px solid ${type === 'success' ? '#00D68F' : '#dc3545'}`;
-                n.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
-                document.body.appendChild(n);
-                setTimeout(() => n.remove(), 4000);
-            },
-
-            login: async () => {
-                const id = document.getElementById('login-id').value.trim();
-                const pass = document.getElementById('login-pass').value;
-                const msg = document.getElementById('login-msg');
-
-                if (app.loginType === 'admin' && id === 'admin@tbos.com' && pass === '@admin123#') {
-                    const data = { role:'admin', hub:'Head Office', name:'Super Admin', staffId:'ADMIN-001', isAdmin:true };
-                    sessionStorage.setItem('ts_admin', JSON.stringify(data));
-                    app.userData = data;
-                    app.initializeApp();
-                    return;
-                }
-
-                try {
-                    let user;
-                    if (id.includes('@')) {
-                        user = await auth.signInWithEmailAndPassword(id, pass);
-                    } else {
-                        const q = await db.collection('users').where('staffId', '==', id).get();
-                        if (q.empty) throw new Error('Staff ID not found');
-                        const u = q.docs[0].data();
-                        user = await auth.signInWithEmailAndPassword(u.email, pass);
-                    }
-                    
-                    const doc = await db.collection('users').doc(user.user.uid).get();
-                    const data = doc.data();
-                    if (!data.approved) throw new Error('Account pending approval');
-                    
-                    app.userData = data;
-                    app.initializeApp();
-                } catch (error) {
-                    msg.className = 'login-msg error';
-                    msg.innerText = error.message;
-                }
-            },
-
-            logout: () => {
-                auth.signOut();
-                sessionStorage.removeItem('ts_admin');
-                app.showLogin();
-            },
-
-            loadDashboard: async () => {
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                const snap = await db.collection('jobs').get();
-                let t=0, p=0, d=0, r=0;
-                
-                snap.forEach(doc => {
-                    const j = doc.data();
-                    const jd = j.dateCreated?.toDate();
-                    if (jd >= today) { t++; r += (j.amount||0); }
-                    if (j.status === 'pending') p++;
-                    if (j.status === 'delivered') d++;
-                });
-
-                document.getElementById('stat-today').innerText = t;
-                document.getElementById('stat-pending').innerText = p;
-                document.getElementById('stat-delivered').innerText = d;
-                document.getElementById('stat-revenue').innerText = '₦'+r.toLocaleString();
-
-                app.renderRecentJobs();
-                app.loadAnnouncements();
-            },
-
-            renderRecentJobs: async () => {
-                const snap = await db.collection('jobs').orderBy('dateCreated','desc').limit(5).get();
-                const div = document.getElementById('recent-jobs');
-                
-                if (snap.empty) {
-                    div.innerHTML = '<p style="color:var(--gray);text-align:center;">No jobs yet</p>';
-                } else {
-                    div.innerHTML = '';
-                    snap.forEach(doc => {
-                        const j = doc.data();
-                        div.innerHTML += `
-                            <div class="job-card">
-                                <div class="job-header">
-                                    <strong>${j.trackingId || 'No ID'}</strong>
-                                    <span class="job-status status-${j.status}">${j.status}</span>
-                                </div>
-                                <div class="job-meta"><span class="hub-badge">${j.hub}</span> ${j.clientId}</div>
-                                <div class="job-meta">Due: ${j.dueDate} | ₦${j.amount}</div>
-                            </div>
-                        `;
-                    });
-                }
-            },
-
-            renderJobs: async () => {
-                const search = document.getElementById('job-search').value.toLowerCase();
-                const status = document.getElementById('job-status').value;
-                const hub = document.getElementById('job-hub').value;
-                
-                const snap = await db.collection('jobs').get();
-                const div = document.getElementById('jobs-list');
-                div.innerHTML = '';
-                
-                let jobs = [];
-                snap.forEach(doc => jobs.push({id:doc.id, ...doc.data()}));
-                
-                if (search) jobs = jobs.filter(j => j.clientId?.toLowerCase().includes(search));
-                if (status !== 'all') jobs = jobs.filter(j => j.status === status);
-                if (hub !== 'all') jobs = jobs.filter(j => j.hub === hub);
-                
-                if (jobs.length === 0) {
-                    div.innerHTML = '<p style="color:var(--gray);text-align:center;">No jobs found</p>';
-                } else {
-                    jobs.forEach(j => {
-                        div.innerHTML += `
-                            <div class="job-card">
-                                <div class="job-header">
-                                    <strong>${j.trackingId || 'No ID'}</strong>
-                                    <span class="job-status status-${j.status}">${j.status}</span>
-                                </div>
-                                <div class="job-meta"><span class="hub-badge">${j.hub}</span> ${j.clientId} | ${j.clientContact}</div>
-                                <div class="job-meta">Due: ${j.dueDate} | ₦${j.amount} | Paid: ₦${j.payment}</div>
-                            </div>
-                        `;
-                    });
-                }
-            },
-
-            createJob: async () => {
-                const client = document.getElementById('job-client').value;
-                const contact = document.getElementById('job-contact').value;
-                const hub = document.getElementById('job-hub-select').value;
-                const details = document.getElementById('job-details').value;
-                const amount = parseFloat(document.getElementById('job-amount').value) || 0;
-                const payment = parseFloat(document.getElementById('job-payment').value) || 0;
-                const due = document.getElementById('job-due').value;
-
-                try {
-                    const count = await db.collection('jobs').count().get();
-                    const trackingId = `TBOS-${(count.data().count+1).toString().padStart(6,'0')}`;
-
-                    await db.collection('jobs').add({
-                        clientId: client,
-                        clientContact: contact,
-                        hub,
-                        details,
-                        amount,
-                        payment,
-                        balance: amount - payment,
-                        dueDate: due,
-                        trackingId,
-                        status: payment >= amount ? 'in-progress' : 'pending',
-                        staffId: app.userData.staffId,
-                        dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    app.showNotification('Job created! ID: '+trackingId, 'success');
-                    app.showView('jobs');
-                } catch (error) {
-                    app.showNotification('Error: '+error.message, 'error');
-                }
-            },
-
-            loadReports: async () => {
-                const div = document.getElementById('reports-list');
-                div.innerHTML = '<p style="color:var(--gray);text-align:center;">Loading...</p>';
-                
-                try {
-                    const snap = await db.collection('reports').orderBy('createdAt','desc').limit(20).get();
-                    if (snap.empty) {
-                        div.innerHTML = '<p style="color:var(--gray);text-align:center;">No reports yet</p>';
-                    } else {
-                        div.innerHTML = '';
-                        snap.forEach(doc => {
-                            const r = doc.data();
-                            div.innerHTML += `
-                                <div class="job-card">
-                                    <div style="font-weight:600;">${r.author}</div>
-                                    <div style="font-size:0.75rem;color:var(--gray);">${new Date(r.createdAt?.toDate()).toLocaleDateString()}</div>
-                                    <div style="margin-top:8px;">${r.content}</div>
-                                </div>
-                            `;
-                        });
-                    }
-                } catch (error) {
-                    div.innerHTML = '<p style="color:#dc3545;text-align:center;">Error loading reports</p>';
-                }
-            },
-
-            createReport: async () => {
-                const content = document.getElementById('report-content').value;
-                if (!content.trim()) {
-                    app.showNotification('Please enter report content', 'error');
-                    return;
-                }
-
-                try {
-                    await db.collection('reports').add({
-                        content,
-                        author: app.userData.name,
-                        staffId: app.userData.staffId,
-                        hub: app.userData.hub,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    app.showNotification('Report submitted!', 'success');
-                    document.getElementById('report-content').value = '';
-                    app.loadReports();
-                } catch (error) {
-                    app.showNotification('Error: '+error.message, 'error');
-                }
-            },
-
-            // Knowledge Center Functions
-            openHelpCenter: () => {
-                const helpContent = `
-                    <h3>TBOS v2.0 Help Center</h3>
-                    <h4>Getting Started</h4>
-                    <ul>
-                        <li>Login with your Staff ID or email</li>
-                        <li>Complete your profile</li>
-                        <li>Review SOPs for your hub</li>
-                    </ul>
-                    <h4>Common Issues</h4>
-                    <ul>
-                        <li>Login problems: Contact admin@tbos.com</li>
-                        <li>Job not showing: Refresh page (Ctrl+F5)</li>
-                        <li>File upload fails: Check file size (max 10MB)</li>
-                    </ul>
-                    <h4>Contact Support</h4>
-                    <p>📧 admin@tbos.com<br>📞 +234 803 082 7417</p>
-                `;
-                app.showModal('Help Center', helpContent);
-            },
-
-            openSOPs: () => {
-                const sopContent = `
-                    <h3>Standard Operating Procedures</h3>
-                    <h4>General Rules (All Hubs)</h4>
-                    <ul>
-                        <li>Be professional and courteous</li>
-                        <li>Record every transaction</li>
-                        <li>Collect payment before delivery</li>
-                        <li>Meet timelines</li>
-                        <li>Escalate issues early</li>
-                    </ul>
-                    <h4>Tech Academy</h4>
-                    <p>Register students → Collect payment → Issue receipt → Add to class group → Conduct classes → Track attendance → Issue certificates</p>
-                    <h4>Printing & Graphics</h4>
-                    <p>Receive job → Confirm specs → Quote price → Collect advance → Design/Print → Quality check → Deliver</p>
-                    <h4>Photography</h4>
-                    <p>Book event → Collect fee → Shoot → Backup files → Edit → Deliver → Request feedback</p>
-                    <h4>Gadgets</h4>
-                    <p>Inquiry → Explain features → Confirm availability → Collect payment → Issue receipt → Update inventory</p>
-                    <h4>Tech Lab</h4>
-                    <p>Receive device → Diagnose → Quote cost → Collect advance → Repair → Test → Deliver → Collect balance</p>
-                `;
-                app.showModal('SOP Guides', sopContent);
-            },
-
-            openCourses: () => {
-                const courseContent = `
-                    <h3>Tomstudio Tech Academy Courses</h3>
-                    <h4>Short Courses</h4>
-                    <ul>
-                        <li>Digital Literacy (4-6 weeks) - ₦25,000</li>
-                        <li>Graphics Design (3 months) - ₦80,000</li>
-                        <li>Video Editing (2 months) - ₦80,000</li>
-                        <li>Digital Marketing (2 months) - ₦50,000</li>
-                    </ul>
-                    <h4>Advanced Courses</h4>
-                    <ul>
-                        <li>Front-End Coding (4 months) - ₦180,000</li>
-                        <li>Back-End Coding (5 months) - ₦200,000</li>
-                        <li>UI/UX Design (3 months) - ₦200,000</li>
-                        <li>Data Analysis with AI (3-4 months) - ₦250,000</li>
-                    </ul>
-                    <h4>Enrollment</h4>
-                    <p>📍 265, Isawo Road, Agric Ikorodu, Lagos<br>📞 090 709 013 82<br>💳 60% deposit required</p>
-                `;
-                app.showModal('Course Catalogue', courseContent);
-            },
-
-            openPrices: () => {
-                const priceContent = `
-                    <h3>Service Price List</h3>
-                    <h4>Printing</h4>
-                    <ul>
-                        <li>B/W Printing - ₦300/copy</li>
-                        <li>Color Printing - ₦500/copy</li>
-                        <li>Photocopy - ₦100/copy</li>
-                        <li>Laminating - ₦500 (ID) / ₦1,000 (Certificate)</li>
-                    </ul>
-                    <h4>Graphics Design</h4>
-                    <ul>
-                        <li>Logo Design - ₦3,500</li>
-                        <li>Flyer Design - ₦2,500</li>
-                        <li>Business Card (100pcs) - ₦10,000</li>
-                        <li>Rollup Banner - ₦50,000</li>
-                    </ul>
-                    <h4>Photography</h4>
-                    <ul>
-                        <li>Passport (5pcs) - ₦1,000</li>
-                        <li>Passport (10pcs) - ₦2,000</li>
-                        <li>Frame 8x10 - ₦8,000</li>
-                        <li>Frame 16x20 - ₦22,000</li>
-                    </ul>
-                    <h4>Custom Items</h4>
-                    <ul>
-                        <li>Mug - ₦7,000</li>
-                        <li>T-Shirt - ₦5,000</li>
-                        <li>Rubber Stamp - ₦3,000</li>
-                    </ul>
-                `;
-                app.showModal('Price List', priceContent);
-            },
-
-            openAbout: () => {
-                const aboutContent = `
-                    <h3>About TBOS v2.0</h3>
-                    <p><strong>TBOS</strong> (Tomstudio BizHub Operations System) is a comprehensive ERP platform designed to manage all operations across Tomstudio BizHub's multiple service hubs.</p>
-                    <h4>Our Hubs</h4>
-                    <ul>
-                        <li>Tech Academy - Professional tech training</li>
-                        <li>Printing & Graphics - Design and print services</li>
-                        <li>Photography - Professional photo services</li>
-                        <li>Gadgets - Sales and repairs</li>
-                        <li>Tech Lab - Device maintenance</li>
-                        <li>CBT Center - Computer-based training</li>
-                    </ul>
-                    <h4>Our Mission</h4>
-                    <p>"Consistency builds trust. Trust builds growth."</p>
-                    <h4>Contact</h4>
-                    <p>📍 265, Isawo Road, Agric Ikorodu, Lagos<br>📞 +234 803 082 7417<br>📧 admin@tbos.com</p>
-                `;
-                app.showModal('About TBOS', aboutContent);
-            },
-
-            showModal: (title, content) => {
-                const modal = document.createElement('div');
-                modal.className = 'modal';
-                modal.innerHTML = `
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>${title}</h3>
-                            <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+        <!-- Tab Content -->
+        <main class="tab-content-container">
+            
+            <!-- Clients Tab -->
+            <div id="clients" class="tab-content active">
+                <div class="panel">
+                    <h3><i class="fas fa-user-plus"></i> Add Client</h3>
+                    <div class="form">
+                        <input type="text" id="clientName" placeholder="Client Name">
+                        <input type="tel" id="clientPhone" placeholder="Phone Number">
+                        <input type="email" id="clientEmail" placeholder="Email">
+                        <textarea id="clientComment" placeholder="Comment/Requirement"></textarea>
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="addClient()">
+                                <i class="fas fa-plus"></i> Add Client
+                            </button>
+                            <button class="btn-danger" onclick="clearClients()">
+                                <i class="fas fa-trash"></i> Clear All
+                            </button>
                         </div>
-                        <div style="line-height:1.6;">${content}</div>
-                        <button class="btn" onclick="this.closest('.modal').remove()" style="margin-top:20px;">
-                            <i class="fas fa-check"></i> Close
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-list"></i> Today's Clients</h3>
+                    <div id="clientList" class="data-list"></div>
+                </div>
+            </div>
+
+            <!-- Jobs Tab -->
+            <div id="jobs" class="tab-content">
+                <div class="panel">
+                    <h3><i class="fas fa-plus-circle"></i> Log New Job</h3>
+                    <div class="form">
+                        <input type="text" id="jobClient" placeholder="Client Name">
+                        <input type="tel" id="jobPhone" placeholder="Phone Number">
+                        <select id="jobHub">
+                            <option value="">Select Hub...</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="CBT Center">CBT Center</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="Other Services">Other Services</option>
+                        </select>
+                        <textarea id="jobDescription" placeholder="Job Description"></textarea>
+                        <input type="number" id="jobAmount" placeholder="Amount (₦)">
+                        <input type="number" id="jobPaid" placeholder="Amount Paid (₦)" value="0">
+                        <input type="date" id="jobDelivery" placeholder="Delivery Date">
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="addJob()">
+                                <i class="fas fa-save"></i> Create Job
+                            </button>
+                            <button class="btn-outline" onclick="clearJobs()">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-list"></i> Active Jobs</h3>
+                    <div class="filter-bar">
+                        <select id="filterHub" onchange="renderJobs()">
+                            <option value="">All Hubs</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="CBT Center">CBT Center</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="Other Services">Other Services</option>
+                        </select>
+                        <select id="filterStatus" onchange="renderJobs()">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div id="jobList" class="data-list"></div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports" class="tab-content">
+                <div class="panel">
+                    <h3><i class="fas fa-file-alt"></i> Daily Report</h3>
+                    <div class="form">
+                        <input type="date" id="reportDate">
+                        <select id="reportHub">
+                            <option value="">Select Hub...</option>
+                            <option value="Graphics Design">Graphics Design</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Tech Academy">Tech Academy</option>
+                            <option value="Online Shop">Online Shop</option>
+                            <option value="CBT Center">CBT Center</option>
+                            <option value="Tech Lab">Tech Lab</option>
+                            <option value="Gadgets">Gadgets</option>
+                            <option value="Other Services">Other Services</option>
+                        </select>
+                        <textarea id="reportTasks" placeholder="Tasks Completed Today"></textarea>
+                        <textarea id="reportChallenges" placeholder="Challenges/Issues Faced"></textarea>
+                        <textarea id="reportPlans" placeholder="Plans for Tomorrow"></textarea>
+                        <input type="number" id="reportHours" placeholder="Hours Worked" value="8">
+                        <input type="number" id="reportJobs" placeholder="Jobs Completed" value="0">
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="submitReport()">
+                                <i class="fas fa-save"></i> Submit Report
+                            </button>
+                            <button class="btn-success" onclick="generateReportPDF()">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-chart-bar"></i> Today's Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-box">
+                            <strong id="reportClients">0</strong>
+                            <span>Clients</span>
+                        </div>
+                        <div class="summary-box">
+                            <strong id="reportJobs">0</strong>
+                            <span>Jobs</span>
+                        </div>
+                        <div class="summary-box">
+                            <strong id="reportSales">₦0</strong>
+                            <span>Sales</span>
+                        </div>
+                        <div class="summary-box">
+                            <strong id="reportStaff">0</strong>
+                            <span>Staff Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-file-export"></i> Export Data</h3>
+                    <div class="export-buttons">
+                        <button class="btn-primary" onclick="generatePDF()">
+                            <i class="fas fa-file-pdf"></i> PDF Report
+                        </button>
+                        <button class="btn-success" onclick="exportCSV()">
+                            <i class="fas fa-file-csv"></i> CSV Export
+                        </button>
+                        <button class="btn-info" onclick="backupData()">
+                            <i class="fas fa-download"></i> Backup Data
                         </button>
                     </div>
-                `;
-                document.body.appendChild(modal);
-            },
+                </div>
+                <!-- PDF Preview -->
+                <div id="pdfPreview" class="pdf-preview">
+                    <div class="pdf-header">
+                        <h1><i class="fas fa-cube"></i> TBOS v2.0</h1>
+                        <p>Tomstudio BizHub Operations System</p>
+                        <p style="font-size: 1.1rem; font-weight: 600; margin-top: 10px;">Daily Staff Report</p>
+                    </div>
+                    <div class="pdf-info">
+                        <div>
+                            <strong>Staff Name:</strong>
+                            <span id="previewStaff">-</span>
+                        </div>
+                        <div>
+                            <strong>Hub/Department:</strong>
+                            <span id="previewHub">-</span>
+                        </div>
+                        <div>
+                            <strong>Report Date:</strong>
+                            <span id="previewDate">-</span>
+                        </div>
+                        <div>
+                            <strong>Hours Worked:</strong>
+                            <span id="previewHours">-</span>
+                        </div>
+                        <div>
+                            <strong>Jobs Completed:</strong>
+                            <span id="previewJobs">-</span>
+                        </div>
+                        <div>
+                            <strong>Report ID:</strong>
+                            <span id="previewId">-</span>
+                        </div>
+                    </div>
+                    <div class="pdf-section">
+                        <h3><i class="fas fa-check-circle"></i> Tasks Completed Today</h3>
+                        <ul id="previewTasks"></ul>
+                    </div>
+                    <div class="pdf-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Challenges/Issues Faced</h3>
+                        <ul id="previewChallenges"></ul>
+                    </div>
+                    <div class="pdf-section">
+                        <h3><i class="fas fa-calendar-day"></i> Plans for Tomorrow</h3>
+                        <ul id="previewPlans"></ul>
+                    </div>
+                    <div class="pdf-footer">
+                        <p><strong>Tomstudio BizHub</strong></p>
+                        <p>265, Isawo Road, Between Oluwakemi and Santos Bustop, Agric Ikorodu, Lagos</p>
+                        <p>Phone: +234 818 550 4382 | Email: info@tbos.com</p>
+                        <p style="margin-top: 15px;">Generated on: <span id="previewGenerated"></span></p>
+                        <p style="font-size: 0.75rem; margin-top: 10px;">"Consistency builds trust. Trust builds growth."</p>
+                    </div>
+                </div>
+            </div>
 
-            renderApprovals: async () => {
-                const snap = await db.collection('users').where('approved','==',false).get();
-                const div = document.getElementById('approvals-list');
-                
-                if (snap.empty) {
-                    div.innerHTML = '<p style="color:var(--gray);">No pending approvals</p>';
-                } else {
-                    div.innerHTML = '';
-                    snap.forEach(doc => {
-                        const u = doc.data();
-                        div.innerHTML += `
-                            <div class="job-card">
-                                <div><strong>${u.name}</strong> (${u.staffId})</div>
-                                <div style="font-size:0.85rem;color:var(--gray);">${u.hub} | ${u.role}</div>
-                                <div style="margin-top:10px;">
-                                    <button class="btn" style="background:#00D68F;width:auto;padding:8px 16px;" onclick="app.approveStaff('${doc.id}')">Approve</button>
-                                    <button class="btn" style="background:#dc3545;width:auto;padding:8px 16px;" onclick="app.rejectStaff('${doc.id}')">Reject</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
+            <!-- Inventory Tab -->
+            <div id="inventory" class="tab-content">
+                <div class="panel">
+                    <h3><i class="fas fa-plus"></i> Add Inventory Item</h3>
+                    <div class="form">
+                        <input type="text" id="itemName" placeholder="Item Name">
+                        <select id="itemCategory">
+                            <option value="Printing Materials">Printing Materials</option>
+                            <option value="Photography Equipment">Photography Equipment</option>
+                            <option value="Office Supplies">Office Supplies</option>
+                            <option value="Tech Equipment">Tech Equipment</option>
+                            <option value="Graphics Materials">Graphics Materials</option>
+                        </select>
+                        <input type="number" id="itemStock" placeholder="Stock Quantity">
+                        <input type="number" id="itemAlert" placeholder="Alert Level">
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="addInventory()">
+                                <i class="fas fa-save"></i> Add Item
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-boxes"></i> Inventory Items</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <strong id="totalItems">0</strong>
+                            <span>Total Items</span>
+                        </div>
+                        <div class="stat-box warning">
+                            <strong id="lowStock">0</strong>
+                            <span>Low Stock</span>
+                        </div>
+                        <div class="stat-box danger">
+                            <strong id="outStock">0</strong>
+                            <span>Out of Stock</span>
+                        </div>
+                    </div>
+                    <div id="inventoryList" class="data-list"></div>
+                </div>
+            </div>
 
-                const select = document.getElementById('idcard-select');
-                select.innerHTML = '<option value="">Select Staff...</option>';
-                const staff = await db.collection('users').where('approved','==',true).get();
-                staff.forEach(doc => {
-                    const u = doc.data();
-                    select.innerHTML += `<option value="${doc.id}">${u.name} (${u.staffId})</option>`;
-                });
-            },
+            <!-- Admin Tab -->
+            <div id="admin" class="tab-content">
+                <div class="panel">
+                    <h3><i class="fas fa-user-shield"></i> Admin Dashboard</h3>
+                    <div class="staff-list-container">
+                        <div class="staff-list">
+                            <input type="text" class="search-bar" id="adminSearch" placeholder="Search staff..." oninput="filterStaffList()">
+                            <div id="staffListElement"></div>
+                        </div>
+                        <div class="staff-data-container" id="staffDataContainer">
+                            <p>Select a staff member to view details</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3><i class="fas fa-cog"></i> Admin Actions</h3>
+                    <div class="export-buttons">
+                        <button class="btn-primary" onclick="generateAdminPDF()">
+                            <i class="fas fa-file-pdf"></i> Admin Report
+                        </button>
+                        <button class="btn-danger" onclick="clearAllData()">
+                            <i class="fas fa-trash"></i> Clear All Data
+                        </button>
+                        <button class="btn-outline" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-            approveStaff: async (id) => {
-                await db.collection('users').doc(id).update({approved:true});
-                app.showNotification('Staff approved!', 'success');
-                app.renderApprovals();
-            },
+        </main>
 
-            rejectStaff: async (id) => {
-                if(confirm('Reject this staff?')) {
-                    await db.collection('users').doc(id).delete();
-                    app.showNotification('Staff rejected', 'info');
-                    app.renderApprovals();
-                }
-            },
+        <!-- Footer -->
+        <footer>
+            <p>TBOS v2.0 | Tomstudio BizHub Operations System</p>
+            <p>Built by Tomstudio Tech Academy | <a href="tel:+2348185504382">+234 818 550 4382</a></p>
+        </footer>
+    </div>
 
-            previewIDCard: () => {
-                const id = document.getElementById('idcard-select').value;
-                if (!id) return;
-                
-                db.collection('users').doc(id).get().then(doc => {
-                    if (doc.exists) {
-                        const u = doc.data();
-                        document.getElementById('idcard-preview').innerHTML = `
-                            <div style="background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:20px;border-radius:12px;text-align:center;">
-                                <div style="width:80px;height:80px;background:white;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
-                                    <i class="fas fa-user" style="font-size:2.5rem;color:var(--primary);"></i>
-                                </div>
-                                <div style="font-size:1.2rem;font-weight:700;">${u.name}</div>
-                                <div style="opacity:0.9;">${u.role} | ${u.hub}</div>
-                                <div style="background:rgba(255,255,255,0.2);padding:5px 15px;border-radius:20px;display:inline-block;margin-top:10px;">${u.staffId}</div>
-                            </div>
-                        `;
-                    }
-                });
-            },
+    <script>
+        // ==================== GLOBAL VARIABLES ====================
+        let currentStaffId = null;
+        let clients = [];
+        let jobs = [];
+        let reports = [];
+        let inventory = [];
+        let isAdminAuthenticated = false;
+        const ADMIN_PASSWORD = "tomstudio123";
+        const WHATSAPP_NUMBER = "2348185504382";
 
-            downloadIDCard: () => {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({format:[85.6,54],unit:'mm'});
-                doc.setFillColor(128,0,128);
-                doc.rect(0,0,85.6,54,'F');
-                doc.setTextColor(255,255,255);
-                doc.setFontSize(10);
-                doc.text('TBOS v2.0', 42.8, 10, {align:'center'});
-                doc.setFontSize(7);
-                doc.text('Staff ID Card', 42.8, 14, {align:'center'});
-                doc.save(`id-card-${Date.now()}.pdf`);
-                app.showNotification('ID Card downloaded!', 'success');
-            },
-
-            loadAnnouncements: async () => {
-                const snap = await db.collection('announcements').orderBy('createdAt','desc').limit(10).get();
-                const div = document.getElementById('announcements-list');
-                const allDiv = document.getElementById('all-announcements');
-                
-                if (snap.empty) {
-                    if (div) div.innerHTML = '<p style="color:var(--gray);">No announcements</p>';
-                    if (allDiv) allDiv.innerHTML = '<p style="color:var(--gray);">No announcements</p>';
-                } else {
-                    let html = '';
-                    snap.forEach(doc => {
-                        const a = doc.data();
-                        html += `
-                            <div class="job-card" style="border-left-color:${a.type==='warning'?'#ffc107':a.type==='alert'?'#dc3545':'#00D68F'}">
-                                <div style="font-weight:600;">${a.type.toUpperCase()}</div>
-                                <div style="margin-top:5px;">${a.message}</div>
-                                <div style="font-size:0.7rem;color:var(--gray);margin-top:5px;">${new Date(a.createdAt?.toDate()).toLocaleDateString()}</div>
-                            </div>
-                        `;
-                    });
-                    if (div) div.innerHTML = html;
-                    if (allDiv) allDiv.innerHTML = html;
-                }
-            },
-
-            postAnnouncement: async () => {
-                const msg = document.getElementById('announce-msg').value;
-                const type = document.getElementById('announce-type').value;
-                const hub = document.getElementById('announce-hub').value;
-
-                if (!msg.trim()) {
-                    app.showNotification('Please enter a message', 'error');
-                    return;
-                }
-
-                try {
-                    await db.collection('announcements').add({
-                        message: msg,
-                        type,
-                        hub,
-                        author: app.userData.name,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    app.showNotification('Announcement posted!', 'success');
-                    document.getElementById('announce-msg').value = '';
-                    app.loadAnnouncements();
-                } catch (error) {
-                    app.showNotification('Error: '+error.message, 'error');
-                }
-            },
-
-            // File Upload Functions
-            uploadFile: async () => {
-                const fileInput = document.getElementById('file-input');
-                const file = fileInput.files[0];
-                
-                if (!file) return;
-
-                const statusDiv = document.getElementById('upload-status');
-                statusDiv.innerHTML = '<p style="color:var(--primary);"><i class="fas fa-spinner fa-spin"></i> Uploading...</p>';
-
-                try {
-                    const fileRef = storage.ref(`files/${file.name}`);
-                    await fileRef.put(file);
-                    const downloadURL = await fileRef.getDownloadURL();
-
-                    await db.collection('files').add({
-                        name: file.name,
-                        url: downloadURL,
-                        uploadedBy: app.userData.name,
-                        uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        size: file.size
-                    });
-
-                    statusDiv.innerHTML = '<p style="color:#00D68F;"><i class="fas fa-check-circle"></i> Upload successful!</p>';
-                    app.loadFiles();
-                } catch (error) {
-                    statusDiv.innerHTML = '<p style="color:#dc3545;"><i class="fas fa-times-circle"></i> Upload failed: '+error.message+'</p>';
-                }
-            },
-
-            loadFiles: async () => {
-                const div = document.getElementById('files-list');
-                div.innerHTML = '<p style="color:var(--gray);text-align:center;">Loading...</p>';
-
-                try {
-                    const snap = await db.collection('files').orderBy('uploadedAt','desc').get();
-                    
-                    if (snap.empty) {
-                        div.innerHTML = '<p style="color:var(--gray);text-align:center;">No files uploaded yet</p>';
-                    } else {
-                        div.innerHTML = '';
-                        snap.forEach(doc => {
-                            const f = doc.data();
-                            const sizeKB = (f.size / 1024).toFixed(1);
-                            div.innerHTML += `
-                                <div class="job-card">
-                                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                                        <div>
-                                            <i class="fas fa-file" style="color:var(--primary);"></i>
-                                            <strong>${f.name}</strong>
-                                            <div style="font-size:0.75rem;color:var(--gray);">${sizeKB} KB | ${f.uploadedBy}</div>
-                                        </div>
-                                        <a href="${f.url}" target="_blank" class="btn" style="width:auto;padding:8px 16px;">
-                                            <i class="fas fa-download"></i> Download
-                                        </a>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                } catch (error) {
-                    div.innerHTML = '<p style="color:#dc3545;text-align:center;">Error loading files</p>';
-                }
-            },
-
-            loadAnalytics: () => {
-                const ctx = document.getElementById('hubChart').getContext('2d');
-                
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Tech Academy', 'Printing', 'Photography', 'Graphics'],
-                        datasets: [{
-                            data: [12, 19, 3, 5],
-                            backgroundColor: ['#800080', '#FF0000', '#FFD700', '#0000FF']
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            },
-
-            showNotifications: () => {
-                app.showNotification('No new notifications', 'info');
-            }
+        // ==================== INITIALIZATION ====================
+        window.onload = function() {
+            updateDate();
+            checkLoginStatus();
+            loadAllData();
         };
 
-        document.addEventListener('DOMContentLoaded', app.init);
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+            document.getElementById('reportDate').value = now.toISOString().split('T')[0];
+        }
+
+        function checkLoginStatus() {
+            const savedId = localStorage.getItem('currentStaffId');
+            if (savedId) {
+                currentStaffId = savedId;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('staffDisplay').textContent = `ID: ${savedId}`;
+                loadAllData();
+                showToast(`Welcome back, ${savedId}!`);
+            }
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function showToast(msg, dur = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), dur);
+        }
+
+        function saveData(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                showToast('Storage error!');
+            }
+        }
+
+        function loadAllData() {
+            try {
+                clients = JSON.parse(localStorage.getItem('clients') || '[]');
+                jobs = JSON.parse(localStorage.getItem('jobs') || '[]');
+                reports = JSON.parse(localStorage.getItem('reports') || '[]');
+                inventory = JSON.parse(localStorage.getItem('inventory') || '[]');
+            } catch (e) {
+                console.error('Load error:', e);
+            }
+        }
+
+        function clearForm(ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function generateId() {
+            return 'TBOS-' + Date.now().toString().slice(-6);
+        }
+
+        // ==================== LOGIN/LOGOUT ====================
+        function login() {
+            const id = document.getElementById('staffId').value.trim();
+            if (!id) {
+                showToast('Please enter Staff ID');
+                return;
+            }
+            currentStaffId = id;
+            localStorage.setItem('currentStaffId', id);
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('staffDisplay').textContent = `ID: ${id}`;
+            loadAllData();
+            showToast(`Welcome, ${id}!`);
+        }
+
+        function logout() {
+            if (confirm('Log out?')) {
+                currentStaffId = null;
+                localStorage.removeItem('currentStaffId');
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+                showToast('Logged out');
+            }
+        }
+
+        // ==================== SIGN-IN WITH GPS ====================
+        function recordSignIn() {
+            const now = new Date();
+            const signInData = {
+                time: now.toLocaleTimeString(),
+                date: now.toLocaleDateString(),
+                timestamp: now.toISOString()
+            };
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    signInData.location = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude
+                    };
+                    document.getElementById('locationInfo').innerHTML = 
+                        `📍 Lat: ${pos.coords.latitude.toFixed(4)}, Long: ${pos.coords.longitude.toFixed(4)}`;
+                    saveSignInData(signInData);
+                    showToast('GPS location recorded!');
+                }, () => {
+                    saveSignInData(signInData);
+                    showToast('Location unavailable');
+                });
+            } else {
+                saveSignInData(signInData);
+            }
+            
+            document.getElementById('signInTime').textContent = `Signed in at ${signInData.time}`;
+        }
+
+        function saveSignInData(data) {
+            if (!currentStaffId) return;
+            localStorage.setItem(`signin_${currentStaffId}`, JSON.stringify(data));
+        }
+
+        // ==================== NAVIGATION ====================
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                
+                if (tabId === 'admin' && !isAdminAuthenticated) {
+                    openAdminModal();
+                    return;
+                }
+                
+                document.querySelectorAll('.tab-content, .nav-link').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                document.getElementById(tabId).classList.add('active');
+                this.classList.add('active');
+                
+                if (tabId === 'clients') renderClients();
+                else if (tabId === 'jobs') renderJobs();
+                else if (tabId === 'reports') updateReportStats();
+                else if (tabId === 'inventory') renderInventory();
+                else if (tabId === 'admin') showAdminDashboard();
+            });
+        });
+
+        // ==================== CLIENTS ====================
+        function addClient() {
+            const name = document.getElementById('clientName').value.trim();
+            if (!name) {
+                showToast('Name required');
+                return;
+            }
+            
+            const now = new Date();
+            clients.push({
+                id: Date.now(),
+                name,
+                phone: document.getElementById('clientPhone').value.trim(),
+                email: document.getElementById('clientEmail').value.trim(),
+                comment: document.getElementById('clientComment').value.trim(),
+                date: now.toLocaleDateString(),
+                time: now.toLocaleTimeString(),
+                staffId: currentStaffId
+            });
+            
+            saveData('clients', clients);
+            renderClients();
+            clearForm(['clientName', 'clientPhone', 'clientEmail', 'clientComment']);
+            showToast('Client added!');
+        }
+
+        function renderClients() {
+            const list = document.getElementById('clientList');
+            const todayClients = clients.filter(c => c.date === new Date().toLocaleDateString());
+            
+            if (todayClients.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No clients today</p>';
+                return;
+            }
+            
+            list.innerHTML = todayClients.map(c => `
+                <div class="data-item">
+                    <div class="data-item-info">
+                        <h4>${c.name}</h4>
+                        <p>📞 ${c.phone || 'N/A'}</p>
+                        <p>✉️ ${c.email || 'N/A'}</p>
+                        <p>${c.comment || 'No comment'}</p>
+                        <p style="font-size: 0.75rem; color: #999;">${c.time}</p>
+                    </div>
+                    <div class="data-item-actions">
+                        <button class="btn-success" onclick="sendWhatsApp('${c.name}', '${c.phone}')">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearClients() {
+            if (confirm('Clear all clients?')) {
+                clients = [];
+                saveData('clients', clients);
+                renderClients();
+                showToast('Cleared!');
+            }
+        }
+
+        // ==================== JOBS WITH ROUTING ====================
+        const JOB_STAGES = [
+            'Client/staff',
+            'Graphics',
+            'Printing',
+            'Photography',
+            'Secretary Review',
+            'Admin Approval',
+            'Delivery',
+            'Completed'
+        ];
+
+        function addJob() {
+            const client = document.getElementById('jobClient').value.trim();
+            if (!client) {
+                showToast('Client name required');
+                return;
+            }
+            
+            const now = new Date();
+            const amount = parseFloat(document.getElementById('jobAmount').value) || 0;
+            const paid = parseFloat(document.getElementById('jobPaid').value) || 0;
+            const trackingId = generateId();
+            
+            jobs.push({
+                id: Date.now(),
+                trackingId,
+                client,
+                phone: document.getElementById('jobPhone').value.trim(),
+                email: document.getElementById('jobEmail')?.value || '',
+                hub: document.getElementById('jobHub').value,
+                description: document.getElementById('jobDescription').value.trim(),
+                amount,
+                paid,
+                balance: amount - paid,
+                paymentStatus: paid >= amount ? 'PAID' : (paid > 0 ? 'PARTIALLY PAID' : 'UNPAID'),
+                status: paid >= amount ? 'Completed' : 'Pending',
+                stage: 'Client/staff',
+                delivery: document.getElementById('jobDelivery').value,
+                date: now.toLocaleDateString(),
+                time: now.toLocaleTimeString(),
+                staffId: currentStaffId,
+                createdAt: now.toISOString()
+            });
+            
+            saveData('jobs', jobs);
+            renderJobs();
+            clearForm(['jobClient', 'jobPhone', 'jobHub', 'jobDescription', 'jobAmount', 'jobPaid', 'jobDelivery']);
+            showToast(`Job created! ID: ${trackingId}`);
+            
+            // Send WhatsApp notification
+            sendJobWhatsApp(trackingId, document.getElementById('jobPhone').value.trim(), 'created');
+        }
+
+        function renderJobs() {
+            const list = document.getElementById('jobList');
+            const hubFilter = document.getElementById('filterHub').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            let filteredJobs = jobs;
+            if (hubFilter) filteredJobs = filteredJobs.filter(j => j.hub === hubFilter);
+            if (statusFilter) filteredJobs = filteredJobs.filter(j => j.status === statusFilter);
+            
+            if (filteredJobs.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No jobs found</p>';
+                return;
+            }
+            
+            list.innerHTML = filteredJobs.map(j => {
+                const statusClass = j.paymentStatus === 'PAID' ? 'status-paid' : 
+                                   j.paymentStatus === 'PARTIALLY PAID' ? 'status-partial' : 'status-unpaid';
+                
+                return `
+                <div class="data-item">
+                    <div class="data-item-info">
+                        <h4>${j.trackingId} - ${j.client}</h4>
+                        <p>🏢 ${j.hub || 'N/A'}</p>
+                        <p>📝 ${j.description || 'No description'}</p>
+                        <p>💰 ₦${j.amount.toLocaleString()} | Paid: ₦${j.paid.toLocaleString()}</p>
+                        <p>📊 Status: <span class="status-badge ${statusClass}">${j.paymentStatus}</span> | Stage: ${j.stage}</p>
+                        <p style="font-size: 0.75rem; color: #999;">${j.date} ${j.time}</p>
+                    </div>
+                    <div class="data-item-actions">
+                        <button class="btn-info" onclick="viewJobDetail(${j.id})" title="View & Route">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-success" onclick="sendJobWhatsApp('${j.trackingId}', '${j.phone}', 'update')" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function viewJobDetail(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            const currentIndex = JOB_STAGES.indexOf(job.stage);
+            const nextStage = currentIndex < JOB_STAGES.length - 1 ? JOB_STAGES[currentIndex + 1] : null;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 700px;">
+                    <div class="modal-header">
+                        <h3>📋 Job Details & Routing</h3>
+                        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div class="form-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <div><strong>Tracking ID:</strong> ${job.trackingId}</div>
+                            <div><strong>Client:</strong> ${job.client}</div>
+                            <div><strong>Phone:</strong> ${job.phone}</div>
+                            <div><strong>Hub:</strong> ${job.hub}</div>
+                            <div><strong>Stage:</strong> ${job.stage}</div>
+                            <div><strong>Status:</strong> <span class="status-badge ${job.paymentStatus === 'PAID' ? 'status-paid' : job.paymentStatus === 'PARTIALLY PAID' ? 'status-partial' : 'status-unpaid'}">${job.paymentStatus}</span></div>
+                            <div><strong>Amount:</strong> ₦${job.amount.toLocaleString()}</div>
+                            <div><strong>Paid:</strong> ₦${job.paid.toLocaleString()}</div>
+                            <div><strong>Balance:</strong> ₦${job.balance.toLocaleString()}</div>
+                            <div><strong>Delivery:</strong> ${job.delivery}</div>
+                        </div>
+                        
+                        <div class="routing-timeline">
+                            <h4><i class="fas fa-route"></i> Job Routing</h4>
+                            <div class="routing-stages">
+                                ${JOB_STAGES.map((stage, index) => {
+                                    let className = 'stage-item';
+                                    if (index === currentIndex) className += ' active';
+                                    if (index < currentIndex) className += ' completed';
+                                    return `<div class="${className}" onclick="alert('Stage: ${stage}')">
+                                        <div class="icon"><i class="fas ${getStageIcon(stage)}"></i></div>
+                                        <div class="label">${stage}</div>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions" style="margin-top: 20px;">
+                            ${nextStage ? `
+                            <button class="btn-primary" onclick="routeJob(${job.id}, '${nextStage}')" style="flex: 1;">
+                                <i class="fas fa-arrow-right"></i> Route to ${nextStage}
+                            </button>
+                            ` : '<button class="btn-success" disabled><i class="fas fa-check"></i> Job Completed</button>'}
+                            <button class="btn-success" onclick="sendJobWhatsApp('${job.trackingId}', '${job.phone}', 'update')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function getStageIcon(stage) {
+            const icons = {
+                'Client/staff': 'fa-user',
+                'Graphics': 'fa-paint-brush',
+                'Printing': 'fa-print',
+                'Photography': 'fa-camera',
+                'Secretary Review': 'fa-clipboard-check',
+                'Admin Approval': 'fa-user-shield',
+                'Delivery': 'fa-truck',
+                'Completed': 'fa-check-circle'
+            };
+            return icons[stage] || 'fa-circle';
+        }
+
+        function routeJob(jobId, nextStage) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            if (!confirm(`Route this job from ${job.stage} to ${nextStage}?`)) return;
+            
+            job.stage = nextStage;
+            job.status = nextStage === 'Completed' ? 'Completed' : 'In Progress';
+            job.routedAt = new Date().toISOString();
+            job.routedBy = currentStaffId;
+            
+            saveData('jobs', jobs);
+            renderJobs();
+            
+            // Close modal
+            document.querySelector('.modal.active')?.remove();
+            
+            showToast(`Job routed to: ${nextStage}`);
+            sendJobWhatsApp(job.trackingId, job.phone, `routed to ${nextStage}`);
+        }
+
+        function clearJobs() {
+            clearForm(['jobClient', 'jobPhone', 'jobHub', 'jobDescription', 'jobAmount', 'jobPaid', 'jobDelivery']);
+        }
+
+        // ==================== WHATSAPP INTEGRATION ====================
+        function sendWhatsApp(name, phone) {
+            if (!phone) {
+                showToast('No phone number');
+                return;
+            }
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const message = `Hello ${name},\n\nThank you for choosing Tomstudio BizHub!\n\nContact: +234 818 550 4382`;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function sendJobWhatsApp(trackingId, phone, action) {
+            if (!phone) {
+                showToast('No phone number');
+                return;
+            }
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            const message = `Hello,\n\nYour job status update - ${trackingId}\nAction: ${action}\n\nThank you for choosing Tomstudio BizHub!\nContact: +234 818 550 4382`;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // ==================== REPORTS WITH PDF ====================
+        function submitReport() {
+            const date = document.getElementById('reportDate').value;
+            const hub = document.getElementById('reportHub').value;
+            const tasks = document.getElementById('reportTasks').value.trim();
+            
+            if (!date || !hub || !tasks) {
+                showToast('Please fill required fields');
+                return;
+            }
+            
+            const now = new Date();
+            const report = {
+                id: generateId(),
+                staffId: currentStaffId,
+                staffName: currentStaffId,
+                hub,
+                date,
+                tasks,
+                challenges: document.getElementById('reportChallenges').value.trim() || 'None',
+                plans: document.getElementById('reportPlans').value.trim() || 'Continue ongoing tasks',
+                hoursWorked: parseInt(document.getElementById('reportHours').value) || 8,
+                jobsCompleted: parseInt(document.getElementById('reportJobs').value) || 0,
+                submittedAt: now.toISOString()
+            };
+            
+            reports.push(report);
+            saveData('reports', reports);
+            
+            // Show PDF preview
+            showReportPDF(report);
+            
+            showToast('Report submitted!');
+            clearForm(['reportTasks', 'reportChallenges', 'reportPlans', 'reportHours', 'reportJobs']);
+            updateReportStats();
+        }
+
+        function showReportPDF(report) {
+            document.getElementById('previewStaff').textContent = report.staffName;
+            document.getElementById('previewHub').textContent = report.hub;
+            document.getElementById('previewDate').textContent = report.date;
+            document.getElementById('previewHours').textContent = report.hoursWorked + ' hours';
+            document.getElementById('previewJobs').textContent = report.jobsCompleted;
+            document.getElementById('previewId').textContent = report.id;
+            document.getElementById('previewGenerated').textContent = new Date().toLocaleString();
+            
+            document.getElementById('previewTasks').innerHTML = report.tasks.split('\n').filter(t => t.trim()).map(t => `<li>${t.trim()}</li>`).join('');
+            document.getElementById('previewChallenges').innerHTML = report.challenges.split('\n').filter(t => t.trim()).map(t => `<li>${t.trim()}</li>`).join('');
+            document.getElementById('previewPlans').innerHTML = report.plans.split('\n').filter(t => t.trim()).map(t => `<li>${t.trim()}</li>`).join('');
+            
+            document.getElementById('pdfPreview').classList.add('active');
+            document.getElementById('pdfPreview').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateReportPDF() {
+            const date = document.getElementById('reportDate').value;
+            const hub = document.getElementById('reportHub').value;
+            const tasks = document.getElementById('reportTasks').value.trim();
+            
+            if (!date || !hub || !tasks) {
+                showToast('Please fill report first');
+                return;
+            }
+            
+            const report = {
+                id: generateId(),
+                staffName: currentStaffId,
+                hub,
+                date,
+                tasks,
+                challenges: document.getElementById('reportChallenges').value.trim() || 'None',
+                plans: document.getElementById('reportPlans').value.trim() || 'Continue ongoing tasks',
+                hoursWorked: parseInt(document.getElementById('reportHours').value) || 8,
+                jobsCompleted: parseInt(document.getElementById('reportJobs').value) || 0
+            };
+            
+            showReportPDF(report);
+            
+            const element = document.getElementById('pdfPreview');
+            const opt = {
+                margin: 10,
+                filename: `TBOS_Report_${currentStaffId}_${date}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                showToast('PDF downloaded!');
+            }).catch(err => {
+                showToast('PDF error: ' + err.message);
+            });
+        }
+
+        function updateReportStats() {
+            const today = new Date().toLocaleDateString();
+            const todayClients = clients.filter(c => c.date === today).length;
+            const todayJobs = jobs.filter(j => j.date === today).length;
+            const todaySales = jobs.filter(j => j.date === today).reduce((sum, j) => sum + (j.paid || 0), 0);
+            const todayStaff = [...new Set(reports.filter(r => r.date === today).map(r => r.staffId))].length;
+            
+            document.getElementById('reportClients').textContent = todayClients;
+            document.getElementById('reportJobs').textContent = todayJobs;
+            document.getElementById('reportSales').textContent = '₦' + todaySales.toLocaleString();
+            document.getElementById('reportStaff').textContent = todayStaff;
+        }
+
+        function generatePDF() {
+            showToast('Use "PDF" button in Reports section');
+        }
+
+        function exportCSV() {
+            const today = new Date().toLocaleDateString();
+            let csv = 'Type,Name,Phone,Amount,Date,Time,Staff\n';
+            
+            clients.filter(c => c.date === today).forEach(c => {
+                csv += `Client,${c.name},${c.phone},0,${c.date},${c.time},${c.staffId}\n`;
+            });
+            
+            jobs.filter(j => j.date === today).forEach(j => {
+                csv += `Job,${j.client},${j.phone},${j.amount},${j.date},${j.time},${j.staffId}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `TBOS_Report_${today.replace(/\//g, '-')}.csv`;
+            a.click();
+            showToast('CSV exported!');
+        }
+
+        function backupData() {
+            const backup = {
+                clients,
+                jobs,
+                reports,
+                inventory,
+                date: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `TBOS_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showToast('Backup downloaded!');
+        }
+
+        // ==================== INVENTORY ====================
+        function addInventory() {
+            const name = document.getElementById('itemName').value.trim();
+            if (!name) {
+                showToast('Item name required');
+                return;
+            }
+            
+            inventory.push({
+                id: Date.now(),
+                name,
+                category: document.getElementById('itemCategory').value,
+                stock: parseInt(document.getElementById('itemStock').value) || 0,
+                alert: parseInt(document.getElementById('itemAlert').value) || 5,
+                status: 'OK'
+            });
+            
+            updateInventoryStatus();
+            saveData('inventory', inventory);
+            renderInventory();
+            clearForm(['itemName', 'itemCategory', 'itemStock', 'itemAlert']);
+            showToast('Item added!');
+        }
+
+        function updateInventoryStatus() {
+            inventory.forEach(item => {
+                if (item.stock === 0) item.status = 'OUT';
+                else if (item.stock <= item.alert) item.status = 'LOW';
+                else item.status = 'OK';
+            });
+        }
+
+        function renderInventory() {
+            const list = document.getElementById('inventoryList');
+            updateInventoryStatus();
+            
+            const total = inventory.length;
+            const low = inventory.filter(i => i.status === 'LOW').length;
+            const out = inventory.filter(i => i.status === 'OUT').length;
+            
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('lowStock').textContent = low;
+            document.getElementById('outStock').textContent = out;
+            
+            if (inventory.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No inventory items</p>';
+                return;
+            }
+            
+            list.innerHTML = inventory.map(i => `
+                <div class="data-item">
+                    <div class="data-item-info">
+                        <h4>${i.name}</h4>
+                        <p>📦 ${i.category}</p>
+                        <p>Stock: ${i.stock} | Alert: ${i.alert}</p>
+                        <p>Status: <span style="color: ${i.status === 'OK' ? 'var(--success)' : i.status === 'LOW' ? 'var(--warning)' : 'var(--danger)'}">${i.status}</span></p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== ADMIN ====================
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                closeAdminModal();
+                document.querySelectorAll('.tab-content, .nav-link').forEach(el => el.classList.remove('active'));
+                document.getElementById('admin').classList.add('active');
+                document.querySelector('[data-tab="admin"]').classList.add('active');
+                showAdminDashboard();
+                showToast('Admin access granted!');
+            } else {
+                showToast('Wrong password!');
+            }
+        }
+
+        function showAdminDashboard() {
+            const staffIds = getAllStaffIds();
+            const list = document.getElementById('staffListElement');
+            
+            if (staffIds.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No staff data</p>';
+                document.getElementById('staffDataContainer').innerHTML = '<p>No staff data available</p>';
+                return;
+            }
+            
+            list.innerHTML = staffIds.map(id => {
+                const count = getDataCount(id);
+                return `
+                    <div class="staff-item" onclick="loadStaffData('${id}')">
+                        <span>${id}</span>
+                        <span class="badge">${count}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            loadStaffData(staffIds[0]);
+        }
+
+        function getAllStaffIds() {
+            const staffIds = new Set();
+            ['clients', 'jobs', 'reports'].forEach(p => {
+                try {
+                    const data = JSON.parse(localStorage.getItem(p) || '[]');
+                    data.forEach(d => {
+                        if (d.staffId) staffIds.add(d.staffId);
+                    });
+                } catch (e) {}
+            });
+            return Array.from(staffIds);
+        }
+
+        function getDataCount(staffId) {
+            let count = 0;
+            ['clients', 'jobs', 'reports'].forEach(p => {
+                try {
+                    const data = JSON.parse(localStorage.getItem(p) || '[]');
+                    count += data.filter(d => d.staffId === staffId).length;
+                } catch (e) {}
+            });
+            return count;
+        }
+
+        function loadStaffData(staffId) {
+            document.querySelectorAll('.staff-item').forEach(i => i.classList.remove('active'));
+            event.target.closest('.staff-item').classList.add('active');
+            
+            const allClients = clients.filter(c => c.staffId === staffId);
+            const allJobs = jobs.filter(j => j.staffId === staffId);
+            const allReports = reports.filter(r => r.staffId === staffId);
+            const signIn = JSON.parse(localStorage.getItem(`signin_${staffId}`) || '{}');
+            
+            const totalSales = allJobs.reduce((sum, j) => sum + (j.paid || 0), 0);
+            
+            document.getElementById('staffDataContainer').innerHTML = `
+                <h3>📋 ${staffId}</h3>
+                ${signIn.time ? `<p>🕐 Signed in: ${signIn.time}</p>` : ''}
+                ${signIn.location ? `<p>📍 Location: ${signIn.location.lat.toFixed(4)}, ${signIn.location.lng.toFixed(4)}</p>` : ''}
+                <p>👥 Clients: ${allClients.length}</p>
+                <p>💼 Jobs: ${allJobs.length}</p>
+                <p>💰 Total Sales: ₦${totalSales.toLocaleString()}</p>
+                <p>📝 Reports: ${allReports.length}</p>
+                <div style="margin: 20px 0;">
+                    <button class="btn-primary" onclick="approveStaff('${staffId}')" style="width: 100%;">
+                        <i class="fas fa-check"></i> Approve & Clear
+                    </button>
+                </div>
+            `;
+        }
+
+        function approveStaff(staffId) {
+            if (confirm(`Approve and clear ${staffId}'s data?`)) {
+                clients = clients.filter(c => c.staffId !== staffId);
+                jobs = jobs.filter(j => j.staffId !== staffId);
+                reports = reports.filter(r => r.staffId !== staffId);
+                localStorage.removeItem(`signin_${staffId}`);
+                
+                saveData('clients', clients);
+                saveData('jobs', jobs);
+                saveData('reports', reports);
+                
+                showAdminDashboard();
+                showToast(`${staffId} approved and cleared!`);
+            }
+        }
+
+        function generateAdminPDF() {
+            showToast('Admin PDF - Feature coming soon!');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ WARNING: This will delete ALL data! Continue?')) {
+                localStorage.clear();
+                clients = [];
+                jobs = [];
+                reports = [];
+                inventory = [];
+                location.reload();
+            }
+        }
+
+        function filterStaffList() {
+            const search = document.getElementById('adminSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.staff-item');
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(search) ? 'flex' : 'none';
+            });
+        }
+
+        // ==================== CLIENT PORTAL LINK ====================
+        function openClientPortal() {
+            // For now, show a message - you can create a separate client portal page
+            alert('Client Portal Feature:\n\nClients can track their jobs by entering Tracking ID or Phone Number.\n\nTo enable: Create clients.html page with job tracking functionality.');
+        }
     </script>
 </body>
 </html>
